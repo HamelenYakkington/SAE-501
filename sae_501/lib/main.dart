@@ -48,7 +48,7 @@ class _MyHomeState extends State<MyHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Image.asset('assets/images/tfl_logo.png'),
+        title: const Text('test tflite'),
         backgroundColor: Colors.black.withOpacity(0.5),
       ),
       body: SafeArea(
