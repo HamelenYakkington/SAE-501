@@ -68,12 +68,5 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-}
-
-android {
-    aaptOptions {
-        noCompress 'tflite'
-        noCompress 'lite'
-    }
+    implementation 'org.tensorflow:tensorflow-lite:2.9.0' // Specify a stable version instead of using +
 }
