@@ -5,7 +5,7 @@ import 'package:sae_501/constants/view_constants.dart';
 Widget customButtonPhoto() {
   return SizedBox(
     width: double.infinity,
-    height: 120,
+    height: 65,
     child: Stack(
       alignment: Alignment.topCenter,
       children: [
@@ -21,7 +21,7 @@ Widget customButtonPhoto() {
         ),
         Positioned(
           top:
-              55,
+              0,
           child: GestureDetector(
             onTap: () {
               print("Cercle cliqué");

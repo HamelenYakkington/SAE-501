@@ -8,8 +8,9 @@ import 'package:sae_501/constants/view_constants.dart';
 class ButtonNavAcceuil {
   final String text;
   final String imagePath;
+  final String route;
 
-  ButtonNavAcceuil({required this.text, required this.imagePath});
+  ButtonNavAcceuil({required this.text, required this.imagePath, required this.route});
 }
 
 class Acceuil extends StatelessWidget {
@@ -19,13 +20,13 @@ class Acceuil extends StatelessWidget {
   Widget build(BuildContext context) {
     List<ButtonNavAcceuil> items = [
       ButtonNavAcceuil(
-          text: "Album", imagePath: "assets/images/album_button.webp"),
+          text: "Album", imagePath: "assets/images/album_button.webp", route: "/album"),
       ButtonNavAcceuil(
-          text: "Share Data", imagePath: "assets/images/share_button.webp"),
+          text: "Share Data", imagePath: "assets/images/share_button.webp", route: "/album"),
       ButtonNavAcceuil(
-          text: "Receive Data", imagePath: "assets/images/cloud_button.webp"),
+          text: "Receive Data", imagePath: "assets/images/cloud_button.webp", route: "/album"),
       ButtonNavAcceuil(
-          text: "Info", imagePath: "assets/images/info_button.webp"),
+          text: "Info", imagePath: "assets/images/info_button.webp", route: "/album"),
     ];
 
     return Scaffold(
@@ -58,7 +59,7 @@ class Acceuil extends StatelessWidget {
                         return customButtonNavAcceuil(
                           item.text,
                           item.imagePath,
-                          '/page${index + 1}',
+                          item.route,
                           context,
                         );
                       },
