@@ -23,9 +23,6 @@ Widget customButtonPhoto() {
           top:
               0,
           child: GestureDetector(
-            onTap: () {
-              print("Cercle cliqué");
-            },
             child: Container(
               width: 80,
               height: 80,
