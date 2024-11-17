@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:sae_501/entity/button_nav_acceuil.dart';
 import 'package:sae_501/view/widget/button_photo.dart';
 import 'package:sae_501/view/widget/header_custom.dart';
-import 'package:sae_501/view/widget/button_nav_acceuil_custom.dart';
 import 'package:sae_501/view/widget/footer_custom.dart';
 import 'package:sae_501/constants/view_constants.dart';
+import 'package:sae_501/view/widget/grid_builder_custom.dart';
 import 'package:sae_501/constants/menu_button_constant.dart';
+import 'package:sae_501/view/widget/button_nav_acceuil_custom.dart';
 
 
 
@@ -30,24 +32,7 @@ class Acceuil extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: GridView.builder(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        crossAxisSpacing: 16,
-                        mainAxisSpacing: 16,
-                        childAspectRatio: 1,
-                      ),
-                      itemCount: MenuConstant.items.length,
-                      itemBuilder: (context, index) {
-                        final item = MenuConstant.items[index];
-                        return customButtonNavAcceuil(
-                          item.text,
-                          item.imagePath,
-                          item.route,
-                          context,
-                        );
-                      },
-                    ),
+                    child: gridBuilderCustom(ButtonNavAcceuil, MenuConstant.items, context ),
                   ),
                 ),
                 customButtonPhoto(),

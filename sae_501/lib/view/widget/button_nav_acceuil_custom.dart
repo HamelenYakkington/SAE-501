@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:sae_501/constants/view_constants.dart';
 
 /// Fonction qui crée un button carré avec une image et un texte en dessous
-Widget customButtonNavAcceuil(String text, String imagePath, String page, BuildContext context) {
+Widget customButtonNavAcceuil(item, BuildContext context) {
   return InkWell(
     onTap: () {
-      Navigator.pushNamed(context, page);
+      Navigator.pushNamed(context, item.route);
     },
     child: Container(
       width: 150,
@@ -26,14 +26,14 @@ Widget customButtonNavAcceuil(String text, String imagePath, String page, BuildC
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
-            imagePath,
+            item.imagePath,
             width: 80,
             height: 80,
             fit: BoxFit.cover,
           ),
           const SizedBox(height: 20),
           Text(
-            text,
+            item.text,
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
