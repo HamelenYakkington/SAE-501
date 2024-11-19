@@ -12,7 +12,8 @@ void main() {
     initialRoute: '/',
     routes: {
       '/': (context) => const Acceuil(),
-      '/album': (context) => const Album(),
+      '/album': (context) => Album(),
+      '/add_album' : (context) => const Acceuil(),
       '/info' : (context) => const Info(),
     },
   ));

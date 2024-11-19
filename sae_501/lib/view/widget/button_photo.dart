@@ -24,8 +24,8 @@ Widget customButtonPhoto() {
               0,
           child: GestureDetector(
             child: Container(
-              width: 80,
-              height: 80,
+              width: 75,
+              height: 75,
               decoration: const BoxDecoration(
                 color: ViewConstant.backgroundButton,
                 shape: BoxShape.circle,
@@ -33,7 +33,7 @@ Widget customButtonPhoto() {
               child: ClipOval(
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    top: 8,
+                    top: 10,
                   ),
                   child: Align(
                     alignment: Alignment
