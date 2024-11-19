@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:sae_501/view/widget/button_nav_acceuil_custom.dart';
 
-Widget gridBuilderCustom(function, items, context) {
+
+Widget gridBuilderCustom(Function function, items, context) {
   return GridView.builder(
     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 2,
@@ -10,11 +10,11 @@ Widget gridBuilderCustom(function, items, context) {
       childAspectRatio: 1,
     ),
     itemCount: items.length,
-    itemBuilder: (context, index) {
+    itemBuilder: (localContext, index) {
       final item = items[index];
-      return customButtonNavAcceuil(
+      return function(
         item,
-        context,
+        localContext,
       );
     },
   );
