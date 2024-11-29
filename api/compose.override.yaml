@@ -1,0 +1,5 @@
+services:
+  db:
+    ports:
+      - 3307:3306
+

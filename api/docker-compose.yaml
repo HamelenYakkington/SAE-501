@@ -1,0 +1,47 @@
+services:
+  # Service pour PHP (avec Symfony)
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api_php
+    volumes:
+      - .:/var/www/symfony
+    environment:
+      - APP_ENV=dev
+    networks:
+      - symfony
+
+  # Service pour la base de données MySQL
+  db:
+    image: mysql:8.0
+    container_name: api_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: symfony
+      MYSQL_USER: symfony
+      MYSQL_PASSWORD: symfony
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - symfony
+
+  # Service Nginx pour servir l'application
+  nginx:
+    image: nginx:latest
+    container_name: api_nginx
+    ports:
+      - "8081:80"
+    volumes:
+      - .:/var/www/symfony
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - symfony
+    depends_on:
+      - php
+
+networks:
+  symfony:
+
+volumes:
+  db_data:
