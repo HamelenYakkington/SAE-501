@@ -1,0 +1,25 @@
+
+###> symfony/framework-bundle ###
+api/.env.local
+api/.env.local.php
+api/.env.*.local
+api/config/secrets/prod/prod.decrypt.private.php
+api/public/bundles/
+api/var/
+api/vendor/
+###< symfony/framework-bundle ###
+
+###> phpunit/phpunit ###
+api/phpunit.xml
+api/.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/phpunit-bridge ###
+api/.phpunit.result.cache
+api/phpunit.xml
+###< symfony/phpunit-bridge ###
+
+###> symfony/asset-mapper ###
+api/public/assets/
+api/assets/vendor/
+###< symfony/asset-mapper ###
