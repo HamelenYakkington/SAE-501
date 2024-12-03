@@ -33,7 +33,7 @@ class Acceuil extends StatelessWidget {
                     child: gridBuilderCustom(customButtonNavAcceuil, MenuConstant.items, context),
                   ),
                 ),
-                customButtonPhoto(),
+                customButtonPhoto(context: context),
                 customFooter(),
               ],
             ),

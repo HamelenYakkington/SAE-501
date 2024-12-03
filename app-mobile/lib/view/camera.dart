@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:sae_501/constants/view_constants.dart';
 import 'package:sae_501/view/widget/button_exit_custom.dart';
-import 'package:sae_501/view/widget/footer_custom.dart';
+import 'package:sae_501/view/widget/button_photo.dart';
 
 class Camera extends StatefulWidget {
   @override
@@ -92,28 +92,23 @@ Widget build(BuildContext context) {
                               },
                             ),
                           ),
-                          const SizedBox(height: 16),
-                          ElevatedButton(
-                            onPressed: _takePhoto,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue,
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 10),
-                            ),
-                            child: const Text('Prendre une photo'),
-                          ),
-                          const SizedBox(height: 16),
-                          _imagePath.isNotEmpty
-                              ? Image.file(File(_imagePath))
-                              : const Text("Aucune image capturée."),
                         ],
                       ),
-                    ),
-                  customFooter(),
+                    )
                 ],
               ),
             ),
           ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: customButtonPhoto(
+              context: context,
+              onTap: _takePhoto,
+            ),
+          ),
+
           customExitButton(context),
         ],
       ),

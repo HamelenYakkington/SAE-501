@@ -91,7 +91,7 @@ class _AlbumState extends State<Album> {
                         ),
                       ),
                     ),
-                    customButtonPhoto(),
+                    customButtonPhoto(context: context),
                     customFooter(),
                   ],
                 ),

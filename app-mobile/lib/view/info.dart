@@ -60,7 +60,7 @@ class Info extends StatelessWidget {
                         ),
                       ),
                     ),
-                    customButtonPhoto(),
+                    customButtonPhoto(context: context),
                     customFooter(),
                   ],
                 ),
