@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sae_501/view/widget/button_photo.dart';
 import 'package:sae_501/view/widget/header_custom.dart';
 import 'package:sae_501/view/widget/footer_custom.dart';
-import 'package:sae_501/view/widget/button_return_button_custom.dart';
+import 'package:sae_501/view/widget/button_return_custom.dart';
 import 'package:sae_501/view/widget/button_add_album_custom.dart';
 import 'package:sae_501/view/widget/button_album_custom.dart';
 import 'package:sae_501/constants/view_constants.dart';

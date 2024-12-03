@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:sae_501/constants/view_constants.dart';
+import 'package:sae_501/view/widget/button_exit_custom.dart';
+import 'package:sae_501/view/widget/footer_custom.dart';
 
 class Camera extends StatefulWidget {
   @override
@@ -13,6 +16,7 @@ class _CustomCameraViewState extends State<Camera> {
   late List<CameraDescription> cameras;
   late CameraController _cameraController;
   late Future<void> _initializeControllerFuture;
+  final String _imagePath = "";
 
   @override
   void initState() {
@@ -51,45 +55,70 @@ class _CustomCameraViewState extends State<Camera> {
 
       File(image.path).copy(filePath);
 
-      print("Photo sauvegardée dans: $filePath");
     } catch (e) {
-      print("Erreur lors de la capture de l'image: $e");
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Caméra personnalisée")),
-      body: FutureBuilder<void>(
-        future: _initializeControllerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            return Stack(
-              children: [
-                CameraPreview(_cameraController),
-                Positioned(
-                  bottom: 20,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: ElevatedButton(
-                      onPressed: _takePhoto,
-                      child: Icon(Icons.camera_alt, size: 40),
-                      style: ElevatedButton.styleFrom(
-                        shape: CircleBorder(),
-                        padding: EdgeInsets.all(20),
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: ViewConstant.backgroundScalfold,
+    body: Container(
+      color: ViewConstant.backgroundApp,
+      child: Stack(
+        children: [
+          SafeArea(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Expanded(
+                      child: Column(
+                        children: [
+                          // Intégrer la vue caméra
+                          Expanded(
+                            child: FutureBuilder<void>(
+                              future: _initializeControllerFuture,
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.done) {
+                                  return CameraPreview(_cameraController);
+                                } else {
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: _takePhoto,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 20, vertical: 10),
+                            ),
+                            child: const Text('Prendre une photo'),
+                          ),
+                          const SizedBox(height: 16),
+                          _imagePath.isNotEmpty
+                              ? Image.file(File(_imagePath))
+                              : const Text("Aucune image capturée."),
+                        ],
                       ),
                     ),
-                  ),
-                ),
-              ],
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+                  customFooter(),
+                ],
+              ),
+            ),
+          ),
+          customExitButton(context),
+        ],
       ),
-    );
-  }
+    ),
+  );
 }
+}
+
