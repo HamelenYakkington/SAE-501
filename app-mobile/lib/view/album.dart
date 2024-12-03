@@ -21,7 +21,7 @@ class _AlbumState extends State<Album> {
   @override
   void initState() {
     super.initState();
-    folderFuture = loadAlbumFolders(); // Load folders dynamically
+    folderFuture = loadAlbumFolders();
   }
 
   @override

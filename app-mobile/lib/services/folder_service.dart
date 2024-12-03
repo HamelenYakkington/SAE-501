@@ -12,3 +12,6 @@ Future<List<String>> loadAlbumFolders() async {
     return []; // Return an empty list in case of an error
   }
 }
+
+
+
