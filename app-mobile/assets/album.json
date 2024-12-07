@@ -1,7 +1,45 @@
 {
   "folders": [
-    "chess",
-    "folder2",
-    "folder3"
+    {
+      "name": "chess",
+      "sub_albums": [
+        {
+          "name": "king",
+          "paths": [
+            "assets/album/chess/pawn/img_1.png",
+            "assets/album/chess/pawn/img_2.png"
+          ]
+        },
+        {
+          "name": "knight",
+          "paths": [
+            "assets/album/chess/knight/img_1.png"
+          ]
+        },
+        {
+          "name": "queen",
+          "paths": [
+            "assets/album/chess/queen/img_1.png"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "folder2",
+      "sub_albums": [
+        {
+          "name": "sub1",
+          "paths": []
+        },
+        {
+          "name": "sub2",
+          "paths": []
+        }
+      ]
+    },
+    {
+      "name": "folder3",
+      "sub_albums": []
+    }
   ]
 }
