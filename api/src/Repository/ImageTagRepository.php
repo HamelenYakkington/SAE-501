@@ -19,10 +19,10 @@ class ImageTagRepository extends ServiceEntityRepository
     //    /**
     //     * @return ImageTag[] Returns an array of ImageTag objects
     //     */
-    //    public function findBySomeField($value): array
+    //    public function findByExampleField($value): array
     //    {
     //        return $this->createQueryBuilder('i')
-    //            ->andWhere('i.someField = :val')
+    //            ->andWhere('i.exampleField = :val')
     //            ->setParameter('val', $value)
     //            ->orderBy('i.id', 'ASC')
     //            ->setMaxResults(10)
@@ -31,14 +31,13 @@ class ImageTagRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findByImageAndTag(int $imageId, int $tagId): ?ImageTag
+    //    public function findOneBySomeField($value): ?ImageTag
     //    {
-    //        return $this->createQueryBuilder('it')
-    //            ->andWhere('it.image = :imageId')
-    //            ->andWhere('it.tag = :tagId')
-    //            ->setParameter('imageId', $imageId)
-    //            ->setParameter('tagId', $tagId)
+    //        return $this->createQueryBuilder('i')
+    //            ->andWhere('i.exampleField = :val')
+    //            ->setParameter('val', $value)
     //            ->getQuery()
-    //            ->getOneOrNullResult();
+    //            ->getOneOrNullResult()
+    //        ;
     //    }
 }
