@@ -18,12 +18,25 @@ security:
 
         # Main firewall for web access (non-API)
         main:
-            lazy: true
-            provider: app_user_provider
+            # Use form_login for traditional web-based authentication (session-based)
+            form_login:
+                login_path: login
+                check_path: login
+                default_target_path: app_home
+                failure_path: login
+                username_parameter: email
+                password_parameter: password
 
-            # Other settings (if you have any web access)
+            logout:
+                path: logout
+                target: app_home
+
+            json_login:
+                # api_login is a route we will create below
+                check_path: login
 
         # API firewall (JWT Authentication)
+        # If you want to keep API access with JWT authentication, you can keep this section
         api:
             pattern: ^/api/
             stateless: true
@@ -31,8 +44,8 @@ security:
 
     # Access Control (Secure API endpoints)
     access_control:
-    # - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
-
+        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { path: ^/profile, roles: ROLE_USER }
 
 # When testing, the password hasher can be adjusted to speed up tests
 when@test:

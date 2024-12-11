@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\User;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
@@ -27,8 +29,8 @@ class SecurityController extends AbstractController
     /*
     / API to login, return an auth token if success
     */
-    #[Route("/login", name:"api_login", methods: ["POST"])]
-    public function login(Request $request): JsonResponse
+    #[Route("/login_token", name:"api_login", methods: ["POST"])]
+    public function loginToken(Request $request): JsonResponse
     {
         // Get the JSON data from the request body
         $data = json_decode($request->getContent(), true);
@@ -82,5 +84,23 @@ class SecurityController extends AbstractController
         $this->entityManager->flush();
 
         return new JsonResponse(['message' => 'User registered successfully'], JsonResponse::HTTP_CREATED);
+    }
+
+    #[Route("/login", name:"login")]
+    public function login(AuthenticationUtils $authenticationUtils): Response
+    {
+        $error = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
+
+        return $this->render('security/login.html.twig', [
+            'last_username' => $lastUsername,
+            'error' => $error,
+        ]);
+    }
+
+    #[Route("/logout", name:"logout")]
+    public function logout()
+    {
+        // Logging out function is directly handled by symfony
     }
 }

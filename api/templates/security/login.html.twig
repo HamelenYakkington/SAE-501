@@ -1,0 +1,27 @@
+{# templates/security/login.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <h1>Login</h1>
+
+    <form action="{{ path('login') }}" method="post">
+        <div>
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" value="{{ last_username }}" required autofocus>
+        </div>
+
+        <div>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+
+        {# Display login errors, if any #}
+        {% if error %}
+            <div class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        <button type="submit">Login</button>
+    </form>
+{% endblock %}
