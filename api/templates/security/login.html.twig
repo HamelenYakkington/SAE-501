@@ -4,24 +4,31 @@
 {% block title %}Login{% endblock %}
 
 {% block body %}
-    <h1>Login</h1>
-
-    <form action="{{ path('login') }}" method="post">
-        <div>
-            <label for="email">Email</label>
-            <input type="text" id="email" name="email" value="{{ last_username }}" required autofocus>
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="card shadow p-4 bg-grey-1" style="width: 100%; max-width: 400px;">
+        <div class="text-center mb-4">
+            <img src="{{ asset('logo/user.png') }}" alt="Logo" style="width: 100px; height: auto;">
         </div>
+        <h1 class="text-center mb-4 text-white">Login</h1>
 
-        <div>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
-        </div>
+        <form action="{{ path('login') }}" method="post">
+            <div class="mb-3 text-muted">
+                <label for="email" class="form-label">Email</label>
+                <input type="text" id="email" name="email" class="form-control" value="{{ last_username }}" required autofocus>
+            </div>
 
-        {# Display login errors, if any #}
-        {% if error %}
-            <div class="error">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
+            <div class="mb-3 text-muted">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-control" required>
+            </div>
 
-        <button type="submit">Login</button>
-    </form>
+            {# Display login errors, if any #}
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            <button type="submit" class="btn w-100 custom-gradient-bg">Login</button>
+        </form>
+    </div>
+</div>
 {% endblock %}
