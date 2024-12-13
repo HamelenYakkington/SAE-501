@@ -3,9 +3,11 @@ import subprocess
 def run_docker_command(command, cwd=None):
     try:
         process = subprocess.Popen(command, text=True,
-                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
-        
-        print(command)
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
+
+        for line in process.stdout:
+            print(line.strip(), flush=True)
+
         stdout, stderr = process.communicate()
 
         if process.returncode == 0:

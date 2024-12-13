@@ -10,7 +10,7 @@ def main():
         name_container = "api_php"
         commands_exec_container = [
             ["composer", "update"],
-            ["php", "bin/console", "doctrine:database:drop", "--force"],
+            ["php", "bin/console", "doctrine:database:drop", "--if-exists" ,"--force", "--no-interaction"],
             ["php", "bin/console", "doctrine:database:create", "--no-interaction"],
             ["php", "bin/console", "doctrine:migration:migrate", "--no-interaction"],
             ["php", "bin/console", "doctrine:fixtures:load", "--no-interaction"]

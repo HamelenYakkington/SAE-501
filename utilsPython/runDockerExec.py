@@ -2,15 +2,15 @@ import subprocess
 
 def run_docker_exec_command(container_name, command):
     try:
-        command.insert(0, container_name)
-        command.insert(0, "exec")
-        command.insert(0, "docker")
+        command = ["docker", "exec", container_name] + command
 
         
-        process = subprocess.Popen(command, text=True, 
-                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        
-        print(command)
+        process = subprocess.Popen(command, text=True,
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        for line in process.stdout:
+            print(line.strip(), flush=True)
+
         stdout, stderr = process.communicate()
 
 
