@@ -1,16 +1,21 @@
 import utilsPython.runDockerCommand as runDocker
 import utilsPython.runDockerExec as runExec
 import utilsPython.displayDockerLink as displayLink
+import os
+import subprocess
+import time
 
 def main():
     try:
         api_directory = "api"
         runDocker.run_docker_command(["docker", "compose", "up", "-d" ,"--build"], cwd=api_directory)
+
+        time.sleep(5)
         
         name_container = "api_php"
         commands_exec_container = [
             ["composer", "update"],
-            ["php", "bin/console", "doctrine:database:drop", "--if-exists" ,"--force", "--no-interaction"],
+            ["php", "bin/console", "doctrine:database:drop", "--force"],
             ["php", "bin/console", "doctrine:database:create", "--no-interaction"],
             ["php", "bin/console", "doctrine:migration:migrate", "--no-interaction"],
             ["php", "bin/console", "doctrine:fixtures:load", "--no-interaction"]
