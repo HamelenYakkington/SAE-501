@@ -2,9 +2,12 @@ import subprocess
 
 def run_docker_exec_command(container_name, command):
     try:
-        docker_command = f"docker exec {container_name} {command}"
+        command.insert(0, container_name)
+        command.insert(0, "exec")
+        command.insert(0, "docker")
+
         
-        process = subprocess.Popen(docker_command, shell=True, text=True, 
+        process = subprocess.Popen(command, text=True, 
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         
         print(command)

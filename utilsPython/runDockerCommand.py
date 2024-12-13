@@ -2,12 +2,11 @@ import subprocess
 
 def run_docker_command(command, cwd=None):
     try:
-        process = subprocess.Popen(command, shell=True, text=True, 
+        process = subprocess.Popen(command, text=True,
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
         
         print(command)
         stdout, stderr = process.communicate()
-
 
         if process.returncode == 0:
 

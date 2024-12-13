@@ -5,14 +5,19 @@ import utilsPython.displayDockerLink as displayLink
 def main():
     try:
         api_directory = "api"
-        runDocker.run_docker_command("docker compose up -d --build", cwd=api_directory)
+        runDocker.run_docker_command(["docker", "compose", "up", "-d" ,"--build"], cwd=api_directory)
         
         name_container = "api_php"
-        runExec.run_docker_exec_command(name_container, "composer update")
-        runExec.run_docker_exec_command(name_container, "php bin/console doctrine:database:drop --force")
-        runExec.run_docker_exec_command(name_container, "php bin/console doctrine:database:create --no-interaction")
-        runExec.run_docker_exec_command(name_container, "php bin/console doctrine:migration:migrate --no-interaction")
-        runExec.run_docker_exec_command(name_container, "php bin/console doctrine:fixtures:load --no-interaction")
+        commands_exec_container = [
+            ["composer", "update"],
+            ["php", "bin/console", "doctrine:database:drop", "--force"],
+            ["php", "bin/console", "doctrine:database:create", "--no-interaction"],
+            ["php", "bin/console", "doctrine:migration:migrate", "--no-interaction"],
+            ["php", "bin/console", "doctrine:fixtures:load", "--no-interaction"]
+        ]
+
+        for command in commands_exec_container:
+            runExec.run_docker_exec_command(name_container, command)
 
         print("API hosted by docker at the url : ")
         displayLink.link('http://localhost:8081/')
