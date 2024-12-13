@@ -9,10 +9,13 @@ def main():
         
         name_container = "api_php"
         runExec.run_docker_exec_command(name_container, "composer update")
-        runExec.run_docker_exec_command(name_container, "php bin/console doctrine:database:create")
-        runExec.run_docker_exec_command(name_container, "php bin/console doctrine:fixtures:load")
+        runExec.run_docker_exec_command(name_container, "php bin/console doctrine:database:drop --force")
+        runExec.run_docker_exec_command(name_container, "php bin/console doctrine:database:create --no-interaction")
+        runExec.run_docker_exec_command(name_container, "php bin/console doctrine:migration:migrate --no-interaction")
+        runExec.run_docker_exec_command(name_container, "php bin/console doctrine:fixtures:load --no-interaction")
 
-        displayLink.link('http://localhost:8081/', "API hosted by docker at the url : ")
+        print("API hosted by docker at the url : ")
+        displayLink.link('http://localhost:8081/')
     except Exception as e:
         print(f"{type(e).__name__} - {e}")
 

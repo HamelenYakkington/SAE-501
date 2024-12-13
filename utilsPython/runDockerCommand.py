@@ -10,12 +10,17 @@ def run_docker_command(command, cwd=None):
 
 
         if process.returncode == 0:
+
             if stdout:
                 print(f"Sortie de la commande :\n{stdout}")
         else:
             print(f"Erreur lors de l'exécution de la commande : {command}")
             print(f"Code de retour : {process.returncode}")
+            message_error = f"Message d'erreur :\n{stderr.strip()}"
             if stderr:
                 print(f"Message d'erreur :\n{stderr.strip()}")
+                message_error += f"Message: {stderr.strip()}"
+            
+            raise(Exception(f"{message_error}") )
     except Exception as e:
-        raise Exception("Something went wrong : " + e)
+        raise Exception(f"{type(e).__name__} - {e}")
