@@ -11,6 +11,7 @@
         "doctrine/doctrine-bundle": "^2.13.1",
         "doctrine/doctrine-migrations-bundle": "^3.3.1",
         "doctrine/orm": "^3.3",
+        "easycorp/easyadmin-bundle": "^4.20",
         "lexik/jwt-authentication-bundle": "^3.1",
         "phpdocumentor/reflection-docblock": "^5.6.1",
         "phpstan/phpdoc-parser": "^2.0",
