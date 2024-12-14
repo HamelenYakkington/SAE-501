@@ -1,27 +1,33 @@
-import subprocess
+import asyncio
 
-def run_docker_command(command, cwd=None):
-    try:
-        process = subprocess.Popen(command, text=True,
-                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, cwd=cwd)
+async def run_docker_command(command, cwd=None):
+    process = await asyncio.create_subprocess_exec(
+        *command, 
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+        cwd=cwd
+    )
 
-        for line in process.stdout:
-            print(line.strip(), flush=True)
+    # Lecture asynchrone de stdout et stderr
+    async def read_output(stream, label):
+        while True:
+            line = await stream.readline()
+            if not line:
+                break
+            print(f"[{label}] {line.decode().strip()}", flush=True)
 
-        stdout, stderr = process.communicate()
+    # Lancer les deux tâches pour lire stdout et stderr simultanément
+    await asyncio.gather(
+        read_output(process.stdout, "STDOUT"),
+        read_output(process.stderr, "STDERR")
+    )
 
-        if process.returncode == 0:
+    # Attendre que le processus se termine
+    return_code = await process.wait()
 
-            if stdout:
-                print(f"Sortie de la commande :\n{stdout}")
-        else:
-            print(f"Erreur lors de l'exécution de la commande : {command}")
-            print(f"Code de retour : {process.returncode}")
-            message_error = f"Message d'erreur :\n{stderr.strip()}"
-            if stderr:
-                print(f"Message d'erreur :\n{stderr.strip()}")
-                message_error += f"Message: {stderr.strip()}"
-            
-            raise(Exception(f"{message_error}") )
-    except Exception as e:
-        raise Exception(f"{type(e).__name__} - {e}")
+    if return_code == 0:
+        print(f"{ command } : DONE")
+    else:
+        print(f"Erreur lors de l'exécution de la commande : {command}")
+        print(f"Code de retour : {return_code}")
+        raise Exception(f"Erreur d'exécution de la commande {command}")
