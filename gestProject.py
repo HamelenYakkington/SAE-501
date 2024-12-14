@@ -14,6 +14,8 @@ async def init():
         name_container = "api_php"
         commands_exec_container = [
             ["composer", "update"],
+            ["php", "bin/console" ,"importmap:install"],
+            ["chown", "-R", "www-data:www-data", "/var/www/symfony"],
             ["php", "bin/console", "doctrine:database:drop", "--if-exists","--force"],
             ["php", "bin/console", "doctrine:database:create", "--no-interaction"],
             ["php", "bin/console", "doctrine:migration:migrate", "--no-interaction"],
@@ -33,7 +35,17 @@ async def start():
         api_directory = "api"
         await runDocker.run_docker_command(["docker","compose","up","-d"], cwd=api_directory)
         time.sleep(5)
-        await runExec.run_docker_exec_command("api_php", ["composer", "update"])
+
+        commands_exec_container = [
+            ["composer", "update"],
+            ["php", "bin/console" ,"importmap:update"],
+            ["chown", "-R", "www-data:www-data", "/var/www/symfony"]
+        ]
+
+        name_container = "api_php"
+
+        for command in commands_exec_container:
+            await runExec.run_docker_exec_command(name_container, command)
 
         print("API hosted by docker at the url : ")
         displayLink.link('http://localhost:8081/')
