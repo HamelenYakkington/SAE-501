@@ -80,7 +80,7 @@ class _MyAppState extends State<TestCamera> {
   }
 
   Future<ObjectDetector> _initObjectDetectorWithLocalModel() async {
-    final modelPath = await _copy('assets/modelYolo11.tflite');
+    final modelPath = await _copy('assets/modelYolo8.tflite');
     final metadataPath = await _copy('assets/metadata.yaml');
     final model = LocalYoloModel(
       id: '',
