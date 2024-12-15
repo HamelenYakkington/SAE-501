@@ -15,6 +15,8 @@ async def init():
         commands_exec_container = [
             ["composer", "update"],
             ["php", "bin/console" ,"importmap:install"],
+            ["php", "bin/console" ,"assets:install"],
+            ["php", "bin/console" ,"asset-map:compile"],
             ["chown", "-R", "www-data:www-data", "/var/www/symfony"],
             ["php", "bin/console", "doctrine:database:drop", "--if-exists","--force"],
             ["php", "bin/console", "doctrine:database:create", "--no-interaction"],
@@ -38,8 +40,10 @@ async def start():
 
         commands_exec_container = [
             ["composer", "update"],
-            ["php", "bin/console" ,"importmap:update"],
-            ["chown", "-R", "www-data:www-data", "/var/www/symfony"]
+            ["php", "bin/console" ,"importmap:install"],
+            ["php", "bin/console" ,"assets:install"],
+            ["php", "bin/console" ,"asset-map:compile"],
+            ["chown", "-R", "www-data:www-data", "/var/www/symfony"],
         ]
 
         name_container = "api_php"
