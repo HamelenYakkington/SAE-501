@@ -26,7 +26,8 @@ class UserFixtures extends Fixture
         $admin->setFirstName('Admin')
             ->setLastName('User')
             ->setEmail('admin@admin.admin')
-            ->setRoles(['ROLE_ADMIN']);
+            ->setRoles(['ROLE_ADMIN'])
+            ->setIsBanned(false);
         $admin->setPassword($this->passwordHasher->hashPassword($admin, 'adminpassword'));
         $manager->persist($admin);
 
@@ -39,7 +40,8 @@ class UserFixtures extends Fixture
             $user->setFirstName($userFirstName)
                 ->setLastName($userLastName)
                 ->setEmail($userFirstName . '.' . $userLastName . '@example.com')
-                ->setRoles(['ROLE_USER']);
+                ->setRoles(['ROLE_USER'])
+                ->setIsBanned(false);
             $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
             $manager->persist($user);
         }

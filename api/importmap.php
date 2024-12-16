@@ -16,6 +16,14 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
+    'app-css' => [
+        'path' => './assets/styles/app.css',
+        'entrypoint' => true,
+    ],
+    'bootstrap-min-css' => [
+        'path' => './assets/styles/bootstrap.min.css',
+        'entrypoint' => true,
+    ],
     '@symfony/stimulus-bundle' => [
         'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
     ],
