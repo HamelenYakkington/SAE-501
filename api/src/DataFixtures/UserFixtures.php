@@ -31,6 +31,9 @@ class UserFixtures extends Fixture
         $admin->setPassword($this->passwordHasher->hashPassword($admin, 'adminpassword'));
         $manager->persist($admin);
 
+        // Add a reference for the admin user
+        $this->addReference('user0', $admin);
+
         // Create regular users with Faker
         for ($i = 1; $i <= 25; $i++) {
             $userFirstName = $faker->firstName();
@@ -44,6 +47,9 @@ class UserFixtures extends Fixture
                 ->setIsBanned(false);
             $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
             $manager->persist($user);
+
+            // Add a reference for each user
+            $this->addReference('user' . $i, $user);
         }
 
         $manager->flush();

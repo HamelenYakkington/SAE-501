@@ -20,6 +20,9 @@ class Image
     #[ORM\JoinColumn(nullable: false)]
     private ?User $idUser = null;
 
+    #[ORM\Column(type: 'string', length: 255)]
+    private $path;
+
     #[ORM\Column(type: Types::DATE_MUTABLE)] // Stocke la date (jour, mois, année)
     private ?\DateTimeInterface $date = null;
 
@@ -35,6 +38,8 @@ class Image
     public function __construct()
     {
         $this->tag = new ArrayCollection();
+        $this->date = new \DateTime();
+        $this->time = new \DateTime();
     }
 
     public function getId(): ?int
@@ -50,6 +55,18 @@ class Image
     public function setIdUser(?User $idUser): static
     {
         $this->idUser = $idUser;
+
+        return $this;
+    }
+
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    public function setPath(?string $path): static
+    {
+        $this->path = $path;
 
         return $this;
     }
@@ -76,6 +93,14 @@ class Image
         $this->time = $time;
 
         return $this;
+    }
+
+    public function getDateTime(): string
+    {
+        $date = $this->date ? $this->date->format('Y-m-d') : '0000-00-00';
+        $time = $this->time ? $this->time->format('H:i:s') : '00:00:00';
+
+        return $date . ' ' . $time;
     }
 
     /**
