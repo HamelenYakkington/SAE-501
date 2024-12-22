@@ -36,7 +36,6 @@ security:
                 check_path: login
 
         # API firewall (JWT Authentication)
-        # If you want to keep API access with JWT authentication, you can keep this section
         api:
             pattern: ^/api/
             stateless: true
@@ -46,6 +45,7 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
+        # - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
 
 # When testing, the password hasher can be adjusted to speed up tests
 when@test:

@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Test Upload Image API{% endblock %}
+
+{% block body %}
+    <h1>Test Upload Image API</h1>
+    <form onsubmit="uploadImage(event)">
+        <label for="imageInput">Select an image:</label>
+        <input type="file" id="imageInput" accept="image/*" required>
+
+        <label for="labelInput">Enter a label (string):</label>
+        <input type="text" id="labelInput" required>
+
+        <button type="submit">Upload</button>
+    </form>
+    <div id="result" style="margin-top: 20px;"></div>
+
+    <script>
+        async function uploadImage(event) {
+            event.preventDefault();
+
+            const fileInput = document.getElementById('imageInput');
+            const labelInput = document.getElementById('labelInput');
+
+            const file = fileInput.files[0];
+            const label = labelInput.value;
+
+            if (!file || !label) {
+                alert('Please select a file and enter a label.');
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = async function() {
+                const base64Image = reader.result;
+
+                const payload = JSON.stringify({
+                    image: base64Image,
+                    label: label
+                });
+
+                try {
+                    const response = await fetch('/api/upload-image', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer YOUR_JWT_TOKEN_HERE'
+                        },
+                        body: payload
+                    });
+
+                    const result = await response.json();
+
+                    if (response.ok) {
+                        document.getElementById('result').innerHTML = `
+                            <p><strong>Message:</strong> ${result.message}</p>
+                            <p><strong>Image Path:</strong> <a href="${result.image_path}" target="_blank">${result.image_path}</a></p>
+                            <p><strong>Label Path:</strong> <a href="${result.label_path}" target="_blank">${result.label_path}</a></p>
+                        `;
+                    } else {
+                        document.getElementById('result').innerHTML = `
+                            <p><strong>Error:</strong> ${result.error}</p>
+                        `;
+                    }
+                } catch (error) {
+                    document.getElementById('result').innerHTML = '<p>An unexpected error occurred.</p>';
+                }
+            };
+
+            reader.readAsDataURL(file);
+        }
+    </script>
+{% endblock %}
