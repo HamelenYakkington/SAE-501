@@ -21,7 +21,7 @@ class _AlbumState extends State<Album> {
   @override
   void initState() {
     super.initState();
-    folderFuture = loadFolders(); // Load the updated folder structure
+    folderFuture = loadFolders();
   }
 
   @override
@@ -80,11 +80,11 @@ class _AlbumState extends State<Album> {
                                   onTap: () {
                                     Navigator.pushNamed(
                                       context,
-                                      '/sub_album', // Navigate to subfolders page
-                                      arguments: folder.name, // Pass the folder name
+                                      '/sub_album',
+                                      arguments: folder.name,
                                     );
                                   },
-                                  isPrimary: index == 0, // First button will be primary
+                                  isPrimary: index == 0,
                                 );
                               },
                             );

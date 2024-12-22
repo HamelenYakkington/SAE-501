@@ -22,7 +22,6 @@ class _SubAlbumState extends State<SubAlbum> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Retrieve the folder name from the arguments passed during navigation
     folderName = ModalRoute.of(context)?.settings.arguments as String?;
     if (folderName != null) {
       subFolderFuture = getSubFolders(folderName!);
@@ -90,7 +89,7 @@ class _SubAlbumState extends State<SubAlbum> {
                                   future: getFirstImagePath(folderName!, subFolder.name),
                                   builder: (context, imageSnapshot) {
                                     String imagePath = imageSnapshot.data ??
-                                        'assets/images/default_image.png'; // Default image if not found
+                                        'assets/images/default_image.png';
 
                                     return SubAlbumButton(
                                       imagePath: imagePath,

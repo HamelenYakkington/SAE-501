@@ -32,14 +32,14 @@ class _YoloVideoState extends State<Camera> {
     List<CameraDescription> cameras = await availableCameras();
     vision = FlutterVision();
     controller = CameraController(cameras[0], ResolutionPreset.high);
-    await controller.initialize(); // Assurez-vous que la caméra est prête
-    await loadYoloModel(); // Chargez le modèle YOLO
+    await controller.initialize();
+    await loadYoloModel();
     setState(() {
       isLoaded = true;
       isDetecting = true;
       yoloResults = [];
     });
-    await startDetection(); // Lancez automatiquement la détection
+    await startDetection();
   }
 
   @override
@@ -153,7 +153,6 @@ class _YoloVideoState extends State<Camera> {
                     Expanded(
                       child: Column(
                         children: [
-                          // Intégrer la vue caméra
                           Expanded(
                             child: Stack(
                               fit: StackFit.expand,

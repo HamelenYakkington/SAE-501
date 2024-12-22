@@ -3,8 +3,8 @@ import 'package:sae_501/constants/view_constants.dart';
 
 /// Fonction qui crée un bouton nav photo avec un demi-cercle au-dessus
 Widget customButtonPhoto({
-  VoidCallback? onTap, // Fonction de clic facultative
-  required BuildContext context, // Contexte requis pour la navigation
+  VoidCallback? onTap,
+  required BuildContext context,
 }) {
   return SizedBox(
     width: double.infinity,

@@ -20,7 +20,7 @@ class CustomFolderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String folderNameCapitalized = _capitalizeFirstLetter(folderName); // Capitalize the first letter of folder name
+    String folderNameCapitalized = _capitalizeFirstLetter(folderName);
 
     return GestureDetector(
       onTap: onTap,
@@ -31,10 +31,10 @@ class CustomFolderButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: isPrimary
               ? ViewConstant.backgroundButtonPrimary
-              : ViewConstant.backgroundButton, // Use custom background colors
+              : ViewConstant.backgroundButton,
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
-            if (isPrimary) // BoxShadow only for the primary button
+            if (isPrimary)
               BoxShadow(
                 color: Colors.black.withOpacity(0.2),
                 blurRadius: 10,
@@ -51,20 +51,20 @@ class CustomFolderButton extends StatelessWidget {
               end: Alignment.bottomRight,
             ).createShader(bounds),
             child: Text(
-              folderNameCapitalized, // Display capitalized folder name
+              folderNameCapitalized,
               style: const TextStyle(
                 fontSize: 23,
                 fontWeight: FontWeight.bold,
-                color: Colors.white, // Text will use the gradient shader
+                color: Colors.white,
               ),
             ),
           )
               : Text(
-            folderNameCapitalized, // Display capitalized folder name
+            folderNameCapitalized,
             style: const TextStyle(
               fontSize: 23,
               fontWeight: FontWeight.bold,
-              color: Colors.white, // White text for non-primary buttons
+              color: Colors.white,
             ),
           ),
         ),

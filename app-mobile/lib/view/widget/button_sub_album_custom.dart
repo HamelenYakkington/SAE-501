@@ -12,7 +12,6 @@ class SubAlbumButton extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
-  // Function to capitalize the first letter of a string
   String _capitalizeFirstLetter(String text) {
     if (text.isEmpty) return text;
     return text[0].toUpperCase() + text.substring(1);
