@@ -4,7 +4,6 @@ import 'package:sae_501/view/album.dart';
 import 'package:sae_501/view/sub album.dart';
 import 'package:sae_501/view/info.dart';
 import 'package:sae_501/view/camera.dart';
-import 'package:sae_501/view/test.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -19,8 +18,7 @@ void main() {
       '/sub_album': (context) => const SubAlbum(),
       '/add_album' : (context) => const Acceuil(),
       '/info' : (context) => const Info(),
-      // '/camera' : (context) => Camera(),
-      '/camera' : (context) => TestCamera(),
+      '/camera' : (context) => Camera(),
     },
   ));
 }
