@@ -103,6 +103,14 @@ class Image
         return $date . ' ' . $time;
     }
 
+    public function setDateTime(\DateTimeInterface $dateTime): static
+    {
+        $this->date = \DateTime::createFromFormat('Y-m-d', $dateTime->format('Y-m-d'));
+        $this->time = \DateTime::createFromFormat('H:i:s', $dateTime->format('H:i:s'));
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, ImageTag>
      */
