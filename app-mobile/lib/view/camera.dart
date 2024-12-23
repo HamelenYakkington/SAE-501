@@ -131,13 +131,6 @@ class _YoloVideoState extends State<Camera> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    if (!isLoaded) {
-      return const Scaffold(
-        body: Center(
-          child: Text("Model not loaded, waiting for it"),
-        ),
-      );
-    }
     return Scaffold(
       backgroundColor: ViewConstant.backgroundScalfold,
       body: Container(
@@ -157,11 +150,19 @@ class _YoloVideoState extends State<Camera> {
                             child: Stack(
                               fit: StackFit.expand,
                               children: [
-                                AspectRatio(
-                                  aspectRatio: controller.value.aspectRatio,
-                                  child: CameraPreview(controller),
-                                ),
-                                ...displayBoxesAroundRecognizedObjects(size),
+                                if (isLoaded) ...[
+                                  AspectRatio(
+                                    aspectRatio: controller.value.aspectRatio,
+                                    child: CameraPreview(controller),
+                                  ),
+                                  ...displayBoxesAroundRecognizedObjects(size),
+                                ] else
+                                  const Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.blue,
+                                      strokeWidth: 4.0,
+                                    ),
+                                  ),
                               ],
                             ),
                           ),
