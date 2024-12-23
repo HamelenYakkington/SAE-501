@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\ImageRepository;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,5 +36,31 @@ class UserController extends AbstractController
 
         // Return users as a JSON response
         return new JsonResponse($userData);
+    }
+
+    #[Route('/api/user/{id}/history', name: 'user_history', methods: ['GET'])]
+    public function getUserHistory(
+        int $id,
+        ImageRepository $imageRepository,
+        ManagerRegistry $doctrine
+    ): JsonResponse {
+        $user = $doctrine->getRepository(User::class)->find($id);
+
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], 404);
+        }
+
+        $images = $imageRepository->findByUser($user);
+
+        $imageData = array_map(function ($image) {
+            return [
+                'id' => $image->getId(),
+                'path' => $image->getPath(),
+                'date' => $image->getDate()->format('Y-m-d'),
+                'time' => $image->getTime()->format('H:i:s'),
+            ];
+        }, $images);
+
+        return new JsonResponse($imageData);
     }
 }
