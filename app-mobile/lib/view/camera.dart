@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_vision/flutter_vision.dart';
 import 'package:camera/camera.dart';
 import 'package:sae_501/constants/view_constants.dart';
 import 'package:sae_501/view/widget/button_exit_custom.dart';
 import 'package:sae_501/view/widget/button_photo.dart';
+import 'package:sae_501/view/displayPhoto.dart';
 
 class Camera extends StatefulWidget {
   const Camera({Key? key}) : super(key: key);
@@ -127,6 +127,26 @@ class _YoloVideoState extends State<Camera> {
     }).toList();
   }
 
+  Future<void> _takePhoto() async {
+    try {
+      if(!isLoaded)
+        return;
+      final XFile photo = await controller.takePicture();
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DisplayPictureScreen(
+              imagePath: photo.path,
+              yoloResults : yoloResults
+          ),
+        ),
+      );
+    } catch (e) {
+      print('Erreur lors de la prise de photo : $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -178,6 +198,7 @@ class _YoloVideoState extends State<Camera> {
               left: 0,
               right: 0,
               child: customButtonPhoto(
+                onTap: _takePhoto,
                 context: context,
               ),
             ),
