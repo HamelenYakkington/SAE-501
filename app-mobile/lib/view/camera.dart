@@ -5,6 +5,10 @@ import 'package:sae_501/constants/view_constants.dart';
 import 'package:sae_501/view/widget/button_exit_custom.dart';
 import 'package:sae_501/view/widget/button_photo.dart';
 import 'package:sae_501/view/displayPhoto.dart';
+import 'package:sae_501/view/widget/button_pick_image_custom.dart';
+import 'dart:io';
+import 'package:image/image.dart' as img;
+import 'package:image_picker/image_picker.dart';
 
 class Camera extends StatefulWidget {
   const Camera({Key? key}) : super(key: key);
@@ -19,6 +23,7 @@ class _YoloVideoState extends State<Camera> {
   late List<Map<String, dynamic>> yoloResults;
 
   CameraImage? cameraImage;
+  File? _selectedImage;
   bool isLoaded = false;
   bool isDetecting = false;
 
@@ -76,6 +81,37 @@ class _YoloVideoState extends State<Camera> {
     }
   }
 
+  Future<void> yoloOnPicture(File image) async {
+    try {
+      // Lire et décoder l'image
+      final imageBytes = await image.readAsBytes();
+      final decodedImage = img.decodeImage(imageBytes);
+
+      if (decodedImage == null) {
+        throw Exception("L'image n'a pas pu être décodée.");
+      }
+
+      final imageWidth = decodedImage.width;
+      final imageHeight = decodedImage.height;
+
+      final result = await vision.yoloOnImage(
+        bytesList: imageBytes,
+        imageHeight: imageHeight,
+        imageWidth: imageWidth,
+        iouThreshold: 0.8,
+        confThreshold: 0.4,
+        classThreshold: 0.7,
+      );
+      if (result.isNotEmpty) {
+        setState(() {
+          yoloResults = result;
+        });
+      }
+    } catch (e) {
+      print("Erreur lors de l'exécution de YOLO sur l'image : $e");
+    }
+  }
+
   Future<void> startDetection() async {
     if (!controller.value.isInitialized || controller.value.isStreamingImages) {
       return;
@@ -125,6 +161,33 @@ class _YoloVideoState extends State<Camera> {
         ),
       );
     }).toList();
+  }
+
+  // Méthode pour charger une image depuis le système
+  Future<void> pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    try {
+      final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      if (pickedFile != null) {
+        final File imageFile = File(pickedFile.path);
+        setState(() {
+          _selectedImage = imageFile;
+        });
+        await yoloOnPicture(imageFile);
+
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => DisplayPictureScreen(
+                imagePath: imageFile.path,
+                yoloResults : yoloResults
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      print("Erreur lors de la sélection de l'image : $e");
+    }
   }
 
   Future<void> _takePhoto() async {
@@ -202,6 +265,7 @@ class _YoloVideoState extends State<Camera> {
                 context: context,
               ),
             ),
+            customPickImage(pickImage),
             customExitButton(context),
           ],
         ),

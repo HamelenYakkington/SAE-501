@@ -83,10 +83,9 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                         children: [
                           Expanded(
                             child: Stack(fit: StackFit.expand, children: [
-                              // Affichez l'image
                               Image.file(
                                 File(widget.imagePath),
-                                fit: BoxFit.contain,
+                                fit: BoxFit.fitHeight,
                               ),
                               ...displayBoxesAroundRecognizedObjects(size),
                             ]),
