@@ -45,7 +45,9 @@ Widget customButtonPhoto({
                     alignment: Alignment.topCenter,
                     child: Image.asset(
                       height: 50,
-                      'assets/images/camera_button.webp',
+                      onTap != null
+                          ? 'assets/images/camera_logo.webp'
+                          : 'assets/images/camera_button.webp',
                       fit: BoxFit.cover,
                     ),
                   ),
