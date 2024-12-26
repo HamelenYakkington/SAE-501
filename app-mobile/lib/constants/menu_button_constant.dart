@@ -10,7 +10,7 @@ class MenuConstant {
     ButtonNavAcceuil(
         text: "Share Data",
         imagePath: "assets/images/share_button.webp",
-        route: "/album"),
+        route: "/login"),
     ButtonNavAcceuil(
         text: "Receive Data",
         imagePath: "assets/images/cloud_button.webp",

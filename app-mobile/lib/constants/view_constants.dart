@@ -9,4 +9,12 @@ class ViewConstant {
 
   static const Color GradientColorLightBlue = Color(0xFF00A6F4);
   static const Color GradientColorDarkBlue = Color(0xFF434BDE);
+
+
+  static const Color ColorInput = Colors.white;
+  static const Color ColorLabelInput = Colors.white;
+  static const Color ColorBorderInput = Colors.white;
+
+  static const Color ColorLabelInputError = Colors.red;
+  static const Color ColorBorderInputError = Colors.red;
 }
