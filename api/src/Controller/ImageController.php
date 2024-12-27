@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Image;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +14,7 @@ use App\Exception\InvalidBase64ImageException;
 class ImageController extends AbstractController
 {
     #[Route('/api/upload-image', name: 'upload_image', methods: ['POST'])]
-    public function uploadImage(Request $request): JsonResponse
+    public function uploadImage(Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         $response = [];
         $statusCode = Response::HTTP_OK;
@@ -38,38 +40,40 @@ class ImageController extends AbstractController
 
             $imageData = base64_decode($base64Image, true);
             if ($imageData === false) {
-                throw new InvalidBase64ImageException();
+                throw new \InvalidArgumentException('Invalid Base64 image data.');
             }
 
             // Generate file paths
             $fileName = uniqid('image_', true);
             $uploadDirImages = $this->getParameter('kernel.project_dir') . '/public/uploads/images';
-            $uploadDirLabels = $this->getParameter('kernel.project_dir') . '/public/uploads/labels';
 
             if (!is_dir($uploadDirImages)) {
                 mkdir($uploadDirImages, 0755, true);
-            }
-
-            if (!is_dir($uploadDirLabels)) {
-                mkdir($uploadDirLabels, 0755, true);
             }
 
             // Save image
             $imagePath = $uploadDirImages . '/' . $fileName . '.png';
             file_put_contents($imagePath, $imageData);
 
-            // Save label
-            $labelPath = $uploadDirLabels . '/' . $fileName . '.txt';
-            $label = $data['label'];
-            file_put_contents($labelPath, $label);
+            // Retrieve the authenticated user from the JWT token
+            $user = $this->getUser();
+            if (!$user) {
+                throw new \LogicException('No authenticated user found.');
+            }
 
-            $response['message'] = 'Image and label uploaded successfully.';
-            $response['image_path'] = '/uploads/images/' . $fileName . '.png';
-            $response['label_path'] = '/uploads/labels/' . $fileName . '.txt';
+            // Create and persist the Image entity
+            $imageEntity = new Image();
+            $imageEntity->setIdUser($user);  // The user will be set based on the JWT token
+            $imageEntity->setPath('/uploads/images/' . $fileName . '.png');
+            $imageEntity->setDate(new \DateTime());
+            $imageEntity->setTime(new \DateTime());
+            $entityManager->persist($imageEntity);
+            $entityManager->flush();
+
+            $response['message'] = 'Image uploaded and entity created successfully.';
+            $response['image_path'] = $imageEntity->getPath();
+            $response['entity_id'] = $imageEntity->getId();
         } catch (\InvalidArgumentException $e) {
-            $response['error'] = $e->getMessage();
-            $statusCode = Response::HTTP_BAD_REQUEST;
-        } catch (InvalidBase64ImageException $e) {
             $response['error'] = $e->getMessage();
             $statusCode = Response::HTTP_BAD_REQUEST;
         } catch (\Throwable $e) {
@@ -77,7 +81,6 @@ class ImageController extends AbstractController
             $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
 
-        // Single return statement at the end
         return $this->json($response, $statusCode);
     }
 }
