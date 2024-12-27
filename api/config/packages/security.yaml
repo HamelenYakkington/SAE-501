@@ -16,6 +16,20 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
+        login:
+            pattern: ^/api/login
+            stateless: true
+            json_login:
+                check_path: /api/login_check
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+        
+        # API firewall (JWT Authentication)
+        api:
+            pattern: ^/api/
+            stateless: true
+            jwt: ~
+
         # Main firewall for web access (non-API)
         main:
             # Use form_login for traditional web-based authentication (session-based)
@@ -30,16 +44,6 @@ security:
             logout:
                 path: logout
                 target: app_home
-
-            json_login:
-                # api_login is a route we will create below
-                check_path: login
-
-        # API firewall (JWT Authentication)
-        api:
-            pattern: ^/api/
-            stateless: true
-            jwt: ~
 
     # Access Control (Secure API endpoints)
     access_control:

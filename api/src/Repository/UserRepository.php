@@ -33,6 +33,11 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    public function findUserByJwtToken(string $token): ?User
+    {
+        return $this->findOneBy(['jwtToken' => $token]);
+    }
+
     //    /**
     //     * @return User[] Returns an array of User objects
     //     */

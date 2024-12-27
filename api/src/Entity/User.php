@@ -36,9 +36,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
-    
+
     #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isBanned = false;
+
+    #[ORM\Column(length: 1023, nullable: true)]
+    private ?string $jwtToken = null;
 
     public function getId(): ?int
     {
@@ -53,7 +56,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setFirstName(string $firstName): static
     {
         $this->firstName = $firstName;
-
         return $this;
     }
 
@@ -65,7 +67,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLastName(string $lastName): static
     {
         $this->lastName = $lastName;
-
         return $this;
     }
 
@@ -77,7 +78,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -99,9 +99,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
 
@@ -111,7 +109,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
-
         return $this;
     }
 
@@ -126,7 +123,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
@@ -138,7 +134,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsBanned(bool $isBanned): self
     {
         $this->isBanned = $isBanned;
-
         return $this;
     }
 
@@ -150,4 +145,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
+    // Getter and setter for the JWT token
+
+    public function getJwtToken(): ?string
+    {
+        return $this->jwtToken;
+    }
+
+    public function setJwtToken(?string $jwtToken): self
+    {
+        $this->jwtToken = $jwtToken;
+        return $this;
+    }
 }
+
