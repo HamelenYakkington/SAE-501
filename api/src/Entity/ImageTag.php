@@ -8,11 +8,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ImageTagRepository::class)]
 class ImageTag
 {
-    // #[ORM\Id]
-    // #[ORM\GeneratedValue]
-    // #[ORM\Column]
-    // private ?int $id = null;
-
     #[ORM\Id]
     #[ORM\ManyToOne(inversedBy: 'tag')]
     #[ORM\JoinColumn(nullable: false)]
@@ -26,14 +21,9 @@ class ImageTag
     #[ORM\Column]
     private ?int $occurence = null;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
     public function getImage(): ?Image
     {
-        return $this->Image;
+        return $this->image;
     }
 
     public function setImage(?Image $image): static

@@ -8,8 +8,8 @@
         <label for="imageInput">Select an image:</label>
         <input type="file" id="imageInput" accept="image/*" required>
 
-        <label for="labelInput">Enter a label (string):</label>
-        <input type="text" id="labelInput" required>
+        <label for="labelInput">Enter labels (one per line):</label>
+        <textarea id="labelInput" rows="6" required></textarea>
 
         <button type="submit">Upload</button>
     </form>
@@ -26,7 +26,7 @@
             const label = labelInput.value;
 
             if (!file || !label) {
-                alert('Please select a file and enter a label.');
+                alert('Please select a file and enter labels.');
                 return;
             }
 
@@ -35,9 +35,10 @@
             reader.onload = async function() {
                 const base64Image = reader.result;
 
+                // Send the labels as they are entered by the user
                 const payload = JSON.stringify({
                     image: base64Image,
-                    label: label
+                    label: label // Multi-line labels from the textarea
                 });
 
                 try {
@@ -45,7 +46,7 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzUyMjMwOTEsImV4cCI6MTczNTQ4MjI5MSwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImFkbWluQGFkbWluLmFkbWluIn0.ai7SD02OjVhUiVRQf1x6sQH2woFgN7npUsDyvQt5bOLPZr33uZ7vNvM40rqFb19t7kZo_bY93NiH19nxis2VMemQFF_Sqytw9K1LOlUcIKgAE_moOvE-mhx7vE7AEHFnAUVqaJDZ3UGA_sGtrg3JsDD0pPe5t2VOqBhHg-CZ-YBwCmXxAc1XKec1TIN3o2LYSx3I18iC5motGved8PVU6tTybLJemaEWdZtnVCH_f716cVPfydvN5qC1EmhTwzLOgUIaGmsJwfiGpD51aon89OzVQLJp7v4F6tUbUOY_Rsygb9UlrWgujFB79gTaSmiCemE5n6Fa-RTTkdnFtKFyyQ'
+                            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzU0MDE1NzIsImV4cCI6MTczNTY2MDc3Miwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImFkbWluQGFkbWluLmFkbWluIn0.htNmZ5tY5Y4wsXV2LzwdtkOYRN8xZOVGiDFNPYu6vpaIcE0Qc9cqg28kHJabUW88y2nmoEPR-WjfjiVidWWwTiUC2uQ46dFU_-HgYpWWYlhSCWMaLV4hvSRTMShVxQfnoScPMvRehYw4PsgKWV0fSrCk037N8TmAKtJPv83oflNfX_4XJYpPQz8pvnVfnLIeXiX4Pvd9_kixVTsz99QGyoYEyg1Uqmc3ALXYzXACwQHcCTgomyPefhcqTKeL7_TmMAPnjTfZtLHOJAIxw6M-_efG-fsbAyMVm4-pYQZE3p03SVPr4oJkS4Y_ZaxiYp5OKixumoN_6siGglI_9k4VPQ' // Replace TOKEN with your actual JWT
                         },
                         body: payload
                     });

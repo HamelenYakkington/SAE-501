@@ -3,24 +3,47 @@
 namespace App\Controller;
 
 use App\Entity\Image;
+use App\Entity\ImageTag;
+use App\Repository\TagRepository;
+use App\Repository\UserRepository;
+use App\Exception\InvalidBase64ImageException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Exception\InvalidBase64ImageException;
 
 class ImageController extends AbstractController
 {
+    public function __construct(
+        private UserRepository $userRepository,
+        private EntityManagerInterface $entityManager,
+        private TagRepository $tagRepository // Inject the TagRepository
+    ) {}
+    
     #[Route('/api/upload-image', name: 'upload_image', methods: ['POST'])]
-    public function uploadImage(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function uploadImage(Request $request): JsonResponse
     {
         $response = [];
         $statusCode = Response::HTTP_OK;
 
         try {
             $data = json_decode($request->getContent(), true);
+
+            // Validate JWT token
+            $authorizationHeader = $request->headers->get('Authorization');
+            if (!$authorizationHeader || strpos($authorizationHeader, 'Bearer ') !== 0) {
+                throw new \InvalidArgumentException('Invalid or missing Authorization token.');
+            }
+
+            $jwtToken = substr($authorizationHeader, 7);
+
+            // Find user by JWT token
+            $user = $this->userRepository->findUserByJwtToken($jwtToken);
+            if (!$user) {
+                throw new \InvalidArgumentException('Invalid or expired JWT token.');
+            }
 
             // Validate 'image' key
             if (!isset($data['image'])) {
@@ -40,40 +63,77 @@ class ImageController extends AbstractController
 
             $imageData = base64_decode($base64Image, true);
             if ($imageData === false) {
-                throw new \InvalidArgumentException('Invalid Base64 image data.');
+                throw new InvalidBase64ImageException();
             }
 
             // Generate file paths
             $fileName = uniqid('image_', true);
             $uploadDirImages = $this->getParameter('kernel.project_dir') . '/public/uploads/images';
+            $uploadDirLabels = $this->getParameter('kernel.project_dir') . '/public/uploads/labels';
 
             if (!is_dir($uploadDirImages)) {
                 mkdir($uploadDirImages, 0755, true);
+            }
+
+            if (!is_dir($uploadDirLabels)) {
+                mkdir($uploadDirLabels, 0755, true);
             }
 
             // Save image
             $imagePath = $uploadDirImages . '/' . $fileName . '.png';
             file_put_contents($imagePath, $imageData);
 
-            // Retrieve the authenticated user from the JWT token
-            $user = $this->getUser();
-            if (!$user) {
-                throw new \LogicException('No authenticated user found.');
-            }
+            // Save label to file
+            $labelPath = $uploadDirLabels . '/' . $fileName . '.txt';
+            file_put_contents($labelPath, $data['label']);
 
-            // Create and persist the Image entity
+            // Save metadata to database
             $imageEntity = new Image();
-            $imageEntity->setIdUser($user);  // The user will be set based on the JWT token
+            $imageEntity->setIdUser($user);
             $imageEntity->setPath('/uploads/images/' . $fileName . '.png');
             $imageEntity->setDate(new \DateTime());
             $imageEntity->setTime(new \DateTime());
-            $entityManager->persist($imageEntity);
-            $entityManager->flush();
 
-            $response['message'] = 'Image uploaded and entity created successfully.';
-            $response['image_path'] = $imageEntity->getPath();
-            $response['entity_id'] = $imageEntity->getId();
+            $this->entityManager->persist($imageEntity);
+
+            // Process tags from the label
+            $labels = explode("\n", trim($data['label']));
+            $tagOccurrences = [];
+
+            foreach ($labels as $label) {
+                $parts = explode(' ', trim($label));
+                $tagId = (int)$parts[0];
+
+                // Increment the tag occurrence count
+                if (!isset($tagOccurrences[$tagId])) {
+                    $tagOccurrences[$tagId] = 0;
+                }
+                $tagOccurrences[$tagId]++;
+            }
+
+            // Save tag occurrences
+            foreach ($tagOccurrences as $tagId => $occurrence) {
+                $tag = $this->tagRepository->find($tagId);
+
+                if ($tag) {
+                    $imageTag = new ImageTag();
+                    $imageTag->setImage($imageEntity);
+                    $imageTag->setTag($tag);
+                    $imageTag->setOccurence($occurrence);
+
+                    $this->entityManager->persist($imageTag);
+                }
+            }
+
+            $this->entityManager->flush();
+
+            $response['message'] = 'Image and label uploaded successfully.';
+            $response['image_path'] = '/uploads/images/' . $fileName . '.png';
+            $response['label_path'] = '/uploads/labels/' . $fileName . '.txt'; // Include label path in the response
         } catch (\InvalidArgumentException $e) {
+            $response['error'] = $e->getMessage();
+            $statusCode = Response::HTTP_BAD_REQUEST;
+        } catch (InvalidBase64ImageException $e) {
             $response['error'] = $e->getMessage();
             $statusCode = Response::HTTP_BAD_REQUEST;
         } catch (\Throwable $e) {

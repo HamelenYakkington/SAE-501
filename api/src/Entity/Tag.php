@@ -9,16 +9,22 @@ use Doctrine\ORM\Mapping as ORM;
 class Tag
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(length: 75)]
+    #[ORM\Column(length: 75, unique: true)]
     private ?string $label = null;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getLabel(): ?string
