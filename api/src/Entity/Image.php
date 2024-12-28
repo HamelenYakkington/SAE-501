@@ -140,4 +140,9 @@ class Image
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->path ?? 'Image #' . $this->id;
+    }
 }

@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Image;
+use App\Entity\ImageTag;
 use App\Entity\User;
 use App\Entity\Tag;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
@@ -41,6 +42,7 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Utilisateurs', 'fas fa-users', User::class);
         yield MenuItem::linkToCrud('Tags', 'fas fa-tags', Tag::class);
         yield MenuItem::linkToCrud('Images', 'fas fa-images', Image::class);
+        yield MenuItem::linkToCrud('Image Tag', 'fas fa-tag', ImageTag::class);
 
         $homepageUrl = $this->urlGenerator->generate('app_home');
         yield MenuItem::linkToUrl('Go to Homepage', 'fa fa-globe', $homepageUrl);

@@ -6,20 +6,29 @@ use App\Repository\ImageTagRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ImageTagRepository::class)]
+#[ORM\UniqueConstraint(columns: ['image_id', 'tag_id'])]
 class ImageTag
 {
     #[ORM\Id]
-    #[ORM\ManyToOne(inversedBy: 'tag')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\ManyToOne(inversedBy: 'tag', cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Image $image = null;
 
-    #[ORM\Id]
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(cascade: ['persist'])]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Tag $tag = null;
 
     #[ORM\Column]
     private ?int $occurence = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
     public function getImage(): ?Image
     {
