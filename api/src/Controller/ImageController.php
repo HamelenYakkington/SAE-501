@@ -6,6 +6,7 @@ use App\Entity\Image;
 use App\Entity\ImageTag;
 use App\Repository\TagRepository;
 use App\Repository\UserRepository;
+use App\Repository\ImageRepository;
 use App\Exception\InvalidBase64ImageException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -142,5 +143,31 @@ class ImageController extends AbstractController
         }
 
         return $this->json($response, $statusCode);
+    }
+
+    #[Route('/api/images/latest-history/{nbr}', name: 'latest_history', methods: ['GET'])]
+    public function getLatestSearchesPerUser(
+        int $nbr,
+        ImageRepository $imageRepository,
+        Request $request
+    ): JsonResponse {
+        if ($nbr > 100) {
+            $nbr = 100;
+        }
+        $limit = $request->query->getInt('limit', default: $nbr);
+
+        $latestSearches = $imageRepository->findLatestSearchesPerUser($limit);
+
+        $data = array_map(function ($image) {
+            return [
+                'id' => $image->getId(),
+                'user' => $image->getIdUser(),
+                'path' => $image->getPath(),
+                'date' => $image->getDate()->format('Y-m-d'),
+                'time' => $image->getTime()->format('H:i:s'),
+            ];
+        }, $latestSearches);
+
+        return new JsonResponse($data);
     }
 }
