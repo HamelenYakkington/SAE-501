@@ -35,10 +35,9 @@
             reader.onload = async function() {
                 const base64Image = reader.result;
 
-                // Send the labels as they are entered by the user
                 const payload = JSON.stringify({
                     image: base64Image,
-                    label: label // Multi-line labels from the textarea
+                    label: label
                 });
 
                 try {
