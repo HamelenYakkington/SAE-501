@@ -19,7 +19,7 @@ class ImageController extends AbstractController
     public function __construct(
         private UserRepository $userRepository,
         private EntityManagerInterface $entityManager,
-        private TagRepository $tagRepository // Inject the TagRepository
+        private TagRepository $tagRepository
     ) {}
     
     #[Route('/api/upload-image', name: 'upload_image', methods: ['POST'])]
@@ -129,7 +129,7 @@ class ImageController extends AbstractController
 
             $response['message'] = 'Image and label uploaded successfully.';
             $response['image_path'] = '/uploads/images/' . $fileName . '.png';
-            $response['label_path'] = '/uploads/labels/' . $fileName . '.txt'; // Include label path in the response
+            $response['label_path'] = '/uploads/labels/' . $fileName . '.txt';
         } catch (\InvalidArgumentException $e) {
             $response['error'] = $e->getMessage();
             $statusCode = Response::HTTP_BAD_REQUEST;
