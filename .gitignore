@@ -29,3 +29,7 @@ build/gestProject/xref-gestProject.html
 gestProject.spec
 app-mobile/pubspec.lock
 api/composer.lock
+/app-mobile/windows
+/app-mobile/macos
+/app-mobile/linux
+app-mobile/pubspec.lock

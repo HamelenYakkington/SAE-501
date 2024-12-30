@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vision/flutter_vision.dart';
 import 'package:camera/camera.dart';
 import 'package:sae_501/constants/view_constants.dart';
+import 'package:sae_501/controller/verif_connexion.dart';
 import 'package:sae_501/view/widget/button_exit_custom.dart';
 import 'package:sae_501/view/widget/button_photo.dart';
 import 'package:sae_501/view/displayPhoto.dart';
@@ -30,6 +31,7 @@ class _YoloVideoState extends State<Camera> {
   @override
   void initState() {
     super.initState();
+    checkConnexionToken(context);
     init();
   }
 

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -55,12 +57,52 @@ class ApiService {
       });
 
       if (response['message'] == 'User registered successfully') {
-        return true; // Succès
+        return true;
       } else {
-        return false; // Échec
+        return false;
       }
     } catch (e) {
-      rethrow; // Handle exceptions
+      rethrow;
+    }
+  }
+
+  Future<bool> sendImage(
+      BuildContext context,
+      File imageFile,
+      String label,
+      String jwtToken,
+      ) async {
+    try {
+      final bytes = await imageFile.readAsBytes();
+      final base64Image = base64Encode(bytes);
+
+      final response = await post(
+        '/api/upload-image',
+        {
+          'image': 'data:image/png;base64,$base64Image',
+          'label': label,
+        },
+        headers: {
+          'Authorization': 'Bearer $jwtToken',
+        },
+      );
+
+      if (response['message'] == 'Image and label uploaded successfully.') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Image envoyée avec succès!')),
+        );
+        return true;
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur: ${response['error']}')),
+        );
+        return false;
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Une erreur est survenue: $e')),
+      );
+      return false;
     }
   }
 }

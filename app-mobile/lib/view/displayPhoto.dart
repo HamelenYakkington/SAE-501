@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:image/image.dart' as img;
 import 'dart:io';
 import 'package:sae_501/constants/view_constants.dart';
+import 'package:sae_501/controller/verif_connexion.dart';
+import 'package:sae_501/services/api_service.dart';
 import 'package:sae_501/view/widget/button_exit_custom.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DisplayPictureScreen extends StatefulWidget {
   final String imagePath;
@@ -18,8 +21,15 @@ class DisplayPictureScreen extends StatefulWidget {
 }
 
 class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
+  ApiService apiService = ApiService();
+
+  @override
+  void initState() {
+    super.initState();
+    checkConnexionToken(context);
+  }
+
   List<Widget> displayBoxesAroundRecognizedObjects(Size screen) {
-    print("Display Rectangle 2");
     if (widget.yoloResults.isEmpty) return [];
     final imageFile = File(widget.imagePath);
     final img.Image image = img.decodeImage(imageFile.readAsBytesSync())!;
@@ -49,8 +59,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
           child: Text(
             "${result['tag']} ${(result['box'][4] * 100).toStringAsFixed(2)}%",
             style: TextStyle(
-              background: Paint()
-                ..color = colorPick,
+              background: Paint()..color = colorPick,
               color: const Color.fromARGB(255, 115, 0, 255),
               fontSize: 18.0,
             ),
@@ -60,11 +69,85 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
     }).toList();
   }
 
+  void _showModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                "Results Details",
+                style:
+                TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10),
+              ...widget.yoloResults.map((result) {
+                return ListTile(
+                  title: Text(result['tag']),
+                  subtitle: Text(
+                    "Confidence: ${(result['box'][4] * 100).toStringAsFixed(2)}%",
+                  ),
+                );
+              }).toList(),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () async {
+                  Navigator.pop(context);
+                  await _sendResults();
+                },
+                child: const Text("Send Results"),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _sendResults() async {
+    try {
+      final label = widget.yoloResults.map((result) {
+        final tag = result['tag'];
+        final box = result['box'];
+        return '${tag} ${box[0]} ${box[1]} ${box[2]} ${box[3]} ${box[4]}';
+      }).join('\n');
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String token = prefs.getString('auth_token')!;
+
+      final success = await apiService.sendImage(
+        context,
+        File(widget.imagePath),
+        label,
+        token,
+      );
+
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Results sent successfully!')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to send results.')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('An error occurred: $e')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery
-        .of(context)
-        .size;
+    final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       backgroundColor: ViewConstant.backgroundScalfold,
@@ -92,9 +175,22 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                           ),
                         ],
                       ),
-                    )
+                    ),
                   ],
                 ),
+              ),
+            ),
+            Positioned(
+              bottom: 5,
+              right: 5,
+              child: ElevatedButton(
+                onPressed: () => _showModal(context),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                ),
+                child: const Text("Send Results"),
               ),
             ),
             customExitButton(context),
