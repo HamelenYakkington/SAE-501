@@ -46,6 +46,10 @@ class SecurityController extends AbstractController
             return new JsonResponse(['error' => 'Invalid credentials'], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
+        if ($user->isBanned()) {
+            return new JsonResponse(['error' => "Your account is banned. Please contact support."], JsonResponse::HTTP_UNAUTHORIZED);
+        }
+
         // Generate JWT token for the authenticated user
         $token = $this->jwtManager->create($user);
 
@@ -97,10 +101,10 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
-        $lastUsername = $authenticationUtils->getLastUsername();
+        $lastEmail = $authenticationUtils->getLastUsername();
 
         return $this->render('security/login.html.twig', [
-            'last_username' => $lastUsername,
+            'last_username' => $lastEmail,
             'error' => $error,
         ]);
     }
