@@ -4,6 +4,9 @@ import 'package:sae_501/view/widget/header_custom.dart';
 import 'package:sae_501/view/widget/footer_custom.dart';
 import 'package:sae_501/constants/view_constants.dart';
 import 'package:sae_501/view/widget/input_text_custom.dart';
+import 'package:sae_501/services/api_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sae_501/controller/verif_connexion.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -15,6 +18,14 @@ class _Login extends State<Login> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  final ApiService _apiService = ApiService();
+
+  @override
+  void initState() {
+    super.initState();
+    connexionByToken(context);
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -22,12 +33,30 @@ class _Login extends State<Login> {
     super.dispose();
   }
 
-  void _submitForm() {
+  Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
-      Navigator.pushNamed(context, '/');
+      try {
+        final response = await _apiService.post('/login_token', {
+          'email': _emailController.text,
+          'password': _passwordController.text,
+        });
+
+        if (response['token'] != null) {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('auth_token', response['token']);
+          Navigator.pushNamed(context, '/');
+        } else {
+          throw Exception('Token manquant dans la réponse');
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erreur : ${e.toString()}')),
+        );
+      }
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ViewConstant.backgroundScalfold,

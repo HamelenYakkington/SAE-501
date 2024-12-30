@@ -43,6 +43,8 @@ dependencies:
   permission_handler: ^11.3.1
   camera: ^0.10.0+2
   flutter_vision: ^1.1.4
+  http: ^1.2.2
+  shared_preferences: ^2.0.17
 
 dev_dependencies:
   flutter_test:

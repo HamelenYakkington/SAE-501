@@ -15,14 +15,14 @@ void main() {
     ),
     initialRoute: '/login',
     routes: {
-      '/': (context) => const Acceuil(),
+      '/': (context) => Acceuil(),
       '/album': (context) => const Album(),
       '/sub_album': (context) => const SubAlbum(),
-      '/add_album' : (context) => const Acceuil(),
-      '/info' : (context) => const Info(),
-      '/camera' : (context) => const Camera(),
-      '/login' : (context) => Login(),
-      '/register' : (context) => Register(),
+      '/add_album': (context) => Acceuil(),
+      '/info': (context) => Info(),
+      '/camera': (context) => const Camera(),
+      '/login': (context) => Login(),
+      '/register': (context) => Register(),
     },
   ));
 }

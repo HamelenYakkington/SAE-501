@@ -27,3 +27,5 @@ api/assets/vendor/
 build/gestProject/xref-gestProject.html
 /build
 gestProject.spec
+app-mobile/pubspec.lock
+api/composer.lock

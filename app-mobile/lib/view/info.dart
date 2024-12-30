@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sae_501/controller/verif_connexion.dart';
 import 'package:sae_501/view/widget/button_photo.dart';
 import 'package:sae_501/view/widget/header_custom.dart';
 import 'package:sae_501/view/widget/footer_custom.dart';
@@ -6,8 +7,18 @@ import 'package:sae_501/constants/view_constants.dart';
 import 'package:sae_501/constants/info_constants.dart';
 import 'package:sae_501/view/widget/button_return_custom.dart';
 
-class Info extends StatelessWidget {
-  const Info({Key? key}) : super(key: key);
+class Info extends StatefulWidget {
+  @override
+  _Info createState() => _Info();
+}
+
+class _Info  extends State<Info> {
+
+  @override
+  void initState() {
+    super.initState();
+    checkConnexionToken(context);
+  }
 
   @override
   Widget build(BuildContext context) {
