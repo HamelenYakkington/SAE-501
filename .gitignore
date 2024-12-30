@@ -24,3 +24,6 @@ api/public/assets/
 api/assets/vendor/
 ###< symfony/asset-mapper ###
 /utilsPython/__pycache__
+build/gestProject/xref-gestProject.html
+/build
+gestProject.spec

@@ -17,7 +17,7 @@ async def init():
             ["php", "bin/console" ,"importmap:install"],
             ["php", "bin/console" ,"assets:install"],
             ["php", "bin/console" ,"asset-map:compile"],
-            ["php", "bin/console" ,"lexik:jwt:generate-keypair"],
+            ["php", "bin/console" ,"lexik:jwt:generate-keypair", "--overwrite"],
             ["chown", "-R", "www-data:www-data", "/var/www/symfony"],
             ["php", "bin/console", "doctrine:database:create", "--no-interaction"],
             ["php", "bin/console", "doctrine:migration:migrate", "--no-interaction"],
