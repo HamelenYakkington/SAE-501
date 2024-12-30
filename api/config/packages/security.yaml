@@ -33,7 +33,6 @@ security:
         # Main firewall for web access (non-API)
         main:
             user_checker: App\Security\BannedUserChecker
-            # Use form_login for traditional web-based authentication (session-based)
             form_login:
                 login_path: login
                 check_path: login
