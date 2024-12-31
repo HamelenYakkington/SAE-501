@@ -6,6 +6,8 @@ use App\Entity\Image;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 
 class ImageCrudController extends AbstractCrudController
 {
@@ -18,8 +20,12 @@ class ImageCrudController extends AbstractCrudController
     {
         yield IdField::new('id')->hideOnForm();
 
-        yield TextField::new('path')
+        yield TextField::new('pathImage')
             ->setLabel('Image Path')
+            ->setRequired(true);
+
+        yield TextField::new('pathLabel')
+            ->setLabel('Label Path')
             ->setRequired(true);
 
         yield TextField::new('dateTime')
@@ -30,20 +36,12 @@ class ImageCrudController extends AbstractCrudController
 
     public function createEntity(string $entityFqcn)
     {
-        $image = new $entityFqcn();
+        throw new \RuntimeException('La création d\'une nouvelle image est interdite.');
+    }
 
-        // Automatically set the current date and time during creation
-        $currentDate = new \DateTimeImmutable();
-        $image->setDate($currentDate);
-        $image->setTime($currentDate);
-
-        $user = $this->getUser();
-        if (!$user) {
-            throw new \RuntimeException('No user is logged in. Cannot assign user to the image.');
-        }
-    
-        $image->setIdUser($user);
-
-        return $image;
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->disable(Action::NEW);
     }
 }
