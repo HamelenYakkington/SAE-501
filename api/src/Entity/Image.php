@@ -21,7 +21,10 @@ class Image
     private ?User $idUser = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $path;
+    private $pathImage;
+
+    #[ORM\Column(type: 'string', length: 255)]
+    private $pathLabel;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)] // Stocke la date (jour, mois, année)
     private ?\DateTimeInterface $date = null;
@@ -59,14 +62,26 @@ class Image
         return $this;
     }
 
-    public function getPath(): ?string
+    public function getPathImage(): ?string
     {
-        return $this->path;
+        return $this->pathImage;
     }
 
-    public function setPath(?string $path): static
+    public function setPathImage(?string $pathImage): static
     {
-        $this->path = $path;
+        $this->pathImage = $pathImage;
+
+        return $this;
+    }
+
+    public function getPathLabel(): ?string
+    {
+        return $this->pathLabel;
+    }
+
+    public function setPathLabel(?string $pathLabel): static
+    {
+        $this->pathLabel = $pathLabel;
 
         return $this;
     }
@@ -143,6 +158,6 @@ class Image
 
     public function __toString(): string
     {
-        return $this->path ?? 'Image #' . $this->id;
+        return $this->pathImage ?? 'Image #' . $this->id;
     }
 }
