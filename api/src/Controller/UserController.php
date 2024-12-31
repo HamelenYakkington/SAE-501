@@ -80,7 +80,9 @@ class UserController extends AbstractController
         $imageData = array_map(function ($image) {
             return [
                 'id' => $image->getId(),
-                'path' => $image->getPath(),
+                'user' => $image->getIdUser(),
+                'pathImage' => $image->getPathImage(),
+                'pathLabel' => $image->getPathLabel(),
                 'date' => $image->getDate()->format('Y-m-d'),
                 'time' => $image->getTime()->format('H:i:s'),
             ];
@@ -114,7 +116,9 @@ class UserController extends AbstractController
         $imageData = array_map(function ($image) {
             return [
                 'id' => $image->getId(),
-                'path' => $image->getPath(),
+                'user' => $image->getIdUser(),
+                'pathImage' => $image->getPathImage(),
+                'pathLabel' => $image->getPathLabel(),
                 'date' => $image->getDate()->format('Y-m-d'),
                 'time' => $image->getTime()->format('H:i:s'),
             ];
