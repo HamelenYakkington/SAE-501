@@ -84,54 +84,67 @@ class ImageController extends AbstractController
             $imagePath = $uploadDirImages . '/' . $fileName . '.png';
             file_put_contents($imagePath, $imageData);
 
-            // Save label to file
-            $labelPath = $uploadDirLabels . '/' . $fileName . '.txt';
-            file_put_contents($labelPath, $data['label']);
-
-            // Save metadata to database
-            $imageEntity = new Image();
-            $imageEntity->setIdUser($user);
-            $imageEntity->setPathImage('/uploads/images/' . $fileName . '.png');
-            $imageEntity->setPathLabel('/uploads/labels/' . $fileName . '.txt');
-            $imageEntity->setDate(new \DateTime());
-            $imageEntity->setTime(new \DateTime());
-
-            $this->entityManager->persist($imageEntity);
-
-            // Process tags from the label
+            // Process and validate label file
             $labels = explode("\n", trim($data['label']));
+            $processedLabels = [];
             $tagOccurrences = [];
 
             foreach ($labels as $label) {
-                $parts = explode(' ', trim($label));
-                $tagId = (int)$parts[0];
+                $row = explode(' ', trim($label));
+                $firstWord = strtolower($row[0]);
 
-                // Increment the tag occurrence count
-                if (!isset($tagOccurrences[$tagId])) {
-                    $tagOccurrences[$tagId] = 0;
-                }
-                $tagOccurrences[$tagId]++;
-            }
-
-            // Save tag occurrences
-            foreach ($tagOccurrences as $tagId => $occurrence) {
-                $tag = $this->tagRepository->find($tagId);
+                // Check if the tag exists
+                $tag = $this->tagRepository->findOneBy(['label' => $firstWord]);
 
                 if ($tag) {
-                    $imageTag = new ImageTag();
-                    $imageTag->setImage($imageEntity);
-                    $imageTag->setTag($tag);
-                    $imageTag->setOccurence($occurrence);
+                    // Replace label with tag ID
+                    $processedLabels[] = $tag->getId() . ' ' . implode(' ', array_slice($row, 1));
 
-                    $this->entityManager->persist($imageTag);
+                    // Increment the tag occurrence count
+                    if (!isset($tagOccurrences[$tag->getId()])) {
+                        $tagOccurrences[$tag->getId()] = 0;
+                    }
+                    $tagOccurrences[$tag->getId()]++;
                 }
             }
 
-            $this->entityManager->flush();
+            if (!empty($processedLabels)) {
+                // Save processed label to file
+                $labelPath = $uploadDirLabels . '/' . $fileName . '.txt';
+                file_put_contents($labelPath, implode("\n", $processedLabels));
 
-            $response['message'] = 'Image and label uploaded successfully.';
-            $response['image_path'] = '/uploads/images/' . $fileName . '.png';
-            $response['label_path'] = '/uploads/labels/' . $fileName . '.txt';
+                // Save metadata to database
+                $imageEntity = new Image();
+                $imageEntity->setIdUser($user);
+                $imageEntity->setPathImage('/uploads/images/' . $fileName . '.png');
+                $imageEntity->setPathLabel('/uploads/labels/' . $fileName . '.txt');
+                $imageEntity->setDate(new \DateTime());
+                $imageEntity->setTime(new \DateTime());
+
+                $this->entityManager->persist($imageEntity);
+
+                // Save tag occurrences
+                foreach ($tagOccurrences as $tagId => $occurrence) {
+                    $tag = $this->tagRepository->find($tagId);
+
+                    if ($tag) {
+                        $imageTag = new ImageTag();
+                        $imageTag->setImage($imageEntity);
+                        $imageTag->setTag($tag);
+                        $imageTag->setOccurence($occurrence);
+
+                        $this->entityManager->persist($imageTag);
+                    }
+                }
+
+                $this->entityManager->flush();
+
+                $response['message'] = 'Image and label uploaded successfully.';
+                $response['image_path'] = '/uploads/images/' . $fileName . '.png';
+                $response['label_path'] = '/uploads/labels/' . $fileName . '.txt';
+            } else {
+                throw new \InvalidArgumentException('Processed label file is empty. No valid tags found.');
+            }
         } catch (\InvalidArgumentException $e) {
             $response['error'] = $e->getMessage();
             $statusCode = Response::HTTP_BAD_REQUEST;
@@ -139,7 +152,8 @@ class ImageController extends AbstractController
             $response['error'] = $e->getMessage();
             $statusCode = Response::HTTP_BAD_REQUEST;
         } catch (\Throwable $e) {
-            $response['error'] = 'An unexpected error occurred.';
+            $response['error'] = 'An unexpected error occurred. ' . $e->getMessage();
+            $response['trace'] = $e->getTraceAsString();
             $statusCode = Response::HTTP_INTERNAL_SERVER_ERROR;
         }
 

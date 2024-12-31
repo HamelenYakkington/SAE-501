@@ -11,7 +11,7 @@
         <label for="labelInput">Enter labels (one per line):</label>
         <textarea id="labelInput" rows="6" required></textarea>
 
-        <button type="submit">Upload</button>
+        <button type="submit" id="uploadButton">Upload</button>
     </form>
     <div id="result" style="margin-top: 20px;"></div>
 
@@ -21,6 +21,8 @@
 
             const fileInput = document.getElementById('imageInput');
             const labelInput = document.getElementById('labelInput');
+            const uploadButton = document.getElementById('uploadButton');
+            const resultDiv = document.getElementById('result');
 
             const file = fileInput.files[0];
             const label = labelInput.value;
@@ -30,9 +32,13 @@
                 return;
             }
 
+            // Show loading indicator
+            uploadButton.disabled = true;
+            resultDiv.innerHTML = '<p>Uploading... Please wait.</p>';
+
             const reader = new FileReader();
 
-            reader.onload = async function() {
+            reader.onload = async function () {
                 const base64Image = reader.result;
 
                 const payload = JSON.stringify({
@@ -45,7 +51,7 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzU0MDE1NzIsImV4cCI6MTczNTY2MDc3Miwicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImFkbWluQGFkbWluLmFkbWluIn0.htNmZ5tY5Y4wsXV2LzwdtkOYRN8xZOVGiDFNPYu6vpaIcE0Qc9cqg28kHJabUW88y2nmoEPR-WjfjiVidWWwTiUC2uQ46dFU_-HgYpWWYlhSCWMaLV4hvSRTMShVxQfnoScPMvRehYw4PsgKWV0fSrCk037N8TmAKtJPv83oflNfX_4XJYpPQz8pvnVfnLIeXiX4Pvd9_kixVTsz99QGyoYEyg1Uqmc3ALXYzXACwQHcCTgomyPefhcqTKeL7_TmMAPnjTfZtLHOJAIxw6M-_efG-fsbAyMVm4-pYQZE3p03SVPr4oJkS4Y_ZaxiYp5OKixumoN_6siGglI_9k4VPQ' // Replace TOKEN with your actual JWT
+                            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzU2NTc1NzMsImV4cCI6MTczNTkxNjc3Mywicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImFkbWluQGFkbWluLmFkbWluIn0.AEhF834cFaexcgbbQQ9c8q6KZJt80PAYEs-j-mSggNRQw1wRnu0q3H2mPmmzNqls3Vzf0fdcqZGqC1N2BR8tkkJpZXz2acPZmCfWM7QzpXoN8mRDnhnv5EsM5ntEAnsSZWeULfcpx9D0ufKILM4dTUs8j4zBhdMxzspPgVRI9B1lsuuNlR0ZF9KB4saJHUElc1y6EvNA5GNurI4nrpYTYgz_Bt2UMYq5_ccwK8rSkDWO67dw25e_RCgysogt3ESTbTHvEG6xjPjnMihkPTsbAA2d4OjlJqEAEq5dcEjAfOGsN60ORJi1KFgmp3M5UOqFLx8B72XS-R8zycsXGRhx_A' // Replace TOKEN dynamically as needed
                         },
                         body: payload
                     });
@@ -53,18 +59,23 @@
                     const result = await response.json();
 
                     if (response.ok) {
-                        document.getElementById('result').innerHTML = `
+                        resultDiv.innerHTML = `
                             <p><strong>Message:</strong> ${result.message}</p>
                             <p><strong>Image Path:</strong> <a href="${result.image_path}" target="_blank">${result.image_path}</a></p>
                             <p><strong>Label Path:</strong> <a href="${result.label_path}" target="_blank">${result.label_path}</a></p>
                         `;
+                        // Reset the form
+                        fileInput.value = '';
+                        labelInput.value = '';
                     } else {
-                        document.getElementById('result').innerHTML = `
+                        resultDiv.innerHTML = `
                             <p><strong>Error:</strong> ${result.error}</p>
                         `;
                     }
                 } catch (error) {
-                    document.getElementById('result').innerHTML = '<p>An unexpected error occurred.</p>';
+                    resultDiv.innerHTML = '<p>An unexpected error occurred.</p>';
+                } finally {
+                    uploadButton.disabled = false;
                 }
             };
 
