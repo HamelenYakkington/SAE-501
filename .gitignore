@@ -33,3 +33,4 @@ api/composer.lock
 /app-mobile/macos
 /app-mobile/linux
 app-mobile/pubspec.lock
+app-mobile/.env

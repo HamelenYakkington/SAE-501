@@ -75,7 +75,7 @@ class _YoloVideoState extends State<Camera> {
         imageWidth: cameraImage.width,
         iouThreshold: 0.4,
         confThreshold: 0.4,
-        classThreshold: 0.5);
+        classThreshold: 0.7);
     if (result.isNotEmpty) {
       setState(() {
         yoloResults = result;
