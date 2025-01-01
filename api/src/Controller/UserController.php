@@ -126,4 +126,24 @@ class UserController extends AbstractController
     
         return new JsonResponse($imageData);
     }
+
+    #[Route('/api/user/info/{id}', name: 'user_info', methods: ['GET'])]
+    public function getUserInfo(int $id): JsonResponse
+    {
+        $user = $this->entityManager->getRepository(User::class)->find($id);
+
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], 404);
+        }
+
+        // Extract non-sensitive information
+        $userInfo = [
+            'id' => $user->getId(),
+            'firstName' => $user->getFirstName(),
+            'lastName' => $user->getLastName(),
+            'role' => $user->getRoles(),
+        ];
+
+        return new JsonResponse($userInfo);
+    }
 }
