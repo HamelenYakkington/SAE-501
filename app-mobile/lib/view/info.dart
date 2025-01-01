@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sae_501/controller/verif_connexion.dart';
+import 'package:sae_501/view/widget/button_deconnexion_custom.dart';
 import 'package:sae_501/view/widget/button_photo.dart';
 import 'package:sae_501/view/widget/header_custom.dart';
 import 'package:sae_501/view/widget/footer_custom.dart';
@@ -78,6 +79,7 @@ class _Info  extends State<Info> {
               ),
             ),
             customReturnButton(context),
+            customDecoButton(context),
           ],
         ),
       ),

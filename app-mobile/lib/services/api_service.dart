@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiService {
-  final String baseUrl;
-
-  ApiService({this.baseUrl = 'http://212.227.57.57:8081'});
+  final String? baseUrl = dotenv.env['BASE_URL'];
 
   Future<dynamic> get(String endpoint, {Map<String, String>? headers}) async {
     try {

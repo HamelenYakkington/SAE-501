@@ -8,6 +8,7 @@ Widget customFooter() {
   return Container(
     color: Colors.black,
     width: double.infinity,
+    height: 30,
     padding: const EdgeInsets.all(8.0),
     child: Center(
       child: Text(

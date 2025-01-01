@@ -8,9 +8,9 @@ class MenuConstant {
         imagePath: "assets/images/album_button.webp",
         route: "/album"),
     ButtonNavAcceuil(
-        text: "Share Data",
+        text: "Historique",
         imagePath: "assets/images/share_button.webp",
-        route: "/login"),
+        route: "/historique"),
     ButtonNavAcceuil(
         text: "Receive Data",
         imagePath: "assets/images/cloud_button.webp",

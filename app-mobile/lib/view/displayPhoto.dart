@@ -133,7 +133,8 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Results sent successfully!')),
         );
-      } else {
+      }
+      else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to send results.')),
         );
