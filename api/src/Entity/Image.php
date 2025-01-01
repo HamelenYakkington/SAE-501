@@ -50,12 +50,17 @@ class Image
         return $this->id;
     }
 
-    public function getIdUser(): ?User
+    public function getUser(): ?User
     {
         return $this->idUser;
     }
 
-    public function setIdUser(?User $idUser): static
+    public function getIdUser(): ?User
+    {
+        return $this->idUser->getId();
+    }
+
+    public function setUser(?User $idUser): static
     {
         $this->idUser = $idUser;
 
