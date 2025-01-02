@@ -7,7 +7,6 @@ import 'package:sae_501/constants/view_constants.dart';
 import 'package:sae_501/view/widget/grid_builder_custom.dart';
 import 'package:sae_501/constants/menu_button_constant.dart';
 import 'package:sae_501/view/widget/button_nav_acceuil_custom.dart';
-import 'package:sae_501/view/widget/button_deconnexion_custom.dart';
 
 class Acceuil extends StatefulWidget {
   @override
@@ -51,7 +50,6 @@ class _Acceuil extends State<Acceuil> {
               ),
             ),
           ),
-          customDecoButton(context),
         ],
       ),
     );

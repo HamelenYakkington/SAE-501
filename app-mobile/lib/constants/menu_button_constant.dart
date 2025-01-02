@@ -4,12 +4,8 @@ import 'package:sae_501/entity/button_nav_acceuil.dart';
 class MenuConstant {
   static final List<ButtonNavAcceuil> items = [
     ButtonNavAcceuil(
-        text: "Album",
-        imagePath: "assets/images/album_button.webp",
-        route: "/album"),
-    ButtonNavAcceuil(
-        text: "Historique",
-        imagePath: "assets/images/share_button.webp",
+        text: "History",
+        imagePath: "assets/images/history.webp",
         route: "/historique"),
     ButtonNavAcceuil(
         text: "Receive Data",
@@ -19,6 +15,10 @@ class MenuConstant {
         text: "Info",
         imagePath: "assets/images/info_button.webp",
         route: "/info"),
+    ButtonNavAcceuil(
+        text: "LogOut",
+        imagePath: "assets/images/deco_button_menu.webp",
+        route: "/logout"),
   ];
 
 }

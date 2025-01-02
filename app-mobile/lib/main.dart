@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sae_501/view/acceuil.dart';
 import 'package:sae_501/view/historique.dart';
+import 'package:sae_501/view/logout.dart';
 import 'package:sae_501/view/register.dart';
 import 'package:sae_501/view/info.dart';
 import 'package:sae_501/view/camera.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         '/info': (context) => Info(),
         '/camera': (context) => const Camera(),
         '/login': (context) => Login(),
+        '/logout': (context) => LogOut(),
         '/register': (context) => Register(),
         '/historique': (context) => const Historique(),
       },

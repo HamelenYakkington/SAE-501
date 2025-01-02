@@ -21,7 +21,7 @@ Widget customDecoButton(BuildContext buildContext) {
             fit: BoxFit.cover,
           ),
           onPressed: () {
-            deco(buildContext);
+            Navigator.pushReplacementNamed(buildContext, '/logout');
           },
         ),
       ));
