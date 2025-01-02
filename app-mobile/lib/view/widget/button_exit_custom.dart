@@ -11,7 +11,7 @@ Widget customExitButton(BuildContext context) {
           height: 19,
           fit: BoxFit.cover,
         ),
-        onPressed: () =>  Navigator.pushNamed(context, '/')
+        onPressed: () =>  Navigator.pop(context)
     ),
   );
 }

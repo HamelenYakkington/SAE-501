@@ -22,11 +22,15 @@ class DisplayPictureScreen extends StatefulWidget {
 
 class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   ApiService apiService = ApiService();
+  bool disabledBtn = false;
 
   @override
   void initState() {
     super.initState();
     checkConnexionToken(context);
+    if(widget.yoloResults.isEmpty) {
+      disabledBtn = true;
+    }
   }
 
   List<Widget> displayBoxesAroundRecognizedObjects(Size screen) {
@@ -38,6 +42,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
 
     double factorX = screen.width / imageWidth;
     double factorY = screen.height / imageHeight;
+
 
     Color colorPick = const Color.fromARGB(255, 50, 233, 30);
 
@@ -98,6 +103,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
               }).toList(),
               const SizedBox(height: 10),
               ElevatedButton(
+
                 onPressed: () async {
                   Navigator.pop(context);
                   await _sendResults();
@@ -113,6 +119,10 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
 
   Future<void> _sendResults() async {
     try {
+      setState(() {
+        disabledBtn = true;
+      });
+
       final label = widget.yoloResults.map((result) {
         final tag = result['tag'];
         final box = result['box'];
@@ -138,11 +148,17 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to send results.')),
         );
+        setState(() {
+          disabledBtn = false;
+        });
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('An error occurred: $e')),
       );
+      setState(() {
+        disabledBtn = false;
+      });
     }
   }
 
@@ -181,19 +197,20 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                 ),
               ),
             ),
-            Positioned(
-              bottom: 5,
-              right: 5,
-              child: ElevatedButton(
-                onPressed: () => _showModal(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            if(disabledBtn == false)
+              Positioned(
+                bottom: 5,
+                right: 5,
+                child: ElevatedButton(
+                  onPressed: () => _showModal(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                    padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  ),
+                  child: const Text("Send Results"),
                 ),
-                child: const Text("Send Results"),
               ),
-            ),
             customExitButton(context),
           ],
         ),
