@@ -25,7 +25,7 @@ class ImageFixtures extends Fixture implements DependentFixtureInterface
             $image->setTime($time);
 
             $userReference = $this->getReference('user' . rand(0, 25), User::class); // Random user from UserFixtures
-            $image->setIdUser($userReference);
+            $image->setUser($userReference);
 
             $manager->persist($image);
         }

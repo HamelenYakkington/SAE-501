@@ -20,7 +20,7 @@ class ImageRepository extends ServiceEntityRepository
     public function findByUser(User $user): array
     {
         return $this->createQueryBuilder('i')
-            ->andWhere('i.idUser = :user')
+            ->andWhere('i.user = :user')
             ->setParameter('user', $user)
             ->orderBy('i.date', 'DESC')
             ->addOrderBy('i.time', 'DESC')
@@ -34,7 +34,7 @@ class ImageRepository extends ServiceEntityRepository
 
         $subQb = $this->createQueryBuilder('sub')
             ->select('MAX(sub.id) AS latestImageId')
-            ->groupBy('sub.idUser');
+            ->groupBy('sub.user');
 
         // Use the subquery results in the main query
         $qb->where($qb->expr()->in('i.id', $subQb->getDQL()))

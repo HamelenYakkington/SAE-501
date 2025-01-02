@@ -1,10 +1,13 @@
 <nav class="navbar navbar-expand-lg custom-gradient-bg" data-bs-theme="dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">MyApp</a>
+    <a href="{{ path('app_home') }}">
+      <img class="navbar-brand mx-3" src="{{ asset('logo/KnightSightOutline.png') }}" style="max-width:50px;">
+    </a>
+    <a class="navbar-brand" href="/">KnightSight</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarColor01">
+    <div class="collapse navbar-collapse text-center" id="navbarColor01">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link active" href="{{ path('app_home') }}">Home
@@ -13,8 +16,8 @@
         </li>
         {% if is_granted('ROLE_ADMIN') %}
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">BackOffice</a>
-          <div class="dropdown-menu">
+          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">BackOffice</a>
+          <div class="dropdown-menu" style="background-color:#2D383C;">
             <a class="dropdown-item" href="{{ path('admin') }}">Admin Dashboard</a>
             <a class="dropdown-item" href="#">User Management</a>
             <div class="dropdown-divider"></div>

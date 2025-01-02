@@ -18,7 +18,7 @@ class Image
 
     #[ORM\ManyToOne(inversedBy: 'images')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $idUser = null;
+    private ?User $user = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     private $pathImage;
@@ -52,17 +52,17 @@ class Image
 
     public function getUser(): ?User
     {
-        return $this->idUser;
+        return $this->user;
     }
 
     public function getIdUser(): ?User
     {
-        return $this->idUser->getId();
+        return $this->user->getId();
     }
 
-    public function setUser(?User $idUser): static
+    public function setUser(?User $user): static
     {
-        $this->idUser = $idUser;
+        $this->user = $user;
 
         return $this;
     }

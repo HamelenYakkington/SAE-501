@@ -115,7 +115,7 @@ class ImageController extends AbstractController
 
                 // Save metadata to database
                 $imageEntity = new Image();
-                $imageEntity->setIdUser($user);
+                $imageEntity->setUser($user);
                 $imageEntity->setPathImage('/uploads/images/' . $fileName . '.png');
                 $imageEntity->setPathLabel('/uploads/labels/' . $fileName . '.txt');
                 $imageEntity->setDate(new \DateTime());
