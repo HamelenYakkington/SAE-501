@@ -88,7 +88,7 @@ class UserController extends AbstractController
                 'pathLabel' => $image->getPathLabel(),
                 'date' => $image->getDate()->format('Y-m-d'),
                 'time' => $image->getTime()->format('H:i:s'),
-                'labels' => $tags, // Inclure les labels extraits
+                'labels' => $tags,
             ];
         }, $images);
 
@@ -128,7 +128,7 @@ class UserController extends AbstractController
                 'pathLabel' => $image->getPathLabel(),
                 'date' => $image->getDate()->format('Y-m-d'),
                 'time' => $image->getTime()->format('H:i:s'),
-                'labels' => $tags, // Inclure les labels extraits
+                'labels' => $tags,
             ];
         }, $images);
     

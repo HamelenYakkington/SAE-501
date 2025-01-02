@@ -176,17 +176,21 @@ class ImageController extends AbstractController
 
         $latestSearches = $imageRepository->findLatestSearchesPerUser($limit);
 
-        $data = array_map(function ($image) {
+        $imageData = array_map(function ($image) {
+            $tags = $image->getTags()->map(function ($imageTag) {
+                return $imageTag->getTags()->getLabel();
+            })->toArray();
+        
             return [
                 'id' => $image->getId(),
-                'user' => $image->getIdUser(),
                 'pathImage' => $image->getPathImage(),
                 'pathLabel' => $image->getPathLabel(),
                 'date' => $image->getDate()->format('Y-m-d'),
                 'time' => $image->getTime()->format('H:i:s'),
+                'labels' => $tags,
             ];
         }, $latestSearches);
 
-        return new JsonResponse($data);
+        return new JsonResponse($imageData);
     }
 }
