@@ -15,14 +15,10 @@
           </a>
         </li>
         {% if is_granted('ROLE_ADMIN') %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">BackOffice</a>
-          <div class="dropdown-menu" style="background-color:#2D383C;">
-            <a class="dropdown-item" href="{{ path('admin') }}">Admin Dashboard</a>
-            <a class="dropdown-item" href="#">User Management</a>
-            <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Settings</a>
-          </div>
+        <li class="nav-item">
+          <a class="nav-link active" href="{{ path('admin') }}">Admin Dashboard
+            <span class="visually-hidden">(current)</span>
+          </a>
         </li>
         {% endif %}
       </ul>
