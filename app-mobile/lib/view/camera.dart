@@ -24,7 +24,6 @@ class _YoloVideoState extends State<Camera> {
   late List<Map<String, dynamic>> yoloResults;
 
   CameraImage? cameraImage;
-  File? _selectedImage;
   bool isLoaded = false;
   bool isDetecting = false;
 
@@ -75,7 +74,7 @@ class _YoloVideoState extends State<Camera> {
         imageWidth: cameraImage.width,
         iouThreshold: 0.4,
         confThreshold: 0.4,
-        classThreshold: 0.7);
+        classThreshold: 0.5);
     if (result.isNotEmpty) {
       setState(() {
         yoloResults = result;
@@ -172,9 +171,6 @@ class _YoloVideoState extends State<Camera> {
       final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         final File imageFile = File(pickedFile.path);
-        setState(() {
-          _selectedImage = imageFile;
-        });
         await yoloOnPicture(imageFile);
 
         Navigator.push(

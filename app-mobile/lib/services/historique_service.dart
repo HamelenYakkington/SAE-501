@@ -116,6 +116,7 @@ class HistoryService {
             content: Text(
                 'Erreur lors de la récupération de l\'historique personnel: $e')),
       );
+      return null;
     }
   }
 

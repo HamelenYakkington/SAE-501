@@ -34,7 +34,7 @@ class _Register extends State<Register> {
   void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       try {
-        bool isRegistered = await ApiService().registerUser(
+        bool isRegistered = await _apiService.registerUser(
           _emailController.text,
           _passwordController.text,
           _nameController.text,
