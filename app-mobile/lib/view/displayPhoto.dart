@@ -126,7 +126,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       final label = widget.yoloResults.map((result) {
         final tag = result['tag'];
         final box = result['box'];
-        return '${tag} ${box[0]} ${box[1]} ${box[2]} ${box[3]} ${box[4]}';
+        return '${tag} ${box[4]} ${box[0]} ${box[1]} ${box[2]} ${box[3]}';
       }).join('\n');
 
       SharedPreferences prefs = await SharedPreferences.getInstance();

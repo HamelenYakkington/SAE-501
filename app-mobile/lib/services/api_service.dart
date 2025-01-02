@@ -24,6 +24,15 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> getTagById(String id) async {
+    try {
+      final responseData = await get('/api/tag/' + id);
+      return Map<String, dynamic>.from(responseData);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> post(String endpoint, Map<String, dynamic> body,
       {Map<String, String>? headers}) async {
     try {
