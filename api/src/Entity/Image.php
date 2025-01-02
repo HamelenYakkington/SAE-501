@@ -35,7 +35,7 @@ class Image
     /**
      * @var Collection<int, ImageTag>
      */
-    #[ORM\OneToMany(targetEntity: ImageTag::class, mappedBy: 'Image')]
+    #[ORM\OneToMany(targetEntity: ImageTag::class, mappedBy: 'image')]
     private Collection $tag;
 
     public function __construct()
@@ -134,7 +134,7 @@ class Image
     /**
      * @return Collection<int, ImageTag>
      */
-    public function getTag(): Collection
+    public function getTags(): Collection
     {
         return $this->tag;
     }

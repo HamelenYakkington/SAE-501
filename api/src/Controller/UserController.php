@@ -78,13 +78,17 @@ class UserController extends AbstractController
         $images = $imageRepository->findByUser($user);
 
         $imageData = array_map(function ($image) {
+            $tags = $image->getTags()->map(function ($imageTag) {
+                return $imageTag->getTags()->getLabel();
+            })->toArray();
+        
             return [
                 'id' => $image->getId(),
-                // 'user' => $image->getIdUser(),
                 'pathImage' => $image->getPathImage(),
                 'pathLabel' => $image->getPathLabel(),
                 'date' => $image->getDate()->format('Y-m-d'),
                 'time' => $image->getTime()->format('H:i:s'),
+                'labels' => $tags, // Inclure les labels extraits
             ];
         }, $images);
 
@@ -114,13 +118,17 @@ class UserController extends AbstractController
         $images = $imageRepository->findByUser($user);
     
         $imageData = array_map(function ($image) {
+            $tags = $image->getTags()->map(function ($imageTag) {
+                return $imageTag->getTags()->getLabel();
+            })->toArray();
+        
             return [
                 'id' => $image->getId(),
-                // 'user' => $image->getIdUser(),
                 'pathImage' => $image->getPathImage(),
                 'pathLabel' => $image->getPathLabel(),
                 'date' => $image->getDate()->format('Y-m-d'),
                 'time' => $image->getTime()->format('H:i:s'),
+                'labels' => $tags, // Inclure les labels extraits
             ];
         }, $images);
     

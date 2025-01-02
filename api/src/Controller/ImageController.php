@@ -121,7 +121,7 @@ class ImageController extends AbstractController
                 $imageEntity->setDate(new \DateTime());
                 $imageEntity->setTime(new \DateTime());
 
-                $this->entityManager->persist($imageEntity);
+                
 
                 // Save tag occurrences
                 foreach ($tagOccurrences as $tagId => $occurrence) {
@@ -132,10 +132,13 @@ class ImageController extends AbstractController
                         $imageTag->setImage($imageEntity);
                         $imageTag->setTag($tag);
                         $imageTag->setOccurence($occurrence);
+                        $imageEntity->addTag($imageTag);
 
                         $this->entityManager->persist($imageTag);
                     }
                 }
+
+                $this->entityManager->persist($imageEntity);
 
                 $this->entityManager->flush();
 

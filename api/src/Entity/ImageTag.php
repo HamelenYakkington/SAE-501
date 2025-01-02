@@ -42,7 +42,7 @@ class ImageTag
         return $this;
     }
 
-    public function getTag(): ?Tag
+    public function getTags(): ?Tag
     {
         return $this->tag;
     }
