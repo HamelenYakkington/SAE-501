@@ -33,6 +33,15 @@ class ApiService {
     }
   }
 
+  Future<List<Map<String, dynamic>>> getTags() async {
+    try {
+      final responseData = await get('/api/tags');
+      return List<Map<String, dynamic>>.from(responseData);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<dynamic> post(String endpoint, Map<String, dynamic> body,
       {Map<String, String>? headers}) async {
     try {
@@ -111,6 +120,28 @@ class ApiService {
         SnackBar(content: Text('Une erreur est survenue: $e')),
       );
       return false;
+    }
+  }
+
+  Future<String> fetchModelVersion() async {
+    try {
+      final responseData = await get('/api/modele/version');
+      return responseData['version'];
+    } catch (e) {
+      throw Exception('Erreur lors de la récupération de la version du modèle: $e');
+    }
+  }
+
+  Future<List<int>> downloadFile(String endpoint) async {
+    try {
+      final response = await http.get(Uri.parse('$baseUrl$endpoint'));
+      if (response.statusCode == 200) {
+        return response.bodyBytes.toList();
+      } else {
+        throw Exception('Erreur ${response.statusCode}: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      throw Exception('Erreur lors du téléchargement du fichier: $e');
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_vision/flutter_vision.dart';
 import 'package:camera/camera.dart';
 import 'package:sae_501/constants/view_constants.dart';
 import 'package:sae_501/controller/verif_connexion.dart';
+import 'package:sae_501/services/download_service.dart';
 import 'package:sae_501/view/widget/button_exit_custom.dart';
 import 'package:sae_501/view/widget/button_photo.dart';
 import 'package:sae_501/view/displayPhoto.dart';
@@ -10,6 +11,7 @@ import 'package:sae_501/view/widget/button_pick_image_custom.dart';
 import 'dart:io';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Camera extends StatefulWidget {
   const Camera({Key? key}) : super(key: key);
@@ -22,6 +24,8 @@ class _YoloVideoState extends State<Camera> {
   late CameraController controller;
   late FlutterVision vision;
   late List<Map<String, dynamic>> yoloResults;
+  bool _isModelClosed = true;
+  DownloadService _downloadService = DownloadService();
 
   CameraImage? cameraImage;
   bool isLoaded = false;
@@ -51,19 +55,65 @@ class _YoloVideoState extends State<Camera> {
   @override
   void dispose() async {
     super.dispose();
-    controller.dispose();
-    await vision.closeYoloModel();
+    isDetecting = false;
+    if (!_isModelClosed) {
+      controller.dispose();
+      await vision.closeYoloModel();
+      _isModelClosed = true;
+      print("Yolo modele closed");
+    }
   }
 
   Future<void> loadYoloModel() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final modelDir = Directory('${directory.path}/modele');
+
+    final modelFilePath = '${modelDir.path}/modelYolo8.tflite';
+    final labelsFilePath ='${modelDir.path}/labels.txt';
+    final versionFilePath ='${modelDir.path}/version.txt';
+
+    final modelFileExists = await File(modelFilePath).exists();
+    final labelsFileExists = await File(labelsFilePath).exists();
+    final versionFileExists = await File(versionFilePath).exists();
+
+    Directory('${directory.path}/modele');
+
+    if (!modelFileExists) {
+        await _downloadService.copyAssetToLocal('assets/modelYolo8.tflite', 'modelYolo8.tflite');
+    }
+    if (!labelsFileExists) {
+      await _downloadService.copyAssetToLocal('assets/labels.txt', 'labels.txt');
+    }
+    if (!versionFileExists) {
+      await _downloadService.copyAssetToLocal('assets/version.txt', 'version.txt');
+    }
+    final modelFile = File(modelFilePath);
+    final labelsFile = File(labelsFilePath);
+    final versionFile = File(versionFilePath);
+
+
+    print('Model path: ${modelFile.path}');
+    print('Labels path: ${labelsFile.path}');
+    print('Version path: ${versionFile.path}');
+
+    print('Version exists: ${versionFile.existsSync()}');
+    print('Model exists: ${modelFile.existsSync()}');
+    print('Labels exists: ${labelsFile.existsSync()}');
+
     await vision.loadYoloModel(
-        labels: 'assets/labels.txt',
-        modelPath: 'assets/modelYolo8.tflite',
-        modelVersion: "yolov8",
-        numThreads: 1,
-        useGpu: true);
+      labels: labelsFilePath,
+      modelPath: modelFilePath,
+      modelVersion: "yolov8",
+      numThreads: 1,
+      useGpu: true,
+      is_asset:false,
+    );
+
+    print("Chargé !");
+
     setState(() {
       isLoaded = true;
+      _isModelClosed = false;
     });
   }
 
@@ -74,7 +124,7 @@ class _YoloVideoState extends State<Camera> {
         imageWidth: cameraImage.width,
         iouThreshold: 0.4,
         confThreshold: 0.4,
-        classThreshold: 0.5);
+        classThreshold: 0.3);
     if (result.isNotEmpty) {
       setState(() {
         yoloResults = result;
@@ -84,7 +134,6 @@ class _YoloVideoState extends State<Camera> {
 
   Future<void> yoloOnPicture(File image) async {
     try {
-      // Lire et décoder l'image
       final imageBytes = await image.readAsBytes();
       final decodedImage = img.decodeImage(imageBytes);
 
@@ -99,9 +148,9 @@ class _YoloVideoState extends State<Camera> {
         bytesList: imageBytes,
         imageHeight: imageHeight,
         imageWidth: imageWidth,
-        iouThreshold: 0.8,
-        confThreshold: 0.4,
-        classThreshold: 0.7,
+        iouThreshold: 0.2,
+        confThreshold: 0.2,
+        classThreshold: 0.2,
       );
       if (result.isNotEmpty) {
         setState(() {

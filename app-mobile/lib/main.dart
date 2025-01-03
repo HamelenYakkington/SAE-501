@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sae_501/view/acceuil.dart';
 import 'package:sae_501/view/historique.dart';
 import 'package:sae_501/view/logout.dart';
+import 'package:sae_501/view/receivedata.dart';
 import 'package:sae_501/view/register.dart';
 import 'package:sae_501/view/info.dart';
 import 'package:sae_501/view/camera.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/login',
       routes: {
         '/': (context) => Acceuil(),
+        '/receive': (context) => ReceiveData(),
         '/add_album': (context) => Acceuil(),
         '/info': (context) => Info(),
         '/camera': (context) => const Camera(),

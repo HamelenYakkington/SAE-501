@@ -10,7 +10,7 @@ class MenuConstant {
     ButtonNavAcceuil(
         text: "Receive Data",
         imagePath: "assets/images/cloud_button.webp",
-        route: "/camera"),
+        route: "/receive"),
     ButtonNavAcceuil(
         text: "Info",
         imagePath: "assets/images/info_button.webp",

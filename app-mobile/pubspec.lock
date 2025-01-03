@@ -113,6 +113,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.8"
+  dio:
+    dependency: "direct main"
+    description:
+      name: dio
+      sha256: "5598aa796bbf4699afd5c67c0f5f6e2ed542afc956884b9cd58c306966efc260"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.7.0"
+  dio_web_adapter:
+    dependency: transitive
+    description:
+      name: dio_web_adapter
+      sha256: "33259a9276d6cea88774a0000cfae0d861003497755969c92faa223108620dc8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
+  download_assets:
+    dependency: "direct main"
+    description:
+      name: download_assets
+      sha256: "1d546bde1b2e00cde2a5435dfc41b65321daf744289c5f7a13be31bee8f38870"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.2.0"
   fake_async:
     dependency: transitive
     description:
@@ -206,10 +230,9 @@ packages:
   flutter_vision:
     dependency: "direct main"
     description:
-      name: flutter_vision
-      sha256: ef1765d992ce39998c25a9d4e2eae7c8e5c4d3fc1f31742a829476fd6758ba6f
-      url: "https://pub.dev"
-    source: hosted
+      path: "../flutter_vision"
+      relative: true
+    source: path
     version: "1.1.4"
   flutter_web_plugins:
     dependency: transitive

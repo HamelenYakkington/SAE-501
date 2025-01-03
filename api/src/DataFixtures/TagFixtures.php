@@ -12,19 +12,18 @@ class TagFixtures extends Fixture
     {
         // List of chess pieces names
         $chessPieces = [
-            "0" => "bishop",
-            "1" => "black-bishop",
-            "2" => "black-king",
-            "3" => "black-knight",
-            "4" => "black-pawn",
-            "5" => "black-queen",
-            "6" => "black-rook",
-            "7" => "white-bishop",
-            "8" => "white-king",
-            "9" => "white-knight",
-            "10" => "white-pawn",
-            "11" => "white-queen",
-            "12" => "white-rook"
+            "0" => "black-bishop",
+            "1" => "black-king",
+            "2" => "black-knight",
+            "3" => "black-pawn",
+            "4" => "black-queen",
+            "5" => "black-rook",
+            "6" => "white-bishop",
+            "7" => "white-king",
+            "8" => "white-knight",
+            "9" => "white-pawn",
+            "10" => "white-queen",
+            "11" => "white-rook"
         ];
 
         foreach ($chessPieces as $id => $piece) {
