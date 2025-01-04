@@ -10,11 +10,14 @@ import 'package:sae_501/controller/verif_connexion.dart';
 import 'package:sae_501/view/widget/button_custom_gradient.dart';
 
 class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
+
+
   @override
-  _Login createState() => _Login();
+  LoginState createState() => LoginState();
 }
 
-class _Login extends State<Login> {
+class LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();

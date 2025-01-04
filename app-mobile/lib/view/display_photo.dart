@@ -8,19 +8,21 @@ import 'package:sae_501/view/widget/button_exit_custom.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DisplayPictureScreen extends StatefulWidget {
+
   final String imagePath;
   final List<Map<String, dynamic>> yoloResults;
 
   const DisplayPictureScreen({
+    Key? key,
     required this.imagePath,
     required this.yoloResults,
-  });
+  }) : super(key: key);
 
   @override
-  _DisplayPictureScreenState createState() => _DisplayPictureScreenState();
+  DisplayPictureScreenState createState() => DisplayPictureScreenState();
 }
 
-class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
+class DisplayPictureScreenState extends State<DisplayPictureScreen> {
   ApiService apiService = ApiService();
   bool disabledBtn = false;
 
@@ -89,21 +91,27 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
             children: [
               const Text(
                 "Results Details",
-                style:
-                TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 10),
-              ...widget.yoloResults.map((result) {
-                return ListTile(
-                  title: Text(result['tag']),
-                  subtitle: Text(
-                    "Confidence: ${(result['box'][4] * 100).toStringAsFixed(2)}%",
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ...widget.yoloResults.map((result) {
+                        return ListTile(
+                          title: Text(result['tag']),
+                          subtitle: Text(
+                            "Confidence: ${(result['box'][4] * 100).toStringAsFixed(2)}%",
+                          ),
+                        );
+                      }).toList(),
+                    ],
                   ),
-                );
-              }).toList(),
+                ),
+              ),
               const SizedBox(height: 10),
               ElevatedButton(
-
                 onPressed: () async {
                   Navigator.pop(context);
                   await _sendResults();
@@ -117,6 +125,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
     );
   }
 
+
   Future<void> _sendResults() async {
     try {
       setState(() {
@@ -126,7 +135,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       final label = widget.yoloResults.map((result) {
         final tag = result['tag'];
         final box = result['box'];
-        return '${tag} ${box[4]} ${box[0]} ${box[1]} ${box[2]} ${box[3]}';
+        return '$tag $box[4] $box[0] $box[1] $box[2] $box[3]';
       }).join('\n');
 
       SharedPreferences prefs = await SharedPreferences.getInstance();

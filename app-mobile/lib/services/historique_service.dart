@@ -1,9 +1,11 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sae_501/services/api_service.dart';
-import 'package:sae_501/view/displayPhoto.dart';
+import 'package:sae_501/view/display_photo.dart';
 import 'package:path_provider/path_provider.dart';
 
 class HistoryService {
@@ -85,12 +87,9 @@ class HistoryService {
 
         return filePath;
       } else {
-        print(
-            'Erreur lors du téléchargement de l\'image: ${response.statusCode}');
         return null;
       }
     } catch (e) {
-      print('Exception lors du téléchargement de l\'image: $e');
       return null;
     }
   }

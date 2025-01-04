@@ -26,7 +26,7 @@ class ApiService {
 
   Future<Map<String, dynamic>> getTagById(String id) async {
     try {
-      final responseData = await get('/api/tag/' + id);
+      final responseData = await get('/api/tag/$id');
       return Map<String, dynamic>.from(responseData);
     } catch (e) {
       rethrow;
@@ -106,7 +106,7 @@ class ApiService {
 
       if (response['message'] == 'Image and label uploaded successfully.') {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Image envoyée avec succès!')),
+          const SnackBar(content: Text('Image envoyée avec succès!')),
         );
         return true;
       } else {

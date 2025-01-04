@@ -3,16 +3,18 @@ import 'package:sae_501/constants/view_constants.dart';
 import 'package:sae_501/services/download_service.dart';
 import 'package:sae_501/view/widget/footer_custom.dart';
 import 'package:sae_501/view/widget/header_custom.dart';
-import 'package:sae_501/services/download_service.dart';
 
 class ReceiveData extends StatefulWidget {
+
+  const ReceiveData({Key? key}) : super(key: key);
+
   @override
-  _ReceiveData createState() => _ReceiveData();
+  ReceiveDataState createState() => ReceiveDataState();
 }
 
-class _ReceiveData extends State<ReceiveData> {
+class ReceiveDataState extends State<ReceiveData> {
   bool _isUpdating = false;
-  DownloadService _downloadService = DownloadService();
+  final DownloadService _downloadService = DownloadService();
 
   Future<void> _handleUpdate() async {
     setState(() {
@@ -23,7 +25,7 @@ class _ReceiveData extends State<ReceiveData> {
       await _downloadService.checkAndUpdateModel();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Mise à jour terminée avec succès !')),
+          const SnackBar(content: Text('Mise à jour terminée avec succès !')),
         );
       }
     } catch (e) {

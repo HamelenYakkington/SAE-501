@@ -6,7 +6,7 @@ import 'package:sae_501/controller/verif_connexion.dart';
 import 'package:sae_501/services/download_service.dart';
 import 'package:sae_501/view/widget/button_exit_custom.dart';
 import 'package:sae_501/view/widget/button_photo.dart';
-import 'package:sae_501/view/displayPhoto.dart';
+import 'package:sae_501/view/display_photo.dart';
 import 'package:sae_501/view/widget/button_pick_image_custom.dart';
 import 'dart:io';
 import 'package:image/image.dart' as img;
@@ -25,11 +25,14 @@ class _YoloVideoState extends State<Camera> {
   late FlutterVision vision;
   late List<Map<String, dynamic>> yoloResults;
   bool _isModelClosed = true;
-  DownloadService _downloadService = DownloadService();
+  final DownloadService _downloadService = DownloadService();
 
   CameraImage? cameraImage;
   bool isLoaded = false;
   bool isDetecting = false;
+
+  int _frameSkipCounter = 0;
+  final int _framesToSkip = 4;
 
   @override
   void initState() {
@@ -60,7 +63,6 @@ class _YoloVideoState extends State<Camera> {
       controller.dispose();
       await vision.closeYoloModel();
       _isModelClosed = true;
-      print("Yolo modele closed");
     }
   }
 
@@ -87,18 +89,6 @@ class _YoloVideoState extends State<Camera> {
     if (!versionFileExists) {
       await _downloadService.copyAssetToLocal('assets/version.txt', 'version.txt');
     }
-    final modelFile = File(modelFilePath);
-    final labelsFile = File(labelsFilePath);
-    final versionFile = File(versionFilePath);
-
-
-    print('Model path: ${modelFile.path}');
-    print('Labels path: ${labelsFile.path}');
-    print('Version path: ${versionFile.path}');
-
-    print('Version exists: ${versionFile.existsSync()}');
-    print('Model exists: ${modelFile.existsSync()}');
-    print('Labels exists: ${labelsFile.existsSync()}');
 
     await vision.loadYoloModel(
       labels: labelsFilePath,
@@ -108,8 +98,6 @@ class _YoloVideoState extends State<Camera> {
       useGpu: true,
       is_asset:false,
     );
-
-    print("Chargé !");
 
     setState(() {
       isLoaded = true;
@@ -123,9 +111,9 @@ class _YoloVideoState extends State<Camera> {
         imageHeight: cameraImage.height,
         imageWidth: cameraImage.width,
         iouThreshold: 0.4,
-        confThreshold: 0.4,
-        classThreshold: 0.3);
-    if (result.isNotEmpty) {
+        confThreshold: 0.6,
+        classThreshold: 0.6);
+    if(result.isNotEmpty) {
       setState(() {
         yoloResults = result;
       });
@@ -148,9 +136,9 @@ class _YoloVideoState extends State<Camera> {
         bytesList: imageBytes,
         imageHeight: imageHeight,
         imageWidth: imageWidth,
-        iouThreshold: 0.2,
-        confThreshold: 0.2,
-        classThreshold: 0.2,
+        iouThreshold: 0.4,
+        confThreshold: 0.6,
+        classThreshold: 0.6,
       );
       if (result.isNotEmpty) {
         setState(() {
@@ -158,6 +146,7 @@ class _YoloVideoState extends State<Camera> {
         });
       }
     } catch (e) {
+      // ignore: avoid_print
       print("Erreur lors de l'exécution de YOLO sur l'image : $e");
     }
   }
@@ -171,8 +160,11 @@ class _YoloVideoState extends State<Camera> {
     });
     await controller.startImageStream((image) async {
       if (isDetecting) {
-        cameraImage = image;
-        yoloOnFrame(image);
+        _frameSkipCounter++;
+        if (_frameSkipCounter % _framesToSkip == 0) {
+          cameraImage = image;
+          await yoloOnFrame(image);
+        }
       }
     });
   }
@@ -190,28 +182,39 @@ class _YoloVideoState extends State<Camera> {
       double objectWidth = (result["box"][2] - result["box"][0]) * factorX;
       double objectHeight = (result["box"][3] - result["box"][1]) * factorY;
 
-      return Positioned(
-        left: objectX,
-        top: objectY,
-        width: objectWidth,
-        height: objectHeight,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            border: Border.all(color: Colors.pink, width: 2.0),
-          ),
-          child: Text(
-            "${result['tag']} ${(result['box'][4] * 100).toStringAsFixed(2)}%",
-            style: TextStyle(
-              background: Paint()..color = colorPick,
-              color: const Color.fromARGB(255, 115, 0, 255),
-              fontSize: 18.0,
+      return Stack(
+        children: [
+          // Label above the rectangle
+          Positioned(
+            left: objectX,
+            top: objectY - 20, // Position above the rectangle
+            child: Text(
+              "${result['tag']} ${(result['box'][4] * 100).toStringAsFixed(2)}%",
+              style: TextStyle(
+                background: Paint()..color = colorPick,
+                color: const Color.fromARGB(255, 115, 0, 255),
+                fontSize: 14.0,
+              ),
             ),
           ),
-        ),
+          // Rectangle itself
+          Positioned(
+            left: objectX,
+            top: objectY,
+            width: objectWidth,
+            height: objectHeight,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                border: Border.all(color: Colors.pink, width: 2.0),
+              ),
+            ),
+          ),
+        ],
       );
     }).toList();
   }
+
 
   // Méthode pour charger une image depuis le système
   Future<void> pickImage() async {
@@ -233,14 +236,16 @@ class _YoloVideoState extends State<Camera> {
         );
       }
     } catch (e) {
+      // ignore: avoid_print
       print("Erreur lors de la sélection de l'image : $e");
     }
   }
 
   Future<void> _takePhoto() async {
     try {
-      if(!isLoaded)
+      if(!isLoaded){
         return;
+      }
       final XFile photo = await controller.takePicture();
 
       Navigator.push(
@@ -253,6 +258,7 @@ class _YoloVideoState extends State<Camera> {
         ),
       );
     } catch (e) {
+      // ignore: avoid_print
       print('Erreur lors de la prise de photo : $e');
     }
   }

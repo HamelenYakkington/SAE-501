@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:sae_501/controller/deco_controller.dart';
 
 class LogOut extends StatefulWidget {
+
+  const LogOut({Key? key}) : super(key: key);
+
   @override
-  _Logout createState() => _Logout();
+  LogoutState createState() => LogoutState();
 }
 
-class _Logout extends State<LogOut> {
+class LogoutState extends State<LogOut> {
   @override
   void initState() {
     super.initState();
@@ -16,14 +19,14 @@ class _Logout extends State<LogOut> {
   Future<void> _logOutUser() async {
     
     await deco(context);
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
 
     Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: CircularProgressIndicator(),
       ),

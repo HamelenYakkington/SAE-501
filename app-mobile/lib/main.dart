@@ -12,10 +12,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,14 +26,13 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/login',
       routes: {
-        '/': (context) => Acceuil(),
-        '/receive': (context) => ReceiveData(),
-        '/add_album': (context) => Acceuil(),
-        '/info': (context) => Info(),
+        '/': (context) => const Acceuil(),
+        '/receive': (context) => const ReceiveData(),
+        '/info': (context) => const Info(),
         '/camera': (context) => const Camera(),
-        '/login': (context) => Login(),
-        '/logout': (context) => LogOut(),
-        '/register': (context) => Register(),
+        '/login': (context) => const Login(),
+        '/logout': (context) => const LogOut(),
+        '/register': (context) => const Register(),
         '/historique': (context) => const Historique(),
       },
     );

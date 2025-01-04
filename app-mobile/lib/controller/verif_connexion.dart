@@ -24,13 +24,7 @@ Future<bool> verifyToken(String token) async {
       headers: {'Authorization': 'Bearer $token'},
     );
 
-    if (response['valid'] == true) {
-      final user = response['user'];
-      print('Utilisateur connecté : ${user['firstname']} ${user['lastname']}');
-      return true;
-    } else {
-      return false;
-    }
+    return response['valid'];
   } catch (e) {
     debugPrint('Erreur lors de la validation du token : $e');
     return false;

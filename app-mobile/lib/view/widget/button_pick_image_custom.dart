@@ -21,9 +21,9 @@ Widget customPickImage(VoidCallback? onTap) {
             borderRadius: BorderRadius.circular(8),
           ),
           padding: EdgeInsets.zero,
-          fixedSize: Size(30, 30),
+          fixedSize: const Size(30, 30),
         ),
-        child: Icon(
+        child: const Icon(
           Icons.image,
           color: ViewConstant.GradientColorLightBlue,
           size: 30,

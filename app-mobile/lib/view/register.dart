@@ -8,11 +8,14 @@ import 'package:sae_501/view/widget/input_text_custom.dart';
 import 'package:sae_501/view/widget/button_custom_gradient.dart';
 
 class Register extends StatefulWidget {
+
+  const Register({Key? key}) : super(key: key);
+
   @override
-  _Register createState() => _Register();
+  RegisterState createState() => RegisterState();
 }
 
-class _Register extends State<Register> {
+class RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -44,12 +47,12 @@ class _Register extends State<Register> {
 
         if (isRegistered) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Inscription réussie !')),
+            const SnackBar(content: Text('Inscription réussie !')),
           );
           Navigator.pushNamed(context, '/');
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Erreur lors de l\'inscription')),
+            const SnackBar(content: Text('Erreur lors de l\'inscription')),
           );
         }
       } catch (e) {
@@ -60,7 +63,7 @@ class _Register extends State<Register> {
     }
   }
 
-
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ViewConstant.backgroundScalfold,

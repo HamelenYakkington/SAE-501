@@ -9,11 +9,14 @@ import 'package:sae_501/constants/info_constants.dart';
 import 'package:sae_501/view/widget/button_return_custom.dart';
 
 class Info extends StatefulWidget {
+
+  const Info({Key? key}) : super(key: key);
+
   @override
-  _Info createState() => _Info();
+  InfoState createState() => InfoState();
 }
 
-class _Info  extends State<Info> {
+class InfoState  extends State<Info> {
 
   @override
   void initState() {

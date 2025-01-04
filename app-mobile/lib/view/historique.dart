@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sae_501/controller/verif_connexion.dart';
 import 'package:sae_501/services/historique_service.dart';
@@ -13,10 +12,10 @@ class Historique extends StatefulWidget {
   const Historique({Key? key}) : super(key: key);
 
   @override
-  _Historique createState() => _Historique();
+  HistoriqueState createState() => HistoriqueState();
 }
 
-class _Historique extends State<Historique> {
+class HistoriqueState extends State<Historique> {
   final HistoryService _historyService = HistoryService();
   List<dynamic> _history = [];
   bool _isLoading = false;
@@ -52,31 +51,31 @@ class _Historique extends State<Historique> {
       itemBuilder: (context, index) {
         final item = history[index];
         return Card(
-          color: ViewConstant.backgroundButton, // Custom background color for the card
+          color: ViewConstant.backgroundButton,
           margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: ListTile(
             leading: item['pathImage'] != null
                 ? Image.network(
-              dotenv.env['BASE_URL']! + '/' + item['pathImage']!,
+              '${dotenv.env['BASE_URL']!}/${item['pathImage']!}',
               errorBuilder: (context, error, stackTrace) =>
               const Icon(Icons.image_not_supported, color: Colors.grey),
             )
                 : const Icon(Icons.image_not_supported, color: Colors.grey),
             title: Text(
               '${item['date']} : ${item['time']}',
-              style: const TextStyle(color: Colors.white), // White text
+              style: const TextStyle(color: Colors.white),
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Labels : ${item['labels'].join(', ')}',
-                  style: const TextStyle(color: Colors.grey), // White text
+                  style: const TextStyle(color: Colors.grey),
                 ),
               ],
             ),
             trailing: IconButton(
-              icon: const Icon(Icons.arrow_forward, color: Colors.white), // White icon
+              icon: const Icon(Icons.arrow_forward, color: Colors.white),
               onPressed: () {
                 _historyService.displayphoto(
                     item['pathImage'], item['pathLabel'], context);
@@ -119,7 +118,7 @@ class _Historique extends State<Historique> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      textColor: Colors.white, // Ensure contrast with the blue gradient
+                      textColor: Colors.white,
                     ),
                     const SizedBox(height: 16.0),
                     customGradientButton(
@@ -134,7 +133,7 @@ class _Historique extends State<Historique> {
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                       ),
-                      textColor: Colors.black, // Ensure contrast with the green gradient
+                      textColor: Colors.black,
                     ),
                   ],
                 ),

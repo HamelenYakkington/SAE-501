@@ -18,10 +18,10 @@ class CustomTextInput extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CustomTextInputState createState() => _CustomTextInputState();
+  CustomTextInputState createState() => CustomTextInputState();
 }
 
-class _CustomTextInputState extends State<CustomTextInput> {
+class CustomTextInputState extends State<CustomTextInput> {
   bool hasError = false;
 
   @override

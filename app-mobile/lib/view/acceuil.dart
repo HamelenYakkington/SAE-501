@@ -9,11 +9,14 @@ import 'package:sae_501/constants/menu_button_constant.dart';
 import 'package:sae_501/view/widget/button_nav_acceuil_custom.dart';
 
 class Acceuil extends StatefulWidget {
+
+  const Acceuil({Key? key}) : super(key: key);
+
   @override
-  _Acceuil createState() => _Acceuil();
+  AcceuilState createState() => AcceuilState();
 }
 
-class _Acceuil extends State<Acceuil> {
+class AcceuilState extends State<Acceuil> {
 
   @override
   void initState() {
