@@ -25,7 +25,7 @@ Widget customPickImage(VoidCallback? onTap) {
         ),
         child: const Icon(
           Icons.image,
-          color: ViewConstant.GradientColorLightBlue,
+          color: ViewConstant.gradientColorLightBlue,
           size: 30,
         ),
       ),

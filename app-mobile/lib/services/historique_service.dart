@@ -119,7 +119,8 @@ class HistoryService {
     }
   }
 
-  Future<List?> fetchAllUsersHistory(int nbr, String? token, BuildContext context) async {
+  Future<List?> fetchAllUsersHistory(
+      int nbr, String? token, BuildContext context) async {
     print("sdfffffffffffffffffffffffffffffffffffffffffff");
     if (token == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -136,16 +137,17 @@ class HistoryService {
         },
       );
       return List.from(history).map((imageData) {
-          return {
-            'id': imageData['id'],
-            'pathImage': imageData['pathImage'],
-            'pathLabel': imageData['pathLabel'],
-            'date': imageData['date'],
-            'time': imageData['time'],
-            'labels': imageData['labels'],
-          };
-        }).toList();
+        return {
+          'id': imageData['id'],
+          'pathImage': imageData['pathImage'],
+          'pathLabel': imageData['pathLabel'],
+          'date': imageData['date'],
+          'time': imageData['time'],
+          'labels': imageData['labels'],
+        };
+      }).toList();
     } catch (e) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
             content: Text(
@@ -155,19 +157,19 @@ class HistoryService {
     }
   }
 
-  Future<void> displayphoto(String imagePath, String labelsPath, BuildContext context) async {
+  Future<void> displayphoto(
+      String imagePath, String labelsPath, BuildContext context) async {
     List<Map<String, dynamic>> yoloResults = await processYoloFile(labelsPath);
     String? pathTempImage = await downloadImage(imagePath);
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => DisplayPictureScreen(
-            imagePath: pathTempImage!, yoloResults: yoloResults),
-      ),
-    );
+    if (context.mounted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DisplayPictureScreen(
+              imagePath: pathTempImage!, yoloResults: yoloResults),
+        ),
+      );
+    }
   }
-
-
-
 }

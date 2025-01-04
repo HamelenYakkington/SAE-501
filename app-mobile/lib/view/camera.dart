@@ -71,8 +71,8 @@ class _YoloVideoState extends State<Camera> {
     final modelDir = Directory('${directory.path}/modele');
 
     final modelFilePath = '${modelDir.path}/modelYolo8.tflite';
-    final labelsFilePath ='${modelDir.path}/labels.txt';
-    final versionFilePath ='${modelDir.path}/version.txt';
+    final labelsFilePath = '${modelDir.path}/labels.txt';
+    final versionFilePath = '${modelDir.path}/version.txt';
 
     final modelFileExists = await File(modelFilePath).exists();
     final labelsFileExists = await File(labelsFilePath).exists();
@@ -81,13 +81,16 @@ class _YoloVideoState extends State<Camera> {
     Directory('${directory.path}/modele');
 
     if (!modelFileExists) {
-        await _downloadService.copyAssetToLocal('assets/modelYolo8.tflite', 'modelYolo8.tflite');
+      await _downloadService.copyAssetToLocal(
+          'assets/modelYolo8.tflite', 'modelYolo8.tflite');
     }
     if (!labelsFileExists) {
-      await _downloadService.copyAssetToLocal('assets/labels.txt', 'labels.txt');
+      await _downloadService.copyAssetToLocal(
+          'assets/labels.txt', 'labels.txt');
     }
     if (!versionFileExists) {
-      await _downloadService.copyAssetToLocal('assets/version.txt', 'version.txt');
+      await _downloadService.copyAssetToLocal(
+          'assets/version.txt', 'version.txt');
     }
 
     await vision.loadYoloModel(
@@ -96,7 +99,7 @@ class _YoloVideoState extends State<Camera> {
       modelVersion: "yolov8",
       numThreads: 1,
       useGpu: true,
-      is_asset:false,
+      is_asset: false,
     );
 
     setState(() {
@@ -113,7 +116,7 @@ class _YoloVideoState extends State<Camera> {
         iouThreshold: 0.4,
         confThreshold: 0.6,
         classThreshold: 0.6);
-    if(result.isNotEmpty) {
+    if (result.isNotEmpty) {
       setState(() {
         yoloResults = result;
       });
@@ -215,12 +218,12 @@ class _YoloVideoState extends State<Camera> {
     }).toList();
   }
 
-
   // Méthode pour charger une image depuis le système
   Future<void> pickImage() async {
     final ImagePicker picker = ImagePicker();
     try {
-      final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+      final XFile? pickedFile =
+          await picker.pickImage(source: ImageSource.gallery);
       if (pickedFile != null) {
         final File imageFile = File(pickedFile.path);
         await yoloOnPicture(imageFile);
@@ -229,9 +232,7 @@ class _YoloVideoState extends State<Camera> {
           context,
           MaterialPageRoute(
             builder: (context) => DisplayPictureScreen(
-                imagePath: imageFile.path,
-                yoloResults : yoloResults
-            ),
+                imagePath: imageFile.path, yoloResults: yoloResults),
           ),
         );
       }
@@ -243,7 +244,7 @@ class _YoloVideoState extends State<Camera> {
 
   Future<void> _takePhoto() async {
     try {
-      if(!isLoaded){
+      if (!isLoaded) {
         return;
       }
       final XFile photo = await controller.takePicture();
@@ -252,9 +253,7 @@ class _YoloVideoState extends State<Camera> {
         context,
         MaterialPageRoute(
           builder: (context) => DisplayPictureScreen(
-              imagePath: photo.path,
-              yoloResults : yoloResults
-          ),
+              imagePath: photo.path, yoloResults: yoloResults),
         ),
       );
     } catch (e) {

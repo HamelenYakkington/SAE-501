@@ -7,14 +7,14 @@ class ViewConstant {
   static const Color backgroundButton = Color(0xFF192428);
   static const Color backgroundButtonPrimary = Color(0xFF111316);
 
-  static const Color GradientColorLightBlue = Color(0xFF00A6F4);
-  static const Color GradientColorDarkBlue = Color(0xFF434BDE);
+  static const Color gradientColorLightBlue = Color(0xFF00A6F4);
+  static const Color gradientColorDarkBlue = Color(0xFF434BDE);
 
 
-  static const Color ColorInput = Colors.white;
-  static const Color ColorLabelInput = Colors.white;
-  static const Color ColorBorderInput = Colors.white;
+  static const Color colorInput = Colors.white;
+  static const Color colorLabelInput = Colors.white;
+  static const Color colorBorderInput = Colors.white;
 
-  static const Color ColorLabelInputError = Colors.red;
-  static const Color ColorBorderInputError = Colors.red;
+  static const Color colorLabelInputError = Colors.red;
+  static const Color colorBorderInputError = Colors.red;
 }

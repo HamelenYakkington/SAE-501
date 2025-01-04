@@ -107,8 +107,8 @@ class LoginState extends State<Login> {
                               onPressed: _submitForm,
                               gradient: const LinearGradient(
                                 colors: [
-                                  ViewConstant.GradientColorLightBlue,
-                                  ViewConstant.GradientColorDarkBlue
+                                  ViewConstant.gradientColorLightBlue,
+                                  ViewConstant.gradientColorDarkBlue
                                 ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,
@@ -124,8 +124,8 @@ class LoginState extends State<Login> {
                               },
                               gradient: const LinearGradient(
                                 colors: [
-                                  ViewConstant.ColorInput,
-                                  ViewConstant.ColorInput
+                                  ViewConstant.colorInput,
+                                  ViewConstant.colorInput
                                 ],
                                 begin: Alignment.bottomRight,
                                 end: Alignment.topLeft,

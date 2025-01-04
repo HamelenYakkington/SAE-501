@@ -13,7 +13,7 @@ Widget customAddButton(BuildContext context) {
         height: 50,
         decoration: BoxDecoration(
           gradient: const LinearGradient(
-            colors: [ViewConstant.GradientColorLightBlue, ViewConstant.GradientColorDarkBlue],
+            colors: [ViewConstant.gradientColorLightBlue, ViewConstant.gradientColorDarkBlue],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),

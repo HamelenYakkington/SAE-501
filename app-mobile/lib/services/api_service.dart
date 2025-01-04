@@ -105,17 +105,20 @@ class ApiService {
       );
 
       if (response['message'] == 'Image and label uploaded successfully.') {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Image envoyée avec succès!')),
-        );
+          // ignore: use_build_context_synchronously
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Image envoyée avec succès!')),
+          );
         return true;
       } else {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erreur: ${response['error']}')),
         );
         return false;
       }
     } catch (e) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Une erreur est survenue: $e')),
       );

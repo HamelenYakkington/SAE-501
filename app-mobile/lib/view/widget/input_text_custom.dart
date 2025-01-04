@@ -31,35 +31,35 @@ class CustomTextInputState extends State<CustomTextInput> {
       decoration: InputDecoration(
         labelText: widget.labelText,
         floatingLabelStyle: TextStyle(
-          color: hasError ? ViewConstant.ColorLabelInputError : Colors.white,
+          color: hasError ? ViewConstant.colorLabelInputError : Colors.white,
         ),
         labelStyle: const TextStyle(
-          color: ViewConstant.ColorLabelInput,
+          color: ViewConstant.colorLabelInput,
           letterSpacing: 1.3,
         ),
         enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(
-            color: ViewConstant.ColorBorderInput,
+            color: ViewConstant.colorBorderInput,
           ),
         ),
         errorBorder: const OutlineInputBorder(
           borderSide: BorderSide(
-            color: ViewConstant.ColorBorderInputError,
+            color: ViewConstant.colorBorderInputError,
           ),
         ),
         errorStyle: const TextStyle(
-          color: ViewConstant.ColorLabelInputError,
+          color: ViewConstant.colorLabelInputError,
           letterSpacing: 1.3,
         ),
         focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: ViewConstant.ColorBorderInput, width: 2.0),
+          borderSide: BorderSide(color: ViewConstant.colorBorderInput, width: 2.0),
         ),
         focusedErrorBorder: const OutlineInputBorder(
-          borderSide: BorderSide(color: ViewConstant.ColorBorderInputError, width: 2.0),
+          borderSide: BorderSide(color: ViewConstant.colorBorderInputError, width: 2.0),
         ),
       ),
       style: const TextStyle(
-        color: ViewConstant.ColorInput,
+        color: ViewConstant.colorInput,
       ),
       obscureText: widget.obscure,
       obscuringCharacter: '*',

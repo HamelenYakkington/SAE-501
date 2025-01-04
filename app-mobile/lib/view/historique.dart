@@ -112,8 +112,8 @@ class HistoriqueState extends State<Historique> {
                       onPressed: fetchUserHistory,
                       gradient: const LinearGradient(
                         colors: [
-                          ViewConstant.GradientColorLightBlue,
-                          ViewConstant.GradientColorDarkBlue
+                          ViewConstant.gradientColorLightBlue,
+                          ViewConstant.gradientColorDarkBlue
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -127,8 +127,8 @@ class HistoriqueState extends State<Historique> {
                       onPressed: fetchAllUsersHistory,
                       gradient: const LinearGradient(
                         colors: [
-                          ViewConstant.ColorInput,
-                          ViewConstant.ColorInput
+                          ViewConstant.colorInput,
+                          ViewConstant.colorInput
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,

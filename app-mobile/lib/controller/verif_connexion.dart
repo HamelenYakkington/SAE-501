@@ -33,14 +33,14 @@ Future<bool> verifyToken(String token) async {
 
 Future<void> connexionByToken(BuildContext context) async {
   bool valid = await _checkToken();
-  if(valid) {
+  if(valid && context.mounted) {
     Navigator.pushReplacementNamed(context, '/');
   }
 }
 
 Future<void> checkConnexionToken(BuildContext context) async {
   bool valid = await _checkToken();
-  if(!valid) {
+  if(!valid && context.mounted ) {
     Navigator.pushReplacementNamed(context, '/login');
   }
 }

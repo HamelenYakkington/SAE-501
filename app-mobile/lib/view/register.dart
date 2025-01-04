@@ -130,8 +130,8 @@ class RegisterState extends State<Register> {
                             onPressed: _submitForm,
                             gradient: const LinearGradient(
                               colors: [
-                                ViewConstant.GradientColorLightBlue,
-                                ViewConstant.GradientColorDarkBlue
+                                ViewConstant.gradientColorLightBlue,
+                                ViewConstant.gradientColorDarkBlue
                               ],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
