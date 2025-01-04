@@ -5,6 +5,7 @@ import 'package:sae_501/view/widget/header_custom.dart';
 import 'package:sae_501/view/widget/footer_custom.dart';
 import 'package:sae_501/constants/view_constants.dart';
 import 'package:sae_501/view/widget/input_text_custom.dart';
+import 'package:sae_501/view/widget/button_custom_gradient.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -120,9 +121,19 @@ class _Register extends State<Register> {
                         ),
                         const SizedBox(height: 16),
                         Center(
-                          child: ElevatedButton(
+                          child:customGradientButton(
+                            context: context,
+                            text: "Inscription",
                             onPressed: _submitForm,
-                            child: const Text("Connexion"),
+                            gradient: const LinearGradient(
+                              colors: [
+                                ViewConstant.GradientColorLightBlue,
+                                ViewConstant.GradientColorDarkBlue
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            textColor: Colors.white,
                           ),
                         ),
                       ],

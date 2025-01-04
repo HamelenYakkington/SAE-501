@@ -7,6 +7,7 @@ import 'package:sae_501/view/widget/input_text_custom.dart';
 import 'package:sae_501/services/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sae_501/controller/verif_connexion.dart';
+import 'package:sae_501/view/widget/button_custom_gradient.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -95,22 +96,41 @@ class _Login extends State<Login> {
                         ),
                         const SizedBox(height: 16),
                         Row(
-                          children : [
-                            ElevatedButton(
-                            onPressed: _submitForm,
-                            child: const Text("Connexion"),
-                          ),
-                            const Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 6.0),
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            customGradientButton(
+                              context: context,
+                              text: "Connexion",
+                              onPressed: _submitForm,
+                              gradient: const LinearGradient(
+                                colors: [
+                                  ViewConstant.GradientColorLightBlue,
+                                  ViewConstant.GradientColorDarkBlue
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                              textColor: Colors.white,
                             ),
-                            ElevatedButton(
+                            const SizedBox(width: 12.0),
+                            customGradientButton(
+                              context: context,
+                              text: "Inscription",
                               onPressed: () {
                                 Navigator.pushNamed(context, '/register');
                               },
-                              child: const Text("Inscription"),
+                              gradient: const LinearGradient(
+                                colors: [
+                                  ViewConstant.ColorInput,
+                                  ViewConstant.ColorInput
+                                ],
+                                begin: Alignment.bottomRight,
+                                end: Alignment.topLeft,
+                              ),
+                              textColor: Colors.black,
                             ),
-                        ]
-                        )
+                          ],
+                        ),
                       ],
                     ),
                   ),

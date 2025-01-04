@@ -7,6 +7,7 @@ import 'package:sae_501/view/widget/header_custom.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:sae_501/constants/view_constants.dart';
+import 'package:sae_501/view/widget/button_custom_gradient.dart';
 
 class Historique extends StatefulWidget {
   const Historique({Key? key}) : super(key: key);
@@ -51,23 +52,34 @@ class _Historique extends State<Historique> {
       itemBuilder: (context, index) {
         final item = history[index];
         return Card(
+          color: ViewConstant.backgroundButton, // Custom background color for the card
           margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: ListTile(
             leading: item['pathImage'] != null
                 ? Image.network(
-                    dotenv.env['BASE_URL']! + '/' + item['pathImage']!)
-                : const Icon(Icons.image_not_supported),
-            title: Text('${item['date']} : ${item['time']}'),
+              dotenv.env['BASE_URL']! + '/' + item['pathImage']!,
+              errorBuilder: (context, error, stackTrace) =>
+              const Icon(Icons.image_not_supported, color: Colors.grey),
+            )
+                : const Icon(Icons.image_not_supported, color: Colors.grey),
+            title: Text(
+              '${item['date']} : ${item['time']}',
+              style: const TextStyle(color: Colors.white), // White text
+            ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Labels : ${item['labels'].join(', ')}'),
+                Text(
+                  'Labels : ${item['labels'].join(', ')}',
+                  style: const TextStyle(color: Colors.grey), // White text
+                ),
               ],
             ),
             trailing: IconButton(
-              icon: const Icon(Icons.arrow_forward),
+              icon: const Icon(Icons.arrow_forward, color: Colors.white), // White icon
               onPressed: () {
-                _historyService.displayphoto(item['pathImage'], item['pathLabel'],context);
+                _historyService.displayphoto(
+                    item['pathImage'], item['pathLabel'], context);
               },
             ),
           ),
@@ -95,17 +107,34 @@ class _Historique extends State<Historique> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton(
+                    customGradientButton(
+                      context: context,
+                      text: "Personal History",
                       onPressed: fetchUserHistory,
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blue),
-                      child: const Text('Personal History'),
+                      gradient: const LinearGradient(
+                        colors: [
+                          ViewConstant.GradientColorLightBlue,
+                          ViewConstant.GradientColorDarkBlue
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      textColor: Colors.white, // Ensure contrast with the blue gradient
                     ),
-                    ElevatedButton(
+                    const SizedBox(height: 16.0),
+                    customGradientButton(
+                      context: context,
+                      text: "Knights Histories",
                       onPressed: fetchAllUsersHistory,
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green),
-                      child: const Text('Knight History'),
+                      gradient: const LinearGradient(
+                        colors: [
+                          ViewConstant.ColorInput,
+                          ViewConstant.ColorInput
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      textColor: Colors.black, // Ensure contrast with the green gradient
                     ),
                   ],
                 ),
