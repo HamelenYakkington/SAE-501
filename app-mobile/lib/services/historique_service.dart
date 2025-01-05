@@ -167,7 +167,7 @@ class HistoryService {
         context,
         MaterialPageRoute(
           builder: (context) => DisplayPictureScreen(
-              imagePath: pathTempImage!, yoloResults: yoloResults),
+              imagePath: pathTempImage!, yoloResults: yoloResults, displaySendButton: false),
         ),
       );
     }

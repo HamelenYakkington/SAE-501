@@ -142,7 +142,7 @@ class _YoloVideoState extends State<Camera> {
         imageWidth: imageWidth,
         iouThreshold: 0.4,
         confThreshold: 0.6,
-        classThreshold: 0.6,
+        classThreshold: 0.8,
       );
       if (result.isNotEmpty) {
         setState(() {
@@ -150,7 +150,6 @@ class _YoloVideoState extends State<Camera> {
         });
       }
     } catch (e) {
-      // ignore: avoid_print
       print("Erreur lors de l'exécution de YOLO sur l'image : $e");
     }
   }
@@ -199,7 +198,6 @@ class _YoloVideoState extends State<Camera> {
         );
       }
     } catch (e) {
-      // ignore: avoid_print
       print("Erreur lors de la sélection de l'image : $e");
     }
   }

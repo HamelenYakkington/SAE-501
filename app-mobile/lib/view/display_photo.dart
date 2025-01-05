@@ -9,14 +9,15 @@ import 'package:sae_501/view/widget/returnBoxes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DisplayPictureScreen extends StatefulWidget {
-
   final String imagePath;
   final List<Map<String, dynamic>> yoloResults;
+  final bool displaySendButton;
 
   const DisplayPictureScreen({
     Key? key,
     required this.imagePath,
     required this.yoloResults,
+    this.displaySendButton = true,
   }) : super(key: key);
 
   @override
@@ -31,7 +32,7 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
   void initState() {
     super.initState();
     checkConnexionToken(context);
-    if(widget.yoloResults.isEmpty) {
+    if(widget.yoloResults.isEmpty || !widget.displaySendButton) {
       disabledBtn = true;
     }
   }
