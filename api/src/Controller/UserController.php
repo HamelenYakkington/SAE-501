@@ -79,7 +79,7 @@ class UserController extends AbstractController
 
         $imageData = array_map(function ($image) {
             $tags = $image->getTags()->map(function ($imageTag) {
-                return $imageTag->getTags()->getLabel();
+                return $imageTag->getTag()->getLabel();
             })->toArray();
         
             return [
@@ -119,7 +119,7 @@ class UserController extends AbstractController
     
         $imageData = array_map(function ($image) {
             $tags = $image->getTags()->map(function ($imageTag) {
-                return $imageTag->getTags()->getLabel();
+                return $imageTag->getTag()->getLabel();
             })->toArray();
         
             return [
