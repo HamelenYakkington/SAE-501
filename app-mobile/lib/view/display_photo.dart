@@ -5,6 +5,7 @@ import 'package:sae_501/constants/view_constants.dart';
 import 'package:sae_501/controller/verif_connexion.dart';
 import 'package:sae_501/services/api_service.dart';
 import 'package:sae_501/view/widget/button_exit_custom.dart';
+import 'package:sae_501/view/widget/returnBoxes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DisplayPictureScreen extends StatefulWidget {
@@ -45,35 +46,7 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
     double factorX = screen.width / imageWidth;
     double factorY = screen.height / imageHeight;
 
-
-    Color colorPick = const Color.fromARGB(255, 50, 233, 30);
-
-    return widget.yoloResults.map((result) {
-      double objectX = result["box"][0] * factorX;
-      double objectY = result["box"][1] * factorY;
-      double objectWidth = (result["box"][2] - result["box"][0]) * factorX;
-      double objectHeight = (result["box"][3] - result["box"][1]) * factorY;
-      return Positioned(
-        left: objectX,
-        top: objectY,
-        width: objectWidth,
-        height: objectHeight,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            border: Border.all(color: Colors.pink, width: 2.0),
-          ),
-          child: Text(
-            "${result['tag']} ${(result['box'][4] * 100).toStringAsFixed(2)}%",
-            style: TextStyle(
-              background: Paint()..color = colorPick,
-              color: const Color.fromARGB(255, 115, 0, 255),
-              fontSize: 18.0,
-            ),
-          ),
-        ),
-      );
-    }).toList();
+    return returnBoxes(screen, widget.yoloResults, factorX, factorY);
   }
 
   void _showModal(BuildContext context) {
