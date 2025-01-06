@@ -50,7 +50,9 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
 
   flutter_vision:
-    path: ../flutter_vision
+    git:
+      url: https://github.com/HamelenYakkington/flutter_vision.git
+      ref: master
 
 flutter_icons:
   android: true

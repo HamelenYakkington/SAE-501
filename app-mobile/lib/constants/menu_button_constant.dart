@@ -8,7 +8,7 @@ class MenuConstant {
         imagePath: "assets/images/history.webp",
         route: "/historique"),
     ButtonNavAcceuil(
-        text: "Receive Data",
+        text: "Update AI",
         imagePath: "assets/images/cloud_button.webp",
         route: "/receive"),
     ButtonNavAcceuil(

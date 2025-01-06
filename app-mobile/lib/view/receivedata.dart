@@ -64,7 +64,7 @@ class ReceiveDataState extends State<ReceiveData> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               const SizedBox(height: 25),
-              customHeader('ReceiveData', 'assets/images/cloud_button.webp'),
+              customHeader('Update AI', 'assets/images/cloud_button.webp'),
               const SizedBox(height: 25),
               _isUpdating
                   ? const Expanded(child: Center(child: CircularProgressIndicator()))
