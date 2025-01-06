@@ -53,7 +53,7 @@ class SecurityController extends AbstractController
         // Generate JWT token for the authenticated user
         $token = $this->jwtManager->create($user);
 
-        // Store the generated JWT token in the User entity (optional)
+        // Store the generated JWT token in the User entity
         $user->setJwtToken($token);
         $this->entityManager->flush();
 
