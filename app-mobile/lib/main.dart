@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Import nécessaire pour SystemChrome
 import 'package:sae_501/view/acceuil.dart';
 import 'package:sae_501/view/historique.dart';
 import 'package:sae_501/view/logout.dart';
@@ -11,6 +12,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
 
   runApp(const MyApp());
 }
