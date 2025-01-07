@@ -112,8 +112,6 @@ class DisplayPictureScreenState extends State<DisplayPictureScreen> {
         return '${tag} ${box[4]} ${box[0]} ${box[1]} ${box[2]} ${box[3]}';
       }).join('\n');
 
-      print(label);
-
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('auth_token')!;
 
