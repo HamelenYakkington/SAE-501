@@ -13,10 +13,9 @@ List<Widget> returnBoxes(Size screen,
 
     return Stack(
       children: [
-        // Label above the rectangle
         Positioned(
           left: objectX,
-          top: objectY - 20, // Position above the rectangle
+          top: objectY - 20,
           child: Text(
             "${result['tag']} ${(result['box'][4] * 100).toStringAsFixed(2)}%",
             style: TextStyle(
@@ -26,7 +25,6 @@ List<Widget> returnBoxes(Size screen,
             ),
           ),
         ),
-        // Rectangle itself
         Positioned(
           left: objectX,
           top: objectY,

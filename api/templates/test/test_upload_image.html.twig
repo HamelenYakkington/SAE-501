@@ -32,7 +32,7 @@
                 return;
             }
 
-            // Show loading indicator
+            //Show loading indicator
             uploadButton.disabled = true;
             resultDiv.innerHTML = '<p>Uploading... Please wait.</p>';
 
@@ -51,7 +51,7 @@
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
-                            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzU2NTc1NzMsImV4cCI6MTczNTkxNjc3Mywicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImFkbWluQGFkbWluLmFkbWluIn0.AEhF834cFaexcgbbQQ9c8q6KZJt80PAYEs-j-mSggNRQw1wRnu0q3H2mPmmzNqls3Vzf0fdcqZGqC1N2BR8tkkJpZXz2acPZmCfWM7QzpXoN8mRDnhnv5EsM5ntEAnsSZWeULfcpx9D0ufKILM4dTUs8j4zBhdMxzspPgVRI9B1lsuuNlR0ZF9KB4saJHUElc1y6EvNA5GNurI4nrpYTYgz_Bt2UMYq5_ccwK8rSkDWO67dw25e_RCgysogt3ESTbTHvEG6xjPjnMihkPTsbAA2d4OjlJqEAEq5dcEjAfOGsN60ORJi1KFgmp3M5UOqFLx8B72XS-R8zycsXGRhx_A' // Replace TOKEN dynamically as needed
+                            'Authorization': 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MzU2NTc1NzMsImV4cCI6MTczNTkxNjc3Mywicm9sZXMiOlsiUk9MRV9BRE1JTiIsIlJPTEVfVVNFUiJdLCJ1c2VybmFtZSI6ImFkbWluQGFkbWluLmFkbWluIn0.AEhF834cFaexcgbbQQ9c8q6KZJt80PAYEs-j-mSggNRQw1wRnu0q3H2mPmmzNqls3Vzf0fdcqZGqC1N2BR8tkkJpZXz2acPZmCfWM7QzpXoN8mRDnhnv5EsM5ntEAnsSZWeULfcpx9D0ufKILM4dTUs8j4zBhdMxzspPgVRI9B1lsuuNlR0ZF9KB4saJHUElc1y6EvNA5GNurI4nrpYTYgz_Bt2UMYq5_ccwK8rSkDWO67dw25e_RCgysogt3ESTbTHvEG6xjPjnMihkPTsbAA2d4OjlJqEAEq5dcEjAfOGsN60ORJi1KFgmp3M5UOqFLx8B72XS-R8zycsXGRhx_A' //Replace TOKEN dynamically as needed
                         },
                         body: payload
                     });
@@ -64,7 +64,7 @@
                             <p><strong>Image Path:</strong> <a href="${result.image_path}" target="_blank">${result.image_path}</a></p>
                             <p><strong>Label Path:</strong> <a href="${result.label_path}" target="_blank">${result.label_path}</a></p>
                         `;
-                        // Reset the form
+                        //Reset the form
                         fileInput.value = '';
                         labelInput.value = '';
                     } else {

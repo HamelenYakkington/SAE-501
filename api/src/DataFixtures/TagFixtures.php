@@ -10,7 +10,7 @@ class TagFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        // List of chess pieces names
+        //List of chess pieces names
         $chessPieces = [
             "0" => "black-bishop",
             "1" => "black-king",

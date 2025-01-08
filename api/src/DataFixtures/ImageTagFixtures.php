@@ -13,7 +13,7 @@ class ImageTagFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
-        // Retrieve existing Image and Tag objects
+        //Retrieve existing Image and Tag objects
         $images = $manager->getRepository(Image::class)->findAll();
         $tags = $manager->getRepository(Tag::class)->findAll();
 
@@ -21,7 +21,7 @@ class ImageTagFixtures extends Fixture implements DependentFixtureInterface
             throw new \RuntimeException('No images or tags found. Please load Image and Tag fixtures first.');
         }
 
-        // Create ImageTag relationships
+        //Create ImageTag relationships
         foreach ($images as $image) {
             foreach ($tags as $tag) {
                 $imageTag = new ImageTag();

@@ -36,15 +36,15 @@ class ImageRepository extends ServiceEntityRepository
             ->select('MAX(sub.id) AS latestImageId')
             ->groupBy('sub.user');
 
-        // Use the subquery results in the main query
+        //Use the subquery results in the main query
         $qb->where($qb->expr()->in('i.id', $subQb->getDQL()))
             ->orderBy('i.date', 'DESC')
             ->addOrderBy('i.time', 'DESC');
 
-        // Optionally, limit the results (applies globally)
+        //Optionally, limit the results (applies globally)
         $qb->setMaxResults($limitPerUser);
 
-        // Execute the query and return results
+        //Execute the query and return results
         return $qb->getQuery()->getResult();
     }
 }

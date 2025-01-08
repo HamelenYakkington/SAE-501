@@ -26,10 +26,10 @@ class Image
     #[ORM\Column(type: 'string', length: 255)]
     private $pathLabel;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)] // Stocke la date (jour, mois, année)
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column(type: Types::TIME_MUTABLE)] // Stocke l'heure (heure, minute, seconde)
+    #[ORM\Column(type: Types::TIME_MUTABLE)]
     private ?\DateTimeInterface $time = null;
 
     /**

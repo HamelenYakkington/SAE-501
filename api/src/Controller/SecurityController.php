@@ -35,7 +35,7 @@ class SecurityController extends AbstractController
     #[Route("/login_token", name:"api_login", methods: ["POST"])]
     public function loginToken(Request $request): JsonResponse
     {
-        // Get the JSON data from the request body
+        //Get the JSON data from the request body
         $data = json_decode($request->getContent(), true);
         
         $email = $data['email'] ?? null;
@@ -50,10 +50,10 @@ class SecurityController extends AbstractController
             return new JsonResponse(['error' => "Your account is banned. Please contact support."], JsonResponse::HTTP_UNAUTHORIZED);
         }
 
-        // Generate JWT token for the authenticated user
+        //Generate JWT token for the authenticated user
         $token = $this->jwtManager->create($user);
 
-        // Store the generated JWT token in the User entity
+        //Store the generated JWT token in the User entity
         $user->setJwtToken($token);
         $this->entityManager->flush();
 
@@ -68,18 +68,18 @@ class SecurityController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        // Validate the input
+        //Validate the input
         if (!isset($data['email'], $data['password'], $data['firstName'], $data['lastName'])) {
             return new JsonResponse(['error' => 'Missing required fields'], JsonResponse::HTTP_BAD_REQUEST);
         }
 
-        // Get the user data from the request
+        //Get the user data from the request
         $email = $data['email'];
         $plainPassword = $data['password'];
         $firstName = $data['firstName'];
         $lastName = $data['lastName'];
 
-        // Create a new user object
+        //Create a new user object
         $user = new User();
         $user->setEmail($email);
         $user->setFirstName($firstName);
@@ -87,7 +87,7 @@ class SecurityController extends AbstractController
 
         $user->setRoles(['ROLE_USER']);
 
-        // Hash the password
+        //Hash the password
         $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
         $user->setPassword($hashedPassword);
 
@@ -112,7 +112,7 @@ class SecurityController extends AbstractController
     #[Route("/logout", name:"logout")]
     public function logout()
     {
-        // Logging out function is directly handled by symfony
+        //Logging out function is directly handled by symfony
     }
 
     #[Route('/api/token/validate', name: 'api_token_validate', methods: ['POST'])]
@@ -120,10 +120,10 @@ class SecurityController extends AbstractController
     {
         $error = null;
         $data = null;
-        // Get the token from the Authorization header
+        //Get the token from the Authorization header
         $authorizationHeader = $request->headers->get('Authorization');
         
-        // Check if the header is valid and contains a token
+        //Check if the header is valid and contains a token
         if (!$authorizationHeader || strpos($authorizationHeader, 'Bearer ') !== 0) {
             $error = JsonResponse::HTTP_BAD_REQUEST;
             $data = ['valid' => false, 'user' => null, 'error' => 'Invalid header or token.'];
@@ -146,7 +146,7 @@ class SecurityController extends AbstractController
             return new JsonResponse($data, $error);
         }
 
-        // Return the user data if the token is valid
+        //Return the user data if the token is valid
         return new JsonResponse([
             'valid' => true,
             'user' => [

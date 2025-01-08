@@ -21,7 +21,7 @@ class UserFixtures extends Fixture
     {
         $faker = Factory::create();
 
-        // Create an admin user
+        //Create an admin user
         $admin = new User();
         $admin->setFirstName('Admin')
             ->setLastName('User')
@@ -31,10 +31,10 @@ class UserFixtures extends Fixture
         $admin->setPassword($this->passwordHasher->hashPassword($admin, 'adminpassword'));
         $manager->persist($admin);
 
-        // Add a reference for the admin user
+        //Add a reference for the admin user
         $this->addReference('user0', $admin);
 
-        // Create regular users with Faker
+        //Create regular users with Faker
         for ($i = 1; $i <= 25; $i++) {
             $userFirstName = $faker->firstName();
             $userLastName = $faker->lastName();
@@ -48,7 +48,7 @@ class UserFixtures extends Fixture
             $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
             $manager->persist($user);
 
-            // Add a reference for each user
+            //Add a reference for each user
             $this->addReference('user' . $i, $user);
         }
 

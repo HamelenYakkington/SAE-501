@@ -14,7 +14,7 @@ class ModeleController extends AbstractController
     #[Route('/api/modele/version', name: 'api_modele_version', methods: ['GET'])]
     public function getModeleVersion(): Response
     {
-        // Define the directory the version's file is stored
+        //Define the directory the version's file is stored
         $filePath = $this->getParameter('kernel.project_dir') . '/public/modele/version.txt';
 
         if (!file_exists($filePath)) {
@@ -35,7 +35,7 @@ class ModeleController extends AbstractController
     {
         $filename = "modelYolo8.tflite";
 
-        // Define the directory where the modele is stored
+        //Define the directory where the modele is stored
         $fileDirectory = $this->getParameter('kernel.project_dir') . '/public/modele';
         $filePath = $fileDirectory . '/' . $filename;
 
@@ -43,10 +43,10 @@ class ModeleController extends AbstractController
             throw $this->createNotFoundException('File not found');
         }
 
-        // Create a BinaryFileResponse to send the file
+        //Create a BinaryFileResponse to send the file
         $response = new BinaryFileResponse($filePath);
 
-        // Set the content disposition to attachment to force download
+        //Set the content disposition to attachment to force download
         $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $filename);
 
         return $response;

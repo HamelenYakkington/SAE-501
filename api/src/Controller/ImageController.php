@@ -32,7 +32,7 @@ class ImageController extends AbstractController
         try {
             $data = json_decode($request->getContent(), true);
 
-            // Validate JWT token
+            //Validate JWT token
             $authorizationHeader = $request->headers->get('Authorization');
             if (!$authorizationHeader || strpos($authorizationHeader, 'Bearer ') !== 0) {
                 throw new \InvalidArgumentException('Invalid or missing Authorization token.');
@@ -40,23 +40,23 @@ class ImageController extends AbstractController
 
             $jwtToken = substr($authorizationHeader, 7);
 
-            // Find user by JWT token
+            //Find user by JWT token
             $user = $this->userRepository->findUserByJwtToken($jwtToken);
             if (!$user) {
                 throw new \InvalidArgumentException('Invalid or expired JWT token.');
             }
 
-            // Validate 'image' key
+            //Validate 'image' key
             if (!isset($data['image'])) {
                 throw new \InvalidArgumentException('No image data provided.');
             }
 
-            // Validate 'label' key
+            //Validate 'label' key
             if (!isset($data['label']) || !is_string($data['label'])) {
                 throw new \InvalidArgumentException('No label data provided or invalid format. Expected a string.');
             }
 
-            // Extract and validate Base64 string
+            //Extract and validate Base64 string
             $base64Image = $data['image'];
             if (strpos($base64Image, 'data:image/') === 0) {
                 $base64Image = explode(',', $base64Image)[1];
@@ -67,7 +67,7 @@ class ImageController extends AbstractController
                 throw new InvalidBase64ImageException();
             }
 
-            // Generate file paths
+            //Generate file paths
             $fileName = uniqid('image_', true);
             $uploadDirImages = $this->getParameter('kernel.project_dir') . '/public/uploads/images';
             $uploadDirLabels = $this->getParameter('kernel.project_dir') . '/public/uploads/labels';
@@ -80,11 +80,11 @@ class ImageController extends AbstractController
                 mkdir($uploadDirLabels, 0755, true);
             }
 
-            // Save image
+            //Save image
             $imagePath = $uploadDirImages . '/' . $fileName . '.png';
             file_put_contents($imagePath, $imageData);
 
-            // Process and validate label file
+            //Process and validate label file
             $labels = explode("\n", trim($data['label']));
             $processedLabels = [];
             $tagOccurrences = [];
@@ -93,14 +93,14 @@ class ImageController extends AbstractController
                 $row = explode(' ', trim($label));
                 $firstWord = strtolower($row[0]);
 
-                // Check if the tag exists
+                //Check if the tag exists
                 $tag = $this->tagRepository->findOneBy(['label' => $firstWord]);
 
                 if ($tag) {
-                    // Replace label with tag ID
+                    //Replace label with tag ID
                     $processedLabels[] = $tag->getId() . ' ' . implode(' ', array_slice($row, 1));
 
-                    // Increment the tag occurrence count
+                    //Increment the tag occurrence count
                     if (!isset($tagOccurrences[$tag->getId()])) {
                         $tagOccurrences[$tag->getId()] = 0;
                     }
@@ -109,11 +109,11 @@ class ImageController extends AbstractController
             }
 
             if (!empty($processedLabels)) {
-                // Save processed label to file
+                //Save processed label to file
                 $labelPath = $uploadDirLabels . '/' . $fileName . '.txt';
                 file_put_contents($labelPath, implode("\n", $processedLabels));
 
-                // Save metadata to database
+                //Save metadata to database
                 $imageEntity = new Image();
                 $imageEntity->setUser($user);
                 $imageEntity->setPathImage('/uploads/images/' . $fileName . '.png');
@@ -123,7 +123,7 @@ class ImageController extends AbstractController
 
                 
 
-                // Save tag occurrences
+                //Save tag occurrences
                 foreach ($tagOccurrences as $tagId => $occurrence) {
                     $tag = $this->tagRepository->find($tagId);
 

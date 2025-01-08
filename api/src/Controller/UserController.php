@@ -30,7 +30,7 @@ class UserController extends AbstractController
         ManagerRegistry $doctrine,
         Request $request
     ): JsonResponse {
-        // Valider le token JWT
+        //Valider le token JWT
         $authorizationHeader = $request->headers->get('Authorization');
         if (!$authorizationHeader || strpos($authorizationHeader, 'Bearer ') !== 0) {
             return new JsonResponse(['error' => 'Invalid or missing Authorization token.'], 401);
@@ -38,24 +38,24 @@ class UserController extends AbstractController
 
         $jwtToken = substr($authorizationHeader, 7);
 
-        // Trouver l'utilisateur par le token JWT
+        //Trouver l'utilisateur par le token JWT
         $adminUser = $this->userRepository->findUserByJwtToken($jwtToken);
         if (!$adminUser) {
             return new JsonResponse(['error' => 'Invalid or expired JWT token.'], 401);
         }
 
-        // Vérifier si l'utilisateur connecté a le rôle d'admin
+        //Vérifier si l'utilisateur connecté a le rôle d'admin
         if (!in_array('ROLE_ADMIN', $adminUser->getRoles())) {
             return new JsonResponse(['error' => 'Access denied.'], 403);
         }
 
-        // Récupérer l'utilisateur dont l'historique est demandé
+        //Récupérer l'utilisateur dont l'historique est demandé
         $user = $doctrine->getRepository(User::class)->find($id);
         if (!$user) {
             return new JsonResponse(['error' => 'User not found.'], 404);
         }
 
-        // Récupérer les images associées à cet utilisateur
+        //Récupérer les images associées à cet utilisateur
         $images = $imageRepository->findByUser($user);
 
         $imageData = array_map(function ($image) {
@@ -81,7 +81,7 @@ class UserController extends AbstractController
         ImageRepository $imageRepository,
         Request $request
     ): JsonResponse {
-        // Validate JWT token
+        //Validate JWT token
         $authorizationHeader = $request->headers->get('Authorization');
         if (!$authorizationHeader || strpos($authorizationHeader, 'Bearer ') !== 0) {
             return new JsonResponse(['error' => 'Invalid or missing Authorization token.'], 401);
@@ -89,13 +89,13 @@ class UserController extends AbstractController
     
         $jwtToken = substr($authorizationHeader, 7);
     
-        // Find user by JWT token
+        //Find user by JWT token
         $user = $this->userRepository->findUserByJwtToken($jwtToken);
         if (!$user) {
             return new JsonResponse(['error' => 'Invalid or expired JWT token.'], 401);
         }
     
-        // Get images associated with the token's user
+        //Get images associated with the token's user
         $images = $imageRepository->findByUser($user);
     
         $imageData = array_map(function ($image) {
@@ -125,7 +125,7 @@ class UserController extends AbstractController
             return new JsonResponse(['error' => 'User not found'], 404);
         }
 
-        // Extract non-sensitive information
+        //Extract non-sensitive information
         $userInfo = [
             'id' => $user->getId(),
             'firstName' => $user->getFirstName(),

@@ -18,13 +18,13 @@ class ImageFixtures extends Fixture implements DependentFixtureInterface
             $image->setPathImage('/uploads/images/image-' . $i . '.jpg');
             $image->setPathLabel('/uploads/labels/label-' . $i . '.txt');
 
-            $date = new \DateTimeImmutable(sprintf('2024-%02d-%02d', rand(1, 12), rand(1, 28))); // Somewhat random date in 2024
-            $time = new \DateTimeImmutable(sprintf('%02d:%02d:%02d', rand(0, 23), rand(0, 59), rand(0, 59))); // Random time
+            $date = new \DateTimeImmutable(sprintf('2024-%02d-%02d', rand(1, 12), rand(1, 28)));
+            $time = new \DateTimeImmutable(sprintf('%02d:%02d:%02d', rand(0, 23), rand(0, 59), rand(0, 59)));
 
             $image->setDate($date);
             $image->setTime($time);
 
-            $userReference = $this->getReference('user' . rand(0, 25), User::class); // Random user from UserFixtures
+            $userReference = $this->getReference('user' . rand(0, 25), User::class);
             $image->setUser($userReference);
 
             $manager->persist($image);

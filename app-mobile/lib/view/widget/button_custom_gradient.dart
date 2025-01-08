@@ -5,8 +5,8 @@ Widget customGradientButton({
   required BuildContext context,
   required String text,
   required VoidCallback onPressed,
-  required Gradient gradient, // Pass the gradient as a parameter
-  Color textColor = Colors.white, // Optional parameter for text color, default is white
+  required Gradient gradient,
+  Color textColor = Colors.white,
 }) {
   return GestureDetector(
     onTap: onPressed,
@@ -29,7 +29,7 @@ Widget customGradientButton({
           style: TextStyle(
             fontSize: 16.0,
             fontWeight: FontWeight.bold,
-            color: textColor, // Use the customizable text color
+            color: textColor,
           ),
         ),
       ),
