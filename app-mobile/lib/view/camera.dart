@@ -33,7 +33,7 @@ class _YoloVideoState extends State<Camera> {
   bool isDetecting = false;
 
   int _frameSkipCounter = 0;
-  final int _framesToSkip = 4;
+  final int _framesToSkip = 30;
 
   @override
   void initState() {
@@ -117,11 +117,9 @@ class _YoloVideoState extends State<Camera> {
         iouThreshold: 0.4,
         confThreshold: 0.6,
         classThreshold: 0.6);
-    if (result.isNotEmpty) {
-      setState(() {
-        yoloResults = result;
-      });
-    }
+    setState(() {
+      yoloResults = result;
+    });
   }
 
   Future<void> yoloOnPicture(File image) async {
@@ -140,15 +138,13 @@ class _YoloVideoState extends State<Camera> {
         bytesList: imageBytes,
         imageHeight: imageHeight,
         imageWidth: imageWidth,
-        iouThreshold: 0.4,
-        confThreshold: 0.6,
-        classThreshold: 0.8,
+          iouThreshold: 0.4,
+          confThreshold: 0.6,
+          classThreshold: 0.6
       );
-      if (result.isNotEmpty) {
-        setState(() {
-          yoloResults = result;
-        });
-      }
+      setState(() {
+        yoloResults = result;
+      });
     } catch (e) {
       print("Erreur lors de l'exécution de YOLO sur l'image : $e");
     }
