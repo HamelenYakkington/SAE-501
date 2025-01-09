@@ -30,21 +30,11 @@ class ImageRepository extends ServiceEntityRepository
 
     public function findLatestSearchesPerUser(int $limitPerUser): array
     {
-        $qb = $this->createQueryBuilder('i');
-
-        $subQb = $this->createQueryBuilder('sub')
-            ->select('MAX(sub.id) AS latestImageId')
-            ->groupBy('sub.user');
-
-        //Use the subquery results in the main query
-        $qb->where($qb->expr()->in('i.id', $subQb->getDQL()))
+        return $this->createQueryBuilder('i')
             ->orderBy('i.date', 'DESC')
-            ->addOrderBy('i.time', 'DESC');
-
-        //Optionally, limit the results (applies globally)
-        $qb->setMaxResults($limitPerUser);
-
-        //Execute the query and return results
-        return $qb->getQuery()->getResult();
+            ->addOrderBy('i.time', 'DESC')
+            ->setMaxResults($limitPerUser)
+            ->getQuery()
+            ->getResult();
     }
 }
