@@ -15,7 +15,7 @@
 
     <application
         android:label="sae_501"
-        android:name="${applicationName}"
+        android:name="Knight Sight"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
