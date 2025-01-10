@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Import nécessaire pour SystemChrome
-import 'package:sae_501/view/acceuil.dart';
+import 'package:sae_501/view/accueil.dart';
 import 'package:sae_501/view/historique.dart';
 import 'package:sae_501/view/logout.dart';
 import 'package:sae_501/view/receivedata.dart';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/login',
       routes: {
-        '/': (context) => const Acceuil(),
+        '/': (context) => const Accueil(),
         '/receive': (context) => const ReceiveData(),
         '/info': (context) => const Info(),
         '/camera': (context) => const Camera(),

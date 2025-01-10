@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sae_501/controller/verif_connexion.dart';
 import 'package:sae_501/services/historique_service.dart';
+import 'package:sae_501/view/display_photo.dart';
 import 'package:sae_501/view/widget/button_return_custom.dart';
 import 'package:sae_501/view/widget/header_custom.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -77,8 +78,8 @@ class HistoriqueState extends State<Historique> {
             trailing: IconButton(
               icon: const Icon(Icons.arrow_forward, color: Colors.white),
               onPressed: () {
-                _historyService.displayphoto(
-                    item['pathImage'], item['pathLabel'], context);
+                actionButtonViewImage(
+                    item['pathImage'], item['pathLabel']);
               },
             ),
           ),
@@ -139,9 +140,9 @@ class HistoriqueState extends State<Historique> {
                 ),
               ),
               _isLoading
-                  ? const Center(
+                  ? const Expanded( child:Center(
                       child: CircularProgressIndicator(),
-                    )
+                    ))
                   : Expanded(
                       child: _history.isNotEmpty
                           ? _buildHistoryList(_history)
@@ -188,5 +189,32 @@ class HistoriqueState extends State<Historique> {
     setState(() {
       _isLoading = false;
     });
+  }
+
+  Future<void> actionButtonViewImage(String imagePath,
+      String labelsPath ) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    Map<String, dynamic> rez = await _historyService.displayphoto(imagePath, labelsPath);
+    if(rez.isNotEmpty) {
+      if (context.mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                DisplayPictureScreen(
+                    imagePath: rez['pathTempImage'],
+                    yoloResults: rez['yoloResults'],
+                    displaySendButton: false),
+          ),
+        );
+      }
+    }
+      setState(() {
+        _isLoading = false;
+      });
+
   }
 }

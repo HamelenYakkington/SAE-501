@@ -157,19 +157,18 @@ class HistoryService {
     }
   }
 
-  Future<void> displayphoto(
-      String imagePath, String labelsPath, BuildContext context) async {
+  Future<Map<String, dynamic>> displayphoto(String imagePath,
+      String labelsPath) async {
+
     List<Map<String, dynamic>> yoloResults = await processYoloFile(labelsPath);
     String? pathTempImage = await downloadImage(imagePath);
 
-    if (context.mounted) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => DisplayPictureScreen(
-              imagePath: pathTempImage!, yoloResults: yoloResults, displaySendButton: false),
-        ),
-      );
-    }
+    return {
+      'yoloResults': yoloResults,
+      'pathTempImage': pathTempImage,
+    };
+
+
+
   }
 }

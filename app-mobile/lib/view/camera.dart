@@ -189,7 +189,8 @@ class _YoloVideoState extends State<Camera> {
           context,
           MaterialPageRoute(
             builder: (context) => DisplayPictureScreen(
-                imagePath: imageFile.path, yoloResults: yoloResults),
+                imagePath: imageFile.path,
+                yoloResults: yoloResults),
           ),
         );
       }

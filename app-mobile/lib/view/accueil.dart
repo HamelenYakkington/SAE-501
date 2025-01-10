@@ -8,15 +8,15 @@ import 'package:sae_501/view/widget/grid_builder_custom.dart';
 import 'package:sae_501/constants/menu_button_constant.dart';
 import 'package:sae_501/view/widget/button_nav_acceuil_custom.dart';
 
-class Acceuil extends StatefulWidget {
+class Accueil extends StatefulWidget {
 
-  const Acceuil({Key? key}) : super(key: key);
+  const Accueil({Key? key}) : super(key: key);
 
   @override
-  AcceuilState createState() => AcceuilState();
+  AccueilState createState() => AccueilState();
 }
 
-class AcceuilState extends State<Acceuil> {
+class AccueilState extends State<Accueil> {
 
   @override
   void initState() {
