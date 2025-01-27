@@ -37,4 +37,19 @@ class ImageRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function deleteImageById(int $id): bool
+    {
+        $entityManager = $this->getEntityManager();
+        $image = $this->find($id);
+
+        if (!$image) {
+            return false;
+        }
+
+        $entityManager->remove($image);
+        $entityManager->flush();
+
+        return true;
+    }
 }

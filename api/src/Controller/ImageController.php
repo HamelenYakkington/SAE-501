@@ -20,7 +20,8 @@ class ImageController extends AbstractController
     public function __construct(
         private UserRepository $userRepository,
         private EntityManagerInterface $entityManager,
-        private TagRepository $tagRepository
+        private TagRepository $tagRepository,
+        private ImageRepository $imageRepository,
     ) {}
     
     #[Route('/api/upload-image', name: 'upload_image', methods: ['POST'])]
@@ -192,5 +193,37 @@ class ImageController extends AbstractController
         }, $latestSearches);
 
         return new JsonResponse($imageData);
+    }
+
+    #[Route('/api/image/delete/{id}', name: 'delete_image', methods: ['DELETE'])]
+    public function deleteImage(int $id, Request $request): JsonResponse
+    {
+        // Get the Authorization header
+        $authorizationHeader = $request->headers->get('Authorization');
+        if (!$authorizationHeader || strpos($authorizationHeader, 'Bearer ') !== 0) {
+            return new JsonResponse(['error' => 'Invalid or missing Authorization token.'], 401);
+        }
+
+        $jwtToken = substr($authorizationHeader, 7);
+
+        // Find the user by the JWT token
+        $adminUser = $this->userRepository->findUserByJwtToken($jwtToken);
+        if (!$adminUser) {
+            return new JsonResponse(['error' => 'Invalid or expired JWT token.'], 401);
+        }
+
+        $image = $this->imageRepository->find($id);
+        if (!$image) {
+            return new JsonResponse(['error' => 'Image not found.'], 404);
+        }
+
+        if (!in_array('ROLE_ADMIN', $adminUser->getRoles()) && $adminUser !== $image->getUser()) {
+            return new JsonResponse(['error' => 'Access denied.'], 403);
+        }
+
+        // Delete the image
+        $this->imageRepository->deleteImageById($id);
+
+        return new JsonResponse(['success' => 'Image deleted successfully.'], 200);
     }
 }
