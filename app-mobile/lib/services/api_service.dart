@@ -105,20 +105,17 @@ class ApiService {
       );
 
       if (response['message'] == 'Image and label uploaded successfully.') {
-          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Image envoyée avec succès!')),
           );
         return true;
       } else {
-        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Erreur: ${response['error']}')),
         );
         return false;
       }
     } catch (e) {
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Une erreur est survenue: $e')),
       );
@@ -137,7 +134,9 @@ class ApiService {
 
   Future<List<int>> downloadFile(String endpoint) async {
     try {
-      final response = await http.get(Uri.parse('$baseUrl$endpoint'));
+      final url = endpoint.startsWith('http') ? endpoint : '$baseUrl$endpoint';
+
+      final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         return response.bodyBytes.toList();
       } else {
@@ -146,5 +145,9 @@ class ApiService {
     } catch (e) {
       throw Exception('Erreur lors du téléchargement du fichier: $e');
     }
+  }
+
+  String returnUrl(String endpoint) {
+    return endpoint.startsWith('http') ? endpoint : '$baseUrl$endpoint';
   }
 }

@@ -5,7 +5,6 @@ import 'package:sae_501/view/widget/footer_custom.dart';
 import 'package:sae_501/view/widget/header_custom.dart';
 
 class ReceiveData extends StatefulWidget {
-
   const ReceiveData({Key? key}) : super(key: key);
 
   @override
@@ -14,6 +13,7 @@ class ReceiveData extends StatefulWidget {
 
 class ReceiveDataState extends State<ReceiveData> {
   bool _isUpdating = false;
+  double _progress = 0.0;
   final DownloadService _downloadService = DownloadService();
 
   Future<void> _handleUpdate() async {
@@ -22,7 +22,12 @@ class ReceiveDataState extends State<ReceiveData> {
     });
 
     try {
-      await _downloadService.checkAndUpdateModel();
+      await _downloadService.checkAndUpdateModel((progress) {
+        setState(() {
+          _progress = progress;
+        });
+      });
+
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Mise à jour terminée avec succès !')),
@@ -60,15 +65,33 @@ class ReceiveDataState extends State<ReceiveData> {
         color: ViewConstant.backgroundApp,
         child: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               const SizedBox(height: 25),
               customHeader('Update AI', 'assets/images/cloud_button.webp'),
               const SizedBox(height: 25),
               _isUpdating
-                  ? const Expanded(child: Center(child: CircularProgressIndicator()))
+                  ? Column(
+                children: [
+                  LinearProgressIndicator(
+                    value: _progress,
+                    minHeight: 10,
+                    backgroundColor: Colors.grey[300],
+                    color: Colors.blue,
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    '${(_progress * 100).toStringAsFixed(2)}%',
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              )
                   : const SizedBox.shrink(),
+              const Spacer(),
               customFooter(),
             ],
           ),

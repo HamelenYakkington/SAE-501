@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sae_501/services/api_service.dart';
+import 'package:path/path.dart' as path;
+
 
 class DownloadService {
   final ApiService _apiService = ApiService();
@@ -17,7 +19,6 @@ class DownloadService {
       }
       final modelFile = File('${modelDir.path}/$fileName');
 
-      // Vérifier si le fichier existe déjà
       if (!await modelFile.exists()) {
         final byteData = await rootBundle.load(assetPath);
         final buffer = byteData.buffer.asUint8List();
@@ -71,49 +72,121 @@ class DownloadService {
     }
   }
 
-  Future<void> checkAndUpdateModel() async {
+  Future<void> checkAndUpdateModel(Function(double) onProgress) async {
     final directory = await getApplicationDocumentsDirectory();
-    final modelDir = '${directory.path}/modele';
+    final modelDir = Directory('${directory.path}/modele');
+    final heavyDir = Directory('${modelDir.path}/heavy');
+    final lightDir = Directory('${modelDir.path}/light');
 
-    final modelFilePath = '$modelDir/modelYolo8.tflite';
-    final labelsFilePath = '$modelDir/labels.txt';
-    final versionFilePath = '$modelDir/version.txt';
+    final heavyModelFilePath = '${heavyDir.path}/modelYolo8.tflite';
+    final lightModelFilePath = '${lightDir.path}/modelYolo8.tflite';
+    final labelsFilePath = '${modelDir.path}/labels.txt';
+    final heavyVersionFilePath = '${heavyDir.path}/version.txt';
+    final lightVersionFilePath = '${lightDir.path}/version.txt';
 
-    final modelFileExists = await File(modelFilePath).exists();
-    final labelsFileExists = await File(labelsFilePath).exists();
-    final versionFileExists = await File(versionFilePath).exists();
+    await heavyDir.create(recursive: true);
+    await lightDir.create(recursive: true);
 
-    if (!modelFileExists || !labelsFileExists || !versionFileExists) {
-      print('Modèle non trouvé, téléchargement du modèle...');
+    try {
+      final metadata = await _apiService.get('/api/modele/metadata');
+      final heavy = metadata['heavy'];
+      final light = metadata['light'];
 
-      // Télécharger les fichiers du modèle
-      final modelData = await _apiService.downloadFile('/api/modele/download');
-      final versionData = await _apiService.fetchModelVersion();
-
-      await Directory(modelDir).create(recursive: true);
-      await File(modelFilePath).writeAsBytes(modelData);
-      await File(labelsFilePath).writeAsString('');
-      await File(versionFilePath).writeAsString(versionData);
-
-      print('Modèle installé avec succès.');
-
-      await _downloadLabels();
-    } else {
-      final localVersion = await File(versionFilePath).readAsString();
-      final remoteVersion = await _apiService.fetchModelVersion();
-
-      if (localVersion.trim() != remoteVersion.trim()) {
-        print('Mise à jour disponible : $remoteVersion (local : $localVersion)');
-
-        final modelData = await _apiService.downloadFile('/api/modele/download');
-        await File(modelFilePath).writeAsBytes(modelData);
-        await _downloadLabels();
-
-        await File(versionFilePath).writeAsString(remoteVersion);
-        print('Mise à jour effectuée avec succès.');
+      final heavyVersionLocal = await _readFileContent(heavyVersionFilePath);
+      if (heavyVersionLocal.trim() != heavy['version'].trim()) {
+        print('Mise à jour du modèle "heavy"...');
+        await _downloadAndSaveFileWithProgress(
+            heavy['model'],
+            heavyModelFilePath,
+                (progress) {
+              onProgress(progress);
+            }
+        );
+        await _writeFileContent(heavyVersionFilePath, heavy['version']);
       } else {
-        print('Le modèle est déjà à jour : $localVersion');
+        print('Le modèle "heavy" est déjà à jour.');
       }
+
+      final lightVersionLocal = await _readFileContent(lightVersionFilePath);
+      if (lightVersionLocal.trim() != light['version'].trim()) {
+        print('Mise à jour du modèle "light"...');
+        await _downloadAndSaveFileWithProgress(
+            light['model'],
+            lightModelFilePath,
+                (progress) {
+              onProgress(progress);
+            }
+        );
+        await _writeFileContent(lightVersionFilePath, light['version']);
+      } else {
+        print('Le modèle "light" est déjà à jour.');
+      }
+
+      final labelsFileExists = await File(labelsFilePath).exists();
+      if (!labelsFileExists) {
+        await _downloadLabels();
+      }
+    } catch (e) {
+      print('Erreur lors de la vérification/mise à jour des modèles : $e');
     }
   }
+
+
+
+  Future<String> _readFileContent(String filePath) async {
+    final file = File(filePath);
+    if (await file.exists()) {
+      return await file.readAsString();
+    }
+    return '';
+  }
+
+  Future<void> _writeFileContent(String filePath, String content) async {
+    final file = File(filePath);
+    await file.create(recursive: true);
+    await file.writeAsString(content);
+  }
+
+  Future<void> _downloadAndSaveFileWithProgress(
+      String endpoint,
+      String localPath,
+      Function(double) onProgress) async {
+    try {
+      final directory = await getApplicationDocumentsDirectory();
+
+      final localFile = File(localPath.startsWith('/')
+          ? localPath
+          : path.join(directory.path, localPath));
+
+      final client = HttpClient();
+      final url = _apiService.returnUrl(endpoint);
+      final request = await client.getUrl(Uri.parse(url));
+      final response = await request.close();
+
+      final contentLength = response.headers.value(HttpHeaders.contentLengthHeader);
+      final totalSize = contentLength != null ? int.parse(contentLength) : -1;
+      int downloadedSize = 0;
+
+      final file = await localFile.create(recursive: true);
+      final sink = file.openWrite();
+
+      await for (var data in response) {
+        downloadedSize += data.length;
+        sink.add(data);
+
+        if (totalSize > 0) {
+          double progress = downloadedSize / totalSize;
+          onProgress(progress);
+        }
+      }
+
+      await sink.flush();
+      await sink.close();
+
+      print('Fichier téléchargé et sauvegardé à : ${localFile.path}');
+    } catch (e) {
+      print('Erreur lors du téléchargement : $e');
+    }
+  }
+
 }
