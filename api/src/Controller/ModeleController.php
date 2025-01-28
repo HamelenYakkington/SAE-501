@@ -72,11 +72,11 @@ class ModeleController extends AbstractController
 
         $metadata = [
             'heavy' => [
-                'model' => file_exists($modelePathHeavy) ? '/public/modele/heavy/' . $modeleFileName : null,
+                'model' => file_exists($modelePathHeavy) ? '/modele/heavy/' . $modeleFileName : null,
                 'version' => file_exists($versionPathHeavy) ? trim(file_get_contents($versionPathHeavy)) : null,
             ],
             'light' => [
-                'model' => file_exists($modelePathLight) ? '/public/modele/light/' . $modeleFileName : null,
+                'model' => file_exists($modelePathLight) ? '/modele/light/' . $modeleFileName : null,
                 'version' => file_exists($versionPathLight) ? trim(file_get_contents($versionPathLight)) : null,
             ],
         ];
