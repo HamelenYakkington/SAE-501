@@ -32,7 +32,7 @@ class SecurityController extends AbstractController
     /*
     / API to login, return an auth token if success
     */
-    #[Route("/login_token", name:"api_login", methods: ["POST"])]
+    #[Route("/app-request/login_token", name:"api_login", methods: ["POST"])]
     public function loginToken(Request $request): JsonResponse
     {
         //Get the JSON data from the request body
@@ -63,7 +63,7 @@ class SecurityController extends AbstractController
     /*
     / API to register a new user
     */
-    #[Route("/register", name:"api_register", methods: ["POST"])]
+    #[Route("/app-request/register", name:"api_register", methods: ["POST"])]
     public function register(Request $request, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
         $data = json_decode($request->getContent(), true);

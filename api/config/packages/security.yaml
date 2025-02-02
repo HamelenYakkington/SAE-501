@@ -17,10 +17,11 @@ security:
             security: false
 
         login:
-            pattern: ^/api/login
+            pattern: ^/app-request/login_token
             stateless: true
             json_login:
-                check_path: /api/login_check
+                check_path: /app-request/login_token
+                username_path: email
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
         
@@ -49,7 +50,9 @@ security:
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/profile, roles: ROLE_USER }
-        # - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/app-request/login_check, roles: PUBLIC_ACCESS }
+        - { path: ^/app-request/register, roles: PUBLIC_ACCESS }
+        - { path: ^/api/, roles: IS_AUTHENTICATED_FULLY }
 
 # When testing, the password hasher can be adjusted to speed up tests
 when@test:
