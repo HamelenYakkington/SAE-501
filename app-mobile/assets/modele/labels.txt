@@ -1,4 +1,4 @@
-black-bishop
+1.0.0black-bishop
 black-king
 black-knight
 black-pawn

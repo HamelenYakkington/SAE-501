@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sae_501/controller/verif_connexion.dart';
 import 'package:sae_501/view/widget/button_deconnexion_custom.dart';
 import 'package:sae_501/view/widget/button_photo.dart';
+import 'package:sae_501/view/widget/custom_background.dart';
 import 'package:sae_501/view/widget/header_custom.dart';
 import 'package:sae_501/view/widget/footer_custom.dart';
 import 'package:sae_501/constants/view_constants.dart';
@@ -28,8 +29,7 @@ class InfoState  extends State<Info> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ViewConstant.backgroundScalfold,
-      body: Container(
-        color: ViewConstant.backgroundApp,
+      body: customContainer(
         child: Stack(
           children: [
             SafeArea(

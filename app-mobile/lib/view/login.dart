@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sae_501/constants/validator.dart';
+import 'package:sae_501/view/widget/custom_background.dart';
 import 'package:sae_501/view/widget/header_custom.dart';
 import 'package:sae_501/view/widget/footer_custom.dart';
 import 'package:sae_501/constants/view_constants.dart';
@@ -64,8 +65,7 @@ class LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ViewConstant.backgroundScalfold,
-      body: Container(
-        color: ViewConstant.backgroundApp,
+      body: customContainer(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,

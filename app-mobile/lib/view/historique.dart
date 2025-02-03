@@ -3,6 +3,7 @@ import 'package:sae_501/controller/verif_connexion.dart';
 import 'package:sae_501/services/historique_service.dart';
 import 'package:sae_501/view/display_photo.dart';
 import 'package:sae_501/view/widget/button_return_custom.dart';
+import 'package:sae_501/view/widget/custom_background.dart';
 import 'package:sae_501/view/widget/header_custom.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -92,8 +93,7 @@ class HistoriqueState extends State<Historique> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ViewConstant.backgroundScalfold,
-      body: Container(
-        color: ViewConstant.backgroundApp,
+      body: customContainer(
         child: Stack(
           children: [
             SafeArea(child: Center( child:Column(

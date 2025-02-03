@@ -13,16 +13,19 @@ class DownloadService {
   Future<void> copyAssetToLocal(String assetPath, String fileName) async {
     try {
       final directory = await getApplicationDocumentsDirectory();
-      final modelDir = Directory('${directory.path}/modele');
-      if (!await modelDir.exists()) {
-        await modelDir.create(recursive: true);
-      }
-      final modelFile = File('${modelDir.path}/$fileName');
+      final fullPath = '${directory.path}/$fileName';
 
-      if (!await modelFile.exists()) {
+      final file = File(fullPath);
+      final parentDir = file.parent;
+
+      if (!await parentDir.exists()) {
+        await parentDir.create(recursive: true);
+      }
+
+      if (!await file.exists()) {
         final byteData = await rootBundle.load(assetPath);
         final buffer = byteData.buffer.asUint8List();
-        await modelFile.writeAsBytes(buffer);
+        await file.writeAsBytes(buffer);
       }
     } catch (e) {
       print('Erreur lors de la copie de l\'asset: $e');

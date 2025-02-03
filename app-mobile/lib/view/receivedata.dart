@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sae_501/constants/view_constants.dart';
 import 'package:sae_501/services/download_service.dart';
+import 'package:sae_501/view/widget/custom_background.dart';
 import 'package:sae_501/view/widget/footer_custom.dart';
 import 'package:sae_501/view/widget/header_custom.dart';
 
@@ -61,8 +62,7 @@ class ReceiveDataState extends State<ReceiveData> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ViewConstant.backgroundScalfold,
-      body: Container(
-        color: ViewConstant.backgroundApp,
+      body: customContainer(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

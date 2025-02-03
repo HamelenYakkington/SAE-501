@@ -24,6 +24,7 @@ class Camera extends StatefulWidget {
 class _YoloVideoState extends State<Camera> {
   late CameraController controller;
   late FlutterVision vision;
+  late FlutterVision analyse;
   late List<Map<String, dynamic>> yoloResults;
   bool _isModelClosed = true;
   final DownloadService _downloadService = DownloadService();
@@ -45,6 +46,7 @@ class _YoloVideoState extends State<Camera> {
   init() async {
     List<CameraDescription> cameras = await availableCameras();
     vision = FlutterVision();
+    analyse = FlutterVision();
     controller = CameraController(cameras[0], ResolutionPreset.high);
     await controller.initialize();
     await loadYoloModel();
@@ -70,33 +72,59 @@ class _YoloVideoState extends State<Camera> {
   Future<void> loadYoloModel() async {
     final directory = await getApplicationDocumentsDirectory();
     final modelDir = Directory('${directory.path}/modele');
+    final modeleHeavyDir = Directory('${modelDir.path}/heavy');
+    final modeleLightDir = Directory('${modelDir.path}/light');
 
-    final modelFilePath = '${modelDir.path}/modelYolo8.tflite';
+    final modeleHeavyVersionPath = '${modeleHeavyDir.path}/version.txt';
+    final modeleLightVersionPath = '${modeleLightDir.path}/version.txt';
+
+    final modeleHeavyModelePath = '${modeleHeavyDir.path}/modelYolo8.tflite';
+    final modeleLightModelePath = '${modeleLightDir.path}/modelYolo8.tflite';
+
     final labelsFilePath = '${modelDir.path}/labels.txt';
-    final versionFilePath = '${modelDir.path}/version.txt';
 
-    final modelFileExists = await File(modelFilePath).exists();
     final labelsFileExists = await File(labelsFilePath).exists();
-    final versionFileExists = await File(versionFilePath).exists();
 
-    Directory('${directory.path}/modele');
+    final modeleHeavyVersionExist = await File(modeleHeavyVersionPath).exists();
+    final modeleLightVersionExist = await File(modeleLightVersionPath).exists();
+    final modeleHeavyModeleExist = await File(modeleHeavyModelePath).exists();
+    final modeleLightModeleExist = await File(modeleLightModelePath).exists();
 
-    if (!modelFileExists) {
-      await _downloadService.copyAssetToLocal(
-          'assets/modelYolo8.tflite', 'modelYolo8.tflite');
-    }
     if (!labelsFileExists) {
       await _downloadService.copyAssetToLocal(
-          'assets/labels.txt', 'labels.txt');
+          'assets/modele/labels.txt', 'modele/labels.txt');
     }
-    if (!versionFileExists) {
+    if (!modeleHeavyVersionExist) {
       await _downloadService.copyAssetToLocal(
-          'assets/version.txt', 'version.txt');
+          'assets/modele/heavy/version.txt', 'modele/heavy/version.txt');
+    }
+    if (!modeleLightVersionExist) {
+      await _downloadService.copyAssetToLocal(
+          'assets/modele/light/version.txt', 'modele/light/version.txt');
+    }
+    if (!modeleHeavyModeleExist) {
+      await _downloadService.copyAssetToLocal(
+          'assets/modele/heavy/modelYolo8.tflite',
+          'modele/heavy/modelYolo8.tflite');
+    }
+    if (!modeleLightModeleExist) {
+      await _downloadService.copyAssetToLocal(
+          'assets/modele/light/modelYolo8.tflite',
+          'modele/light/modelYolo8.tflite');
     }
 
     await vision.loadYoloModel(
       labels: labelsFilePath,
-      modelPath: modelFilePath,
+      modelPath: modeleLightModelePath,
+      modelVersion: "yolov8",
+      numThreads: 1,
+      useGpu: true,
+      is_asset: false,
+    );
+
+    await analyse.loadYoloModel(
+      labels: labelsFilePath,
+      modelPath: modeleHeavyModelePath,
       modelVersion: "yolov8",
       numThreads: 1,
       useGpu: true,
@@ -134,14 +162,13 @@ class _YoloVideoState extends State<Camera> {
       final imageWidth = decodedImage.width;
       final imageHeight = decodedImage.height;
 
-      final result = await vision.yoloOnImage(
-        bytesList: imageBytes,
-        imageHeight: imageHeight,
-        imageWidth: imageWidth,
+      final result = await analyse.yoloOnImage(
+          bytesList: imageBytes,
+          imageHeight: imageHeight,
+          imageWidth: imageWidth,
           iouThreshold: 0.4,
           confThreshold: 0.6,
-          classThreshold: 0.6
-      );
+          classThreshold: 0.6);
       setState(() {
         yoloResults = result;
       });
@@ -189,8 +216,7 @@ class _YoloVideoState extends State<Camera> {
           context,
           MaterialPageRoute(
             builder: (context) => DisplayPictureScreen(
-                imagePath: imageFile.path,
-                yoloResults: yoloResults),
+                imagePath: imageFile.path, yoloResults: yoloResults),
           ),
         );
       }

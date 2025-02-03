@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sae_501/controller/verif_connexion.dart';
 import 'package:sae_501/view/widget/button_photo.dart';
+import 'package:sae_501/view/widget/custom_background.dart';
 import 'package:sae_501/view/widget/header_custom.dart';
 import 'package:sae_501/view/widget/footer_custom.dart';
 import 'package:sae_501/constants/view_constants.dart';
@@ -30,8 +31,7 @@ class AccueilState extends State<Accueil> {
       backgroundColor: ViewConstant.backgroundScalfold,
       body: Stack(
         children: [
-          Container(
-            color: ViewConstant.backgroundApp,
+          customContainer(
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
