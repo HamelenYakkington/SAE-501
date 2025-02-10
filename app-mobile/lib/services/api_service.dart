@@ -25,6 +25,30 @@ class ApiService {
     }
   }
 
+  Future<bool> deleteImage(int id, String? token) async {
+    try {
+      final response = await http.delete(
+        Uri.parse('$baseUrl/api/image/delete/$id'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        if (responseData['success'] == 'Image deleted successfully.') {
+          return true;
+        } else {
+          throw Exception('Erreur: ${responseData['error']}');
+        }
+      } else {
+        throw Exception('Erreur ${response.statusCode}: ${response.reasonPhrase}');
+      }
+    } catch (e) {
+      throw Exception('Erreur lors de la suppression de l\'image: $e');
+    }
+  }
+
   Future<Map<String, dynamic>> getTagById(String id) async {
     try {
       final responseData = await get('/api/tag/$id');
