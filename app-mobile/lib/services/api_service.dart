@@ -45,7 +45,7 @@ class ApiService {
         throw Exception('Erreur ${response.statusCode}: ${response.reasonPhrase}');
       }
     } catch (e) {
-      throw Exception('Erreur lors de la suppression de l\'image: $e');
+      rethrow;
     }
   }
 
@@ -53,6 +53,32 @@ class ApiService {
     try {
       final responseData = await get('/api/tag/$id');
       return Map<String, dynamic>.from(responseData);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<bool> isAdmin(String? token) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/api/isadmin'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+
+      if(response.statusCode == 200) {
+        final responseData = jsonDecode(response.body);
+        if (responseData['isadmin'] != null && responseData['isadmin']) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        throw Exception('Erreur ${response.statusCode}: ${response.reasonPhrase}');
+      }
+
     } catch (e) {
       rethrow;
     }

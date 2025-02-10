@@ -23,7 +23,9 @@ class HistoriqueState extends State<Historique> {
   final ApiService _apiService = ApiService();
   List<dynamic> _history = [];
   bool _historyUser = false;
+  bool _isAdmin = false;
   bool _isLoading = false;
+  int _currentView = 0;
   String? _token;
 
   @override
@@ -38,6 +40,7 @@ class HistoriqueState extends State<Historique> {
     setState(() {
       _token = prefs.getString('auth_token');
     });
+    _isAdmin = await _apiService.isAdmin(_token);
     fetchUserHistory();
   }
 
@@ -82,7 +85,7 @@ class HistoriqueState extends State<Historique> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _historyUser ?
+                _historyUser || _isAdmin ?
                   IconButton(
                     icon: const Icon(Icons.delete, color: Colors.red),
                     onPressed: () async {
@@ -94,7 +97,7 @@ class HistoriqueState extends State<Historique> {
                             const SnackBar(
                                 content: Text('Image supprimée avec succès!')),
                           );
-                          fetchUserHistory();
+                          refreshPage();
                         }
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -198,6 +201,7 @@ class HistoriqueState extends State<Historique> {
       setState(() {
         _history = rez;
         _historyUser = false;
+        _currentView = 2;
       });
     }
     setState(() {
@@ -214,6 +218,7 @@ class HistoriqueState extends State<Historique> {
       setState(() {
         _history = rez;
         _historyUser = true;
+        _currentView = 1;
       });
     }
     setState(() {
@@ -245,5 +250,20 @@ class HistoriqueState extends State<Historique> {
       setState(() {
         _isLoading = false;
       });
+  }
+
+  Future<void> refreshPage() async {
+    switch(_currentView) {
+      case 0:
+        break;
+      case 1:
+        await fetchUserHistory();
+        break;
+      case 2:
+        await fetchAllUsersHistory();
+        break;
+      default:
+        break;
+    }
   }
 }
