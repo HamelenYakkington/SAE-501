@@ -157,4 +157,41 @@ class SecurityController extends AbstractController
             ]
         ]);
     }
+
+    #[Route('/api/isadmin', name: 'api_isadmin', methods: ['POST'])]
+    public function isadmin(Request $request): JsonResponse
+    {
+        $error = null;
+        $data = null;
+        //Get the token from the Authorization header
+        $authorizationHeader = $request->headers->get('Authorization');
+        
+        //Check if the header is valid and contains a token
+        if (!$authorizationHeader || strpos($authorizationHeader, 'Bearer ') !== 0) {
+            $error = JsonResponse::HTTP_BAD_REQUEST;
+            $data = ['valid' => false, 'user' => null, 'error' => 'Invalid header or token.'];
+        }
+
+        $token = substr($authorizationHeader, 7);
+        $user = $this->userRepository->findUserByJwtToken($token);
+
+        if (!$user) {
+            $error = JsonResponse::HTTP_UNAUTHORIZED;
+            $data = ['valid' => false, 'user' => null, 'error' => 'No user found.'];
+        }
+
+        if ($user->isBanned()) {
+            $error = JsonResponse::HTTP_UNAUTHORIZED;
+            $data = ['valid' => false, 'user' => null, 'error' => "Your account is banned. Please contact support."];
+        }
+
+        if ($error) {
+            return new JsonResponse($data, $error);
+        }
+
+        //Return if the user is admin or not
+        return new JsonResponse([
+            'isadmin' => in_array('ROLE_ADMIN', $this->getUser()->getRoles(), true),
+        ]);
+    }
 }
