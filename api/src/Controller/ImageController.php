@@ -221,8 +221,22 @@ class ImageController extends AbstractController
             return new JsonResponse(['error' => 'Access denied.'], 403);
         }
 
-        // Delete the image
-        $this->imageRepository->deleteImageById($id);
+        $projectDir = $this->getParameter('kernel.project_dir') . '/public';
+        $imagePath = $projectDir . $image->getPathImage();
+        $labelPath = $projectDir . $image->getPathLabel();
+
+        // Delete the image file if it exists
+        if (file_exists($imagePath) && is_file($imagePath)) {
+            unlink($imagePath);
+        }
+
+        // Delete the label file if it exists
+        if (file_exists($labelPath) && is_file($labelPath)) {
+            unlink($labelPath);
+        }
+        
+        $this->entityManager->remove($image);
+        $this->entityManager->flush();
 
         return new JsonResponse(['success' => 'Image deleted successfully.'], 200);
     }
