@@ -121,7 +121,6 @@ class HistoryService {
 
   Future<List?> fetchAllUsersHistory(
       int nbr, String? token, BuildContext context) async {
-    print("sdfffffffffffffffffffffffffffffffffffffffffff");
     if (token == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Erreur : Aucun token trouvé.')),
@@ -167,8 +166,7 @@ class HistoryService {
       'yoloResults': yoloResults,
       'pathTempImage': pathTempImage,
     };
-
-
-
   }
+
+
 }

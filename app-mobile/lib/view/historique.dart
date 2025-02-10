@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sae_501/controller/verif_connexion.dart';
+import 'package:sae_501/services/api_service.dart';
 import 'package:sae_501/services/historique_service.dart';
 import 'package:sae_501/view/display_photo.dart';
 import 'package:sae_501/view/widget/button_return_custom.dart';
@@ -19,7 +20,9 @@ class Historique extends StatefulWidget {
 
 class HistoriqueState extends State<Historique> {
   final HistoryService _historyService = HistoryService();
+  final ApiService _apiService = ApiService();
   List<dynamic> _history = [];
+  bool _historyUser = false;
   bool _isLoading = false;
   String? _token;
 
@@ -76,12 +79,37 @@ class HistoriqueState extends State<Historique> {
                 ),
               ],
             ),
-            trailing: IconButton(
-              icon: const Icon(Icons.arrow_forward, color: Colors.white),
-              onPressed: () {
-                actionButtonViewImage(
-                    item['pathImage'], item['pathLabel']);
-              },
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _historyUser ?
+                  IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    onPressed: () async {
+                      try {
+                        final success = await _apiService.deleteImage(
+                            item['id'], _token);
+                        if (success) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Image supprimée avec succès!')),
+                          );
+                          fetchUserHistory();
+                        }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Erreur: $e')),
+                        );
+                      }
+                    },
+                  ) : Container() ,
+                IconButton(
+                  icon: const Icon(Icons.arrow_forward, color: Colors.white),
+                  onPressed: () {
+                    actionButtonViewImage(item['pathImage'], item['pathLabel']);
+                  },
+                ),
+              ],
             ),
           ),
         );
@@ -169,6 +197,7 @@ class HistoriqueState extends State<Historique> {
     if(rez != null) {
       setState(() {
         _history = rez;
+        _historyUser = false;
       });
     }
     setState(() {
@@ -184,6 +213,7 @@ class HistoriqueState extends State<Historique> {
     if(rez != null) {
       setState(() {
         _history = rez;
+        _historyUser = true;
       });
     }
     setState(() {
@@ -215,6 +245,5 @@ class HistoriqueState extends State<Historique> {
       setState(() {
         _isLoading = false;
       });
-
   }
 }
