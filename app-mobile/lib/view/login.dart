@@ -41,7 +41,7 @@ class LoginState extends State<Login> {
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       try {
-        final response = await _apiService.post('/login_token', {
+        final response = await _apiService.postWithAppToken('/app-request/login_token', {
           'email': _emailController.text,
           'password': _passwordController.text,
         });

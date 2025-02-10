@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ApiService {
   final String? baseUrl = dotenv.env['BASE_URL'];
+  final String? AppLogin = dotenv.env['APP_SECRET_TOKEN'];
 
   Future<dynamic> get(String endpoint, {Map<String, String>? headers}) async {
     try {
@@ -66,7 +67,7 @@ class ApiService {
 
   Future<bool> registerUser(String email, String password, String firstName, String lastName) async {
     try {
-      final response = await post('/register', {
+      final response = await postWithAppToken('/app-request/register', {
         'email': email,
         'password': password,
         'firstName': firstName,
@@ -149,5 +150,19 @@ class ApiService {
 
   String returnUrl(String endpoint) {
     return endpoint.startsWith('http') ? endpoint : '$baseUrl$endpoint';
+  }
+
+  Future<dynamic> postWithAppToken(String endpoint, Map<String, dynamic> body) async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $AppLogin',
+      };
+
+      final response = await post(endpoint, body, headers: headers);
+      return response;
+    } catch (e) {
+      rethrow;
+    }
   }
 }
