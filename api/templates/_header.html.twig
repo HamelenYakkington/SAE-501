@@ -14,11 +14,13 @@
             <span class="visually-hidden">(current)</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="{{ path('history') }}">History
-            <span class="visually-hidden">(current)</span>
-          </a>
-        </li>
+        {% if is_granted('ROLE_USER') %}
+          <li class="nav-item">
+            <a class="nav-link active" href="{{ path('history') }}">History
+              <span class="visually-hidden">(current)</span>
+            </a>
+          </li>
+        {% endif %}
         {% if is_granted('ROLE_ADMIN') %}
         <li class="nav-item">
           <a class="nav-link active" href="{{ path('admin') }}">Admin Dashboard

@@ -4,22 +4,24 @@
 
 {% block body %}
 <style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper { margin: 1em auto; max-width: 640px; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
 
 <div class="example-wrapper">
-    <h1 class="text-primary text-center">History</h1>
+    <h1 class="text-primary text-center">Your history</h1>
 
     {% if uploads is empty %}
         <div class="alert alert-info">
-            No search history available. Once you post images from the mobile app, they should appear here.
+            No history available. Once you post images from the mobile app, they SHOULD appear here.
         </div>
     {% else %}
-        <div class="uploads">
+        <div class="uploads-container" style="max-height: 80vh; overflow-y: auto;">
             {% for upload in uploads %}
-                <div class="upload-item" style="margin-bottom: 20px; position: relative; display: inline-block;">
-                    <img src="{{ asset(upload.image) }}" id="img-{{ loop.index }}" style="display: block;" />
+                <div class="upload-item" 
+                     style="margin-bottom: 20px; position: relative; display: inline-block;" 
+                     data-boxes='{{ upload.boxes|json_encode|raw }}'>
+                    <img src="{{ asset(upload.image) }}" id="img-{{ loop.index }}" style="display: block; max-width: 100%;" />
                     <canvas id="canvas-{{ loop.index }}" style="position: absolute; top: 0; left: 0;"></canvas>
                 </div>
             {% endfor %}
@@ -28,59 +30,59 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        {% for upload in uploads %}
-            (function() {
-                const img = document.getElementById('img-{{ loop.index }}');
-                const canvas = document.getElementById('canvas-{{ loop.index }}');
-                const boxes = {{ upload.boxes|json_encode|raw }};
+    document.querySelectorAll('.upload-item').forEach(item => {
+        const boxes = JSON.parse(item.getAttribute('data-boxes'));
+        const img = item.querySelector('img');
+        const canvas = item.querySelector('canvas');
 
-                function draw() {
-                    canvas.width = img.clientWidth;
-                    canvas.height = img.clientHeight;
-                    const ctx = canvas.getContext('2d');
-                    ctx.lineWidth = 2;
-                    ctx.strokeStyle = 'red';
-                    ctx.font = "16px Arial";
-                    ctx.fillStyle = "red";
+        function draw() {
+            canvas.width = img.clientWidth;
+            canvas.height = img.clientHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'red';
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "red";
 
-                    boxes.forEach(box => {
-                        const xCenter = box.x_center * img.clientWidth;
-                        const yCenter = box.y_center * img.clientHeight;
-                        const boxWidth = box.width * img.clientWidth;
-                        const boxHeight = box.height * img.clientHeight;
-                        const x = xCenter - boxWidth / 2;
-                        const y = yCenter - boxHeight / 2;
+            boxes.forEach(box => {
+                const xCenter = box.x_center * img.clientWidth;
+                const yCenter = box.y_center * img.clientHeight;
+                const boxWidth = box.width * img.clientWidth;
+                const boxHeight = box.height * img.clientHeight;
+                const x = xCenter - boxWidth / 2;
+                const y = yCenter - boxHeight / 2;
 
-                        ctx.strokeRect(x, y, boxWidth, boxHeight);
+                ctx.strokeRect(x, y, boxWidth, boxHeight);
 
-                        const tagMapping = {
-                            "0": "black-bishop",
-                            "1": "black-king",
-                            "2": "black-knight",
-                            "3": "black-pawn",
-                            "4": "black-queen",
-                            "5": "black-rook",
-                            "6": "white-bishop",
-                            "7": "white-king",
-                            "8": "white-knight",
-                            "9": "white-pawn",
-                            "10": "white-queen",
-                            "11": "white-rook"
-                        };
-                        const tagText = tagMapping[box.class] || box.class;
+                const tagMapping = {
+                    "0": "black-bishop",
+                    "1": "black-king",
+                    "2": "black-knight",
+                    "3": "black-pawn",
+                    "4": "black-queen",
+                    "5": "black-rook",
+                    "6": "white-bishop",
+                    "7": "white-king",
+                    "8": "white-knight",
+                    "9": "white-pawn",
+                    "10": "white-queen",
+                    "11": "white-rook"
+                };
+                const tagText = tagMapping[box.class] || box.class;
 
-                        ctx.fillText("Tag: " + tagText, x, (y - 5 < 10 ? y + 15 : y - 5));
-                    });
-                }
+                let textY = (y - 5 < 10) ? y + 20 : y - 5;
+                ctx.fillText("Tag: " + tagText, x, textY);
+            });
+        }
 
-                if (img.complete) {
-                    draw();
-                } else {
-                    img.onload = draw;
-                }
-            })();
-        {% endfor %}
+        if (img.complete) {
+            draw();
+        } else {
+            img.addEventListener('load', draw);
+        }
+
+        window.addEventListener('resize', draw);
     });
 </script>
 {% endblock %}
