@@ -1,42 +1,86 @@
 {% extends 'base.html.twig' %}
 
-{% block body %}
-<h1>History</h1>
+{% block title %}History{% endblock %}
 
-<div class="uploads">
-    {% for upload in uploads %}
-        <div class="upload-item" style="margin-bottom: 20px; position: relative; display: inline-block;">
-            <img src="{{ asset(upload.image) }}" id="img-{{ loop.index }}" style="display: block;" />
-            <canvas id="canvas-{{ loop.index }}" style="position: absolute; top: 0; left: 0;"></canvas>
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1 class="text-primary text-center">History</h1>
+
+    {% if uploads is empty %}
+        <div class="alert alert-info">
+            No search history available. Once you post images from the mobile app, they should appear here.
         </div>
-    {% endfor %}
+    {% else %}
+        <div class="uploads">
+            {% for upload in uploads %}
+                <div class="upload-item" style="margin-bottom: 20px; position: relative; display: inline-block;">
+                    <img src="{{ asset(upload.image) }}" id="img-{{ loop.index }}" style="display: block;" />
+                    <canvas id="canvas-{{ loop.index }}" style="position: absolute; top: 0; left: 0;"></canvas>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    {% for upload in uploads %}
-        (function() {
-            const img = document.getElementById('img-{{ loop.index }}');
-            const canvas = document.getElementById('canvas-{{ loop.index }}');
-            const boxes = {{ upload.boxes|json_encode|raw }};
-            img.onload = function() {
-                canvas.width = img.clientWidth;
-                canvas.height = img.clientHeight;
-                const ctx = canvas.getContext('2d');
-                ctx.lineWidth = 2;
-                ctx.strokeStyle = 'red';
-                boxes.forEach(box => {
-                    const xCenter = box.x_center * img.clientWidth;
-                    const yCenter = box.y_center * img.clientHeight;
-                    const boxWidth = box.width * img.clientWidth;
-                    const boxHeight = box.height * img.clientHeight;
-                    const x = xCenter - boxWidth / 2;
-                    const y = yCenter - boxHeight / 2;
-                    ctx.strokeRect(x, y, boxWidth, boxHeight);
-                });
-            };
-        })();
-    {% endfor %}
-});
+    document.addEventListener("DOMContentLoaded", function() {
+        {% for upload in uploads %}
+            (function() {
+                const img = document.getElementById('img-{{ loop.index }}');
+                const canvas = document.getElementById('canvas-{{ loop.index }}');
+                const boxes = {{ upload.boxes|json_encode|raw }};
+
+                function draw() {
+                    canvas.width = img.clientWidth;
+                    canvas.height = img.clientHeight;
+                    const ctx = canvas.getContext('2d');
+                    ctx.lineWidth = 2;
+                    ctx.strokeStyle = 'red';
+                    ctx.font = "16px Arial";
+                    ctx.fillStyle = "red";
+
+                    boxes.forEach(box => {
+                        const xCenter = box.x_center * img.clientWidth;
+                        const yCenter = box.y_center * img.clientHeight;
+                        const boxWidth = box.width * img.clientWidth;
+                        const boxHeight = box.height * img.clientHeight;
+                        const x = xCenter - boxWidth / 2;
+                        const y = yCenter - boxHeight / 2;
+
+                        ctx.strokeRect(x, y, boxWidth, boxHeight);
+
+                        const tagMapping = {
+                            "0": "black-bishop",
+                            "1": "black-king",
+                            "2": "black-knight",
+                            "3": "black-pawn",
+                            "4": "black-queen",
+                            "5": "black-rook",
+                            "6": "white-bishop",
+                            "7": "white-king",
+                            "8": "white-knight",
+                            "9": "white-pawn",
+                            "10": "white-queen",
+                            "11": "white-rook"
+                        };
+                        const tagText = tagMapping[box.class] || box.class;
+
+                        ctx.fillText("Tag: " + tagText, x, (y - 5 < 10 ? y + 15 : y - 5));
+                    });
+                }
+
+                if (img.complete) {
+                    draw();
+                } else {
+                    img.onload = draw;
+                }
+            })();
+        {% endfor %}
+    });
 </script>
 {% endblock %}

@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class HistoryController extends AbstractController
@@ -11,20 +10,24 @@ class HistoryController extends AbstractController
     #[Route("/history", name:"history")]
     public function index()
     {
-        $uploadDir = $this->getParameter('kernel.project_dir').'/public/uploads';
-        $files = scandir($uploadDir);
+        $uploadDir = $this->getParameter('kernel.project_dir') . '/public/uploads';
+        $imagesDir = $uploadDir . '/images';
+        $labelsDir = $uploadDir . '/labels';
+
+        $files = scandir($imagesDir);
         $uploads = [];
 
         foreach ($files as $file) {
             if (preg_match('/\.(png|jpg|jpeg)$/i', $file)) {
                 $annotationFile = preg_replace('/\.(png|jpg|jpeg)$/i', '.txt', $file);
                 $boxes = [];
-                if (file_exists($uploadDir.'/'.$annotationFile)) {
-                    $lines = file($uploadDir.'/'.$annotationFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+
+                if (file_exists($labelsDir . '/' . $annotationFile)) {
+                    $lines = file($labelsDir . '/' . $annotationFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
                     foreach ($lines as $line) {
                         list($class, $xCenter, $yCenter, $width, $height) = explode(' ', $line);
                         $boxes[] = [
-                            'class' => $class,
+                            'class'    => $class,
                             'x_center' => (float)$xCenter,
                             'y_center' => (float)$yCenter,
                             'width'    => (float)$width,
@@ -32,8 +35,9 @@ class HistoryController extends AbstractController
                         ];
                     }
                 }
+
                 $uploads[] = [
-                    'image' => '/uploads/'.$file,
+                    'image' => '/uploads/images/' . $file,
                     'boxes' => $boxes,
                 ];
             }
