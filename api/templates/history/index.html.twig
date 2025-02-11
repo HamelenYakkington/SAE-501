@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<h1>History</h1>
+
+<div class="uploads">
+    {% for upload in uploads %}
+        <div class="upload-item" style="margin-bottom: 20px; position: relative; display: inline-block;">
+            <img src="{{ asset(upload.image) }}" id="img-{{ loop.index }}" style="display: block;" />
+            <canvas id="canvas-{{ loop.index }}" style="position: absolute; top: 0; left: 0;"></canvas>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    {% for upload in uploads %}
+        (function() {
+            const img = document.getElementById('img-{{ loop.index }}');
+            const canvas = document.getElementById('canvas-{{ loop.index }}');
+            const boxes = {{ upload.boxes|json_encode|raw }};
+            img.onload = function() {
+                canvas.width = img.clientWidth;
+                canvas.height = img.clientHeight;
+                const ctx = canvas.getContext('2d');
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = 'red';
+                boxes.forEach(box => {
+                    const xCenter = box.x_center * img.clientWidth;
+                    const yCenter = box.y_center * img.clientHeight;
+                    const boxWidth = box.width * img.clientWidth;
+                    const boxHeight = box.height * img.clientHeight;
+                    const x = xCenter - boxWidth / 2;
+                    const y = yCenter - boxHeight / 2;
+                    ctx.strokeRect(x, y, boxWidth, boxHeight);
+                });
+            };
+        })();
+    {% endfor %}
+});
+</script>
+{% endblock %}
