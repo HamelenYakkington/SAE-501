@@ -41,6 +41,16 @@ class HistoryController extends AbstractController
                             'width'    => (float)$width,
                             'height'   => (float)$height,
                         ];
+                    } elseif (count($parts) === 6) {
+                        list($class, $confidence, $xMin, $yMin, $xMax, $yMax) = $parts;
+                        $boxes[] = [
+                            'class'      => $class,
+                            'confidence' => (float)$confidence,
+                            'x_center'   => (((float)$xMin + (float)$xMax) / 2),
+                            'y_center'   => (((float)$yMin + (float)$yMax) / 2),
+                            'width'      => ((float)$xMax - (float)$xMin),
+                            'height'     => ((float)$yMax - (float)$yMin),
+                        ];
                     }
                 }
             }

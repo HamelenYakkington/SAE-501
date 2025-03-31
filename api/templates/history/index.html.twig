@@ -46,10 +46,21 @@
             ctx.fillStyle = "red";
 
             boxes.forEach(box => {
-                const xCenter = box.x_center * img.clientWidth;
-                const yCenter = box.y_center * img.clientHeight;
-                const boxWidth = box.width * img.clientWidth;
-                const boxHeight = box.height * img.clientHeight;
+                let xCenter, yCenter, boxWidth, boxHeight, confidence;
+                if (box.hasOwnProperty('confidence')) {
+                    const scaleX = img.clientWidth / img.naturalWidth;
+                    const scaleY = img.clientHeight / img.naturalHeight;
+                    xCenter = box.x_center * scaleX;
+                    yCenter = box.y_center * scaleY;
+                    boxWidth = box.width * scaleX;
+                    boxHeight = box.height * scaleY;
+                    confidence = Math.round(box.confidence * 100);
+                } else {
+                    xCenter = box.x_center * img.clientWidth;
+                    yCenter = box.y_center * img.clientHeight;
+                    boxWidth = box.width * img.clientWidth;
+                    boxHeight = box.height * img.clientHeight;
+                }
                 const x = xCenter - boxWidth / 2;
                 const y = yCenter - boxHeight / 2;
 
@@ -72,7 +83,7 @@
                 const tagText = tagMapping[box.class] || box.class;
 
                 let textY = (y - 5 < 10) ? y + 20 : y - 5;
-                ctx.fillText("Tag: " + tagText, x, textY);
+                ctx.fillText(tagText + " " + confidence + "%", x, textY);
             });
         }
 
